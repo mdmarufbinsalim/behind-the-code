@@ -19,9 +19,9 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
           <Image
             src="/about-image.png"
             alt="Doodle illustration of the developer leaning back in his chair, feet up, staring at a ceiling full of thought bubbles — lightbulbs, question marks, code brackets, a bug, and a tangled scribble"
-            width={620}
-            height={620}
-            className="w-full max-w-[520px]"
+            width={780}
+            height={780}
+            className="w-full max-w-[700px]"
           />
         </motion.div>
 
