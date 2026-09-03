@@ -37,16 +37,24 @@ export function SketchConnector({
       const endX = toRect.right - containerRect.left + 16;
       const endY = toRect.bottom - containerRect.top - toRect.height / 2;
 
-      const margin = 90;
-      const top = Math.min(startY, endY) - margin;
-      const left = Math.min(startX, endX) - margin;
-      const width = Math.abs(endX - startX) + margin * 2;
-      const height = Math.abs(endY - startY) + margin * 2;
-
-      if (width < 20 || height < 20) {
+      if (endY - startY < 60) {
         setBox(null);
         return;
       }
+
+      // Route through the clear space to the right of both anchors,
+      // well past the heading's own right edge, so the line never
+      // crosses over any text — it only approaches from open space.
+      const rightZoneX = Math.min(
+        Math.max(startX, endX) + 130,
+        containerRect.width - 24
+      );
+
+      const margin = 40;
+      const top = startY - margin;
+      const left = Math.min(startX, endX) - margin;
+      const width = Math.max(rightZoneX, startX, endX) - left + margin;
+      const height = endY - startY + margin * 2;
 
       setBox({ top, left, width, height });
 
@@ -54,37 +62,27 @@ export function SketchConnector({
       const sy = startY - top;
       const ex = endX - left;
       const ey = endY - top;
+      const rx = rightZoneX - left;
 
-      const dx = ex - sx;
-      const dy = ey - sy;
-      const dist = Math.hypot(dx, dy) || 1;
-      const bendAmount = Math.min(dist * 0.18, 70);
-      const nx = -dy / dist;
-      const ny = dx / dist;
-      const side = ex > sx ? 1 : -1;
-      const midX = (sx + ex) / 2 + nx * bendAmount * side;
-      const midY = (sy + ey) / 2 + ny * bendAmount * side;
+      const p1: [number, number] = [sx + (rx - sx) * 0.55, sy];
+      const p2: [number, number] = [rx, sy + (ey - sy) * 0.3];
+      const p3: [number, number] = [rx, sy + (ey - sy) * 0.75];
+      const p4: [number, number] = [ex + (rx - ex) * 0.3, ey];
 
       const curveOpts = {
         ...roughDefaults,
         strokeWidth: 2,
         seed: randomSeed(),
-        roughness: 0.9,
-        bowing: 0.4,
+        roughness: 0.35,
+        bowing: 0.1,
         disableMultiStroke: true,
-        curveFitting: 0.98,
+        curveFitting: 1,
+        curveStepCount: 18,
       };
 
-      const curve = generator.curve(
-        [
-          [sx, sy],
-          [midX, midY],
-          [ex, ey],
-        ],
-        curveOpts
-      );
+      const curve = generator.curve([[sx, sy], p1, p2, p3, p4, [ex, ey]], curveOpts);
 
-      const angle = Math.atan2(ey - midY, ex - midX);
+      const angle = Math.atan2(ey - p4[1], ex - p4[0]);
       const headLen = 11;
       const spread = 0.5;
       const a1: [number, number] = [
@@ -100,7 +98,7 @@ export function SketchConnector({
         ...roughDefaults,
         strokeWidth: 2,
         seed: randomSeed(),
-        roughness: 0.7,
+        roughness: 0.3,
         disableMultiStroke: true,
       });
 

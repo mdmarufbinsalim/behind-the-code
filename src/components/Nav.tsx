@@ -16,7 +16,7 @@ export function Nav() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-sm">
-      <div className="flex items-center justify-between px-6 py-4 sm:px-10 lg:px-16 xl:px-24">
+      <div className="site-px flex items-center justify-between py-4">
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
           <Image src="/logo-black.svg" alt="Behind the Code" width={28} height={28} />
           <span className="font-hand text-xl">Behind the Code</span>
