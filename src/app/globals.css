@@ -15,6 +15,35 @@ html {
   overflow-x: hidden;
 }
 
+/*
+ * Dark mode: this site is pure black line art on white/transparent
+ * throughout, no photos or hue-dependent color — so inverting flips
+ * background/text/doodle-images to a correct dark palette with zero
+ * per-component overrides. Images are meant to invert too (black
+ * outline -> white outline), so nothing is exempted from the filter.
+ *
+ * The filter is applied to two separate elements (nav, and a wrapper
+ * around everything else) rather than one shared ancestor — a `filter`
+ * on any ancestor of a `position: sticky` (or `fixed`) element breaks
+ * its stickiness in Chrome, and the site's nav is sticky.
+ */
+.invert-in-dark {
+  transition: filter 0.2s ease;
+}
+
+.dark .invert-in-dark {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/*
+ * Body itself is outside the filtered wrapper (see above), so give it
+ * a real dark background directly — otherwise any unfiltered sliver
+ * (elastic overscroll, etc.) would flash white in dark mode.
+ */
+.dark body {
+  background: #0a0a0a;
+}
+
 body {
   background: var(--paper);
   color: var(--ink);

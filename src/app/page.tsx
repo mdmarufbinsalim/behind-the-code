@@ -11,10 +11,12 @@ export default function Home() {
   return (
     <>
       <Nav />
-      <main className="flex-1">
-        <HomeContent caseStudies={caseStudies} experience={experience} about={about} />
-      </main>
-      <Footer />
+      <div className="invert-in-dark flex flex-1 flex-col">
+        <main className="flex-1">
+          <HomeContent caseStudies={caseStudies} experience={experience} about={about} />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }
