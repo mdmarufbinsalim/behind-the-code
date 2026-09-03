@@ -6,22 +6,6 @@ import { motion } from "framer-motion";
 type Point = [number, number];
 type Box = { top: number; left: number; width: number; height: number };
 
-function smoothPath(points: Point[]): string {
-  let d = `M ${points[0][0]} ${points[0][1]} `;
-  for (let i = 0; i < points.length - 1; i++) {
-    const p0 = points[i - 1] ?? points[i];
-    const p1 = points[i];
-    const p2 = points[i + 1];
-    const p3 = points[i + 2] ?? p2;
-    const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
-    const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
-    const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
-    const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
-    d += `C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2[0]} ${p2[1]} `;
-  }
-  return d;
-}
-
 export function SketchConnector({
   fromRef,
   toRef,
@@ -78,15 +62,18 @@ export function SketchConnector({
       const ey = endY - top;
       const rx = rightZoneX - left;
 
-      const p1: Point = [sx + (rx - sx) * 0.55, sy];
-      const p2: Point = [rx, sy + (ey - sy) * 0.3];
-      const p3: Point = [rx, sy + (ey - sy) * 0.75];
-      const p4: Point = [ex + (rx - ex) * 0.3, ey];
-      const points: Point[] = [[sx, sy], p1, p2, p3, p4, [ex, ey]];
+      // A single cubic Bezier, both control points pulled toward the
+      // same rightward point — this has continuously varying curvature
+      // by construction, so there's no seam where a straight run meets
+      // a sharp turn (unlike a multi-segment spline through a "corner").
+      const cp1: Point = [rx, sy + (ey - sy) * 0.18];
+      const cp2: Point = [rx, ey - (ey - sy) * 0.18];
 
-      setLinePath(smoothPath(points));
+      setLinePath(
+        `M ${sx} ${sy} C ${cp1[0]} ${cp1[1]}, ${cp2[0]} ${cp2[1]}, ${ex} ${ey}`
+      );
 
-      const angle = Math.atan2(ey - p4[1], ex - p4[0]);
+      const angle = Math.atan2(ey - cp2[1], ex - cp2[0]);
       const headLen = 12;
       const spread = 0.45;
       const a1: Point = [
