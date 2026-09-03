@@ -4,7 +4,8 @@ import { useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import type { ExperienceEntry } from "@content/experience";
 import { TimelineWave } from "@/components/sketch/TimelineWave";
-import { ScrollShapes } from "@/components/sketch/ScrollShapes";
+// Shapes temporarily disabled — see ScrollShapes.tsx (kept for later).
+// import { ScrollShapes } from "@/components/sketch/ScrollShapes";
 
 const listVariants = {
   hidden: {},
@@ -29,8 +30,6 @@ export function ExperienceSection({ experience }: { experience: ExperienceEntry[
 
   return (
     <section id="experience" ref={sectionRef} className="site-px relative py-16">
-      <ScrollShapes scrollTargetRef={sectionRef} />
-
       <motion.h2
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
