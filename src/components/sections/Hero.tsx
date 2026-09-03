@@ -2,17 +2,22 @@
 
 import { motion } from "framer-motion";
 import { SketchUnderline } from "@/components/sketch/SketchUnderline";
+import { SketchCircle } from "@/components/sketch/SketchCircle";
+import { SketchArrow } from "@/components/sketch/SketchArrow";
 
 export function Hero() {
   return (
-    <section className="flex min-h-[85vh] flex-col items-start justify-center px-6 sm:px-10">
+    <section className="site-px flex flex-col items-start pt-28 pb-20 sm:pt-40 sm:pb-28">
       <motion.p
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
         className="mb-3 text-sm tracking-wide text-neutral-500"
       >
-        Software engineer, based in Dhaka
+        Software engineer, based in{" "}
+        <SketchCircle delay={1.1} paddingX={8} paddingY={4}>
+          Dhaka
+        </SketchCircle>
       </motion.p>
 
       <motion.h1
@@ -45,15 +50,20 @@ export function Hero() {
         when no one is looking. This is the story behind a few of them.
       </motion.p>
 
-      <motion.a
-        href="#work"
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.6 }}
-        className="font-hand mt-10 text-xl underline decoration-2 underline-offset-4"
+        className="mt-10 flex items-center gap-1"
       >
-        See the case studies ↓
-      </motion.a>
+        <a
+          href="#work"
+          className="font-hand text-xl underline decoration-2 underline-offset-4"
+        >
+          See the case studies
+        </a>
+        <SketchArrow direction="down-right" width={44} height={40} delay={1.2} />
+      </motion.div>
     </section>
   );
 }

@@ -10,18 +10,19 @@ export function useElementSize<T extends HTMLElement>() {
     const el = ref.current;
     if (!el) return;
 
-    const observer = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      if (!entry) return;
-      const { width, height } = entry.contentRect;
+    const measure = () => {
+      const rect = el.getBoundingClientRect();
       setSize((prev) =>
-        prev.width === width && prev.height === height
+        prev.width === rect.width && prev.height === rect.height
           ? prev
-          : { width, height }
+          : { width: rect.width, height: rect.height }
       );
-    });
+    };
 
+    const observer = new ResizeObserver(measure);
     observer.observe(el);
+    measure();
+
     return () => observer.disconnect();
   }, []);
 

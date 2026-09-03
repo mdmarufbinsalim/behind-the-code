@@ -38,7 +38,7 @@ export default async function CaseStudyPage({
   return (
     <>
       <Nav />
-      <main className="flex-1 px-6 py-12 sm:px-10">
+      <main className="flex-1 site-px py-12">
         <div className="mx-auto max-w-3xl">
           <Link href="/#work" className="mb-10 inline-block text-sm text-neutral-500 hover:opacity-60">
             ← Back to the story

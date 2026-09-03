@@ -5,7 +5,7 @@ import type { ExperienceEntry } from "@content/experience";
 
 export function ExperienceSection({ experience }: { experience: ExperienceEntry[] }) {
   return (
-    <section id="experience" className="px-6 py-24 sm:px-10">
+    <section id="experience" className="site-px py-24">
       <motion.h2
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}

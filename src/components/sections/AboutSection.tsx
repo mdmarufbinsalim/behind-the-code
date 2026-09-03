@@ -6,7 +6,7 @@ import type { about as AboutType } from "@content/about";
 
 export function AboutSection({ about }: { about: typeof AboutType }) {
   return (
-    <section id="about" className="px-6 py-24 sm:px-10">
+    <section id="about" className="site-px py-24">
       <div className="mx-auto max-w-2xl">
         <motion.h2
           initial={{ opacity: 0, y: 12 }}

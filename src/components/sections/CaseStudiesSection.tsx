@@ -6,7 +6,7 @@ import type { CaseStudy } from "@/lib/case-studies";
 
 export function CaseStudiesSection({ caseStudies }: { caseStudies: CaseStudy[] }) {
   return (
-    <section id="work" className="px-6 py-24 sm:px-10">
+    <section id="work" className="site-px py-24">
       <motion.h2
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
