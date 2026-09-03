@@ -32,26 +32,21 @@ export function SketchConnector({
 
       const startX = fromRect.right - containerRect.left + 10;
       const startY = fromRect.top - containerRect.top + fromRect.height / 2;
-      const endX = toRect.right - containerRect.left + 16;
-      const endY = toRect.bottom - containerRect.top - toRect.height / 2;
+      // The heading now sits on the right, so approach its top-left
+      // corner from above — the line never travels through its own
+      // text row, only toward it.
+      const endX = toRect.left - containerRect.left - 14;
+      const endY = toRect.top - containerRect.top - 6;
 
-      if (endY - startY < 60) {
+      if (endY - startY < 60 || endX - startX < 60) {
         setBox(null);
         return;
       }
 
-      // Route through the clear space to the right of both anchors,
-      // well past the heading's own right edge, so the line never
-      // crosses over any text — it only approaches from open space.
-      const rightZoneX = Math.min(
-        Math.max(startX, endX) + 130,
-        containerRect.width - 24
-      );
-
       const margin = 40;
       const top = startY - margin;
-      const left = Math.min(startX, endX) - margin;
-      const width = Math.max(rightZoneX, startX, endX) - left + margin;
+      const left = startX - margin;
+      const width = endX - startX + margin * 2;
       const height = endY - startY + margin * 2;
 
       setBox({ top, left, width, height });
@@ -60,14 +55,14 @@ export function SketchConnector({
       const sy = startY - top;
       const ex = endX - left;
       const ey = endY - top;
-      const rx = rightZoneX - left;
 
-      // A single cubic Bezier, both control points pulled toward the
-      // same rightward point — this has continuously varying curvature
-      // by construction, so there's no seam where a straight run meets
-      // a sharp turn (unlike a multi-segment spline through a "corner").
-      const cp1: Point = [rx, sy + (ey - sy) * 0.18];
-      const cp2: Point = [rx, ey - (ey - sy) * 0.18];
+      // Classic S-curve: both control points sit at the horizontal
+      // midpoint, one level with the start, one level with the end.
+      // Continuously varying curvature with a single inflection —
+      // no seams, no jitter.
+      const midX = sx + (ex - sx) * 0.5;
+      const cp1: Point = [midX, sy];
+      const cp2: Point = [midX, ey];
 
       setLinePath(
         `M ${sx} ${sy} C ${cp1[0]} ${cp1[1]}, ${cp2[0]} ${cp2[1]}, ${ex} ${ey}`

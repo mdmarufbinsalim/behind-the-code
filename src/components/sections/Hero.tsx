@@ -8,7 +8,7 @@ import { SketchCircle } from "@/components/sketch/SketchCircle";
 
 export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> }) {
   return (
-    <section className="site-px grid gap-12 pt-24 pb-10 sm:pt-32 sm:pb-14 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-8">
+    <section className="site-px grid gap-12 pt-24 pb-28 sm:pt-32 sm:pb-40 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-8">
       <div className="flex flex-col items-start">
         <motion.p
           initial={{ opacity: 0, y: 10 }}

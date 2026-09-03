@@ -29,7 +29,7 @@ export function CaseStudiesSection({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.5, delay: 0.05 }}
-        className="mb-12 max-w-2xl text-3xl font-medium sm:text-4xl"
+        className="mb-12 max-w-2xl text-3xl font-medium sm:text-4xl lg:ml-auto lg:text-right"
       >
         A few systems worth telling the story of
       </motion.h3>
