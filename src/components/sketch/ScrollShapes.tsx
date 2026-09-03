@@ -7,35 +7,21 @@ const SHAPES = [
   {
     name: "cube",
     viewBox: "0 0 90 80",
-    size: 100,
+    size: 150,
     path: "M22,58 L22,28 L47,17 L72,28 L72,58 L47,69 Z M22,28 L47,39 L72,28 M47,39 L47,69",
   },
   {
     name: "pyramid",
     viewBox: "0 0 92 72",
-    size: 90,
+    size: 135,
     path: "M46,8 L14,64 L79,64 Z M46,8 L46,64 M14,64 L46,37 L79,64",
   },
   {
     name: "sphere",
     viewBox: "0 0 80 80",
-    size: 90,
+    size: 135,
     path:
       "M40,4 A36,36 0 1 1 39.9,4 M4,40 L76,40 M9,25 Q40,40 71,25 M9,55 Q40,40 71,55 M40,4 Q52,40 40,76 M40,4 Q28,40 40,76",
-  },
-  {
-    name: "hexagon",
-    viewBox: "0 0 80 90",
-    size: 90,
-    path:
-      "M40,4 L74,24 L74,64 L40,84 L6,64 L6,24 Z M40,4 L40,44 M6,24 L40,44 M74,24 L40,44 M40,44 L40,84",
-  },
-  {
-    name: "star",
-    viewBox: "0 0 90 90",
-    size: 90,
-    path:
-      "M45,4 L55,33 L86,33 L61,52 L70,82 L45,63 L20,82 L29,52 L4,33 L35,33 Z",
   },
 ] as const;
 
@@ -63,7 +49,7 @@ function ShapeSvg({
       viewBox={placed.shape.viewBox}
       width={placed.shape.size}
       height={placed.shape.size}
-      style={{ rotate, y, top: `${placed.top}%`, right: placed.right }}
+      style={{ rotate, y, top: placed.top, right: placed.right }}
       className="absolute"
     >
       <path
@@ -78,6 +64,12 @@ function ShapeSvg({
   );
 }
 
+const MIN_GAP = 180;
+const RIGHT_MIN = 60;
+const RIGHT_MAX = 480;
+const TOP_MARGIN = 70;
+const MAX_ATTEMPTS = 60;
+
 export function ScrollShapes({
   scrollTargetRef,
 }: {
@@ -91,25 +83,40 @@ export function ScrollShapes({
   const [placements, setPlacements] = useState<Placed[] | null>(null);
 
   useEffect(() => {
-    const pool = [...SHAPES].sort(() => Math.random() - 0.5);
-    const count = 3;
-    const bands = 100 / count;
+    const el = scrollTargetRef.current;
+    const height = el?.getBoundingClientRect().height ?? 900;
+    const bottomBound = Math.max(height - TOP_MARGIN, TOP_MARGIN + 200);
 
-    const next: Placed[] = pool.slice(0, count).map((shape, i) => {
-      const bandStart = i * bands;
+    const pool = [...SHAPES].sort(() => Math.random() - 0.5).slice(0, 3);
+    const centers: { top: number; right: number }[] = [];
+    const next: Placed[] = [];
+
+    for (const shape of pool) {
+      let top = TOP_MARGIN;
+      let right = RIGHT_MIN;
+      for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+        top = TOP_MARGIN + Math.random() * (bottomBound - TOP_MARGIN);
+        right = RIGHT_MIN + Math.random() * (RIGHT_MAX - RIGHT_MIN);
+        const clear = centers.every(
+          (c) => Math.hypot(c.top - top, c.right - right) > MIN_GAP
+        );
+        if (clear) break;
+      }
+
+      centers.push({ top, right });
       const direction = Math.random() > 0.5 ? 1 : -1;
-      return {
+      next.push({
         shape,
-        top: bandStart + Math.random() * (bands - 20),
-        right: 24 + Math.random() * 180,
+        top,
+        right,
         rotateFrom: direction * (Math.random() * 20),
         rotateTo: direction * (240 + Math.random() * 140),
-        driftY: (Math.random() - 0.5) * 140,
-      };
-    });
+        driftY: (Math.random() - 0.5) * 60,
+      });
+    }
 
     setPlacements(next);
-  }, []);
+  }, [scrollTargetRef]);
 
   if (!placements) return null;
 
