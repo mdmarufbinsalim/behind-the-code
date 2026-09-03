@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Behind The Code",
-  description: "Behind The Code",
+  title: "Behind the Code — Md. Maruf Bin Salim",
+  description:
+    "A look behind the code: systems I've built, problems I've solved, things I've broken, and lessons learned along the way.",
 };
+
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
