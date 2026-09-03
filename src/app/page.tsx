@@ -9,15 +9,6 @@ export default function Home() {
         width={120}
         height={120}
         priority
-        className="dark:hidden"
-      />
-      <Image
-        src="/logo-white.svg"
-        alt="Behind The Code"
-        width={120}
-        height={120}
-        priority
-        className="hidden dark:block"
       />
     </div>
   );
