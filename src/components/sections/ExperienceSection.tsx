@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import type { ExperienceEntry } from "@content/experience";
 import { TimelineWave } from "@/components/sketch/TimelineWave";
+import { ScrollShapes } from "@/components/sketch/ScrollShapes";
 
 const listVariants = {
   hidden: {},
@@ -18,6 +19,7 @@ const itemVariants = {
 };
 
 export function ExperienceSection({ experience }: { experience: ExperienceEntry[] }) {
+  const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const dotRefs = useMemo(
     () => experience.map(() => ({ current: null }) as React.RefObject<HTMLElement | null>),
@@ -26,7 +28,9 @@ export function ExperienceSection({ experience }: { experience: ExperienceEntry[
   const [entriesReady, setEntriesReady] = useState(false);
 
   return (
-    <section id="experience" className="site-px py-16">
+    <section id="experience" ref={sectionRef} className="site-px relative py-16">
+      <ScrollShapes scrollTargetRef={sectionRef} />
+
       <motion.h2
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
