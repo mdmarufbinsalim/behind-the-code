@@ -107,7 +107,7 @@ export function SketchConnector({
         stroke="#0a0a0a"
         strokeWidth={2}
         fill="none"
-        strokeLinecap="round"
+        strokeLinecap="butt"
         strokeLinejoin="round"
         initial={{ pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
@@ -119,7 +119,7 @@ export function SketchConnector({
         stroke="#0a0a0a"
         strokeWidth={2}
         fill="none"
-        strokeLinecap="round"
+        strokeLinecap="butt"
         strokeLinejoin="round"
         initial={{ pathLength: 0 }}
         whileInView={{ pathLength: 1 }}

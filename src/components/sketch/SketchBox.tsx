@@ -51,7 +51,7 @@ export function SketchBox({
               stroke="#0a0a0a"
               strokeWidth={strokeWidth}
               fill="none"
-              strokeLinecap="round"
+              strokeLinecap="butt"
               strokeLinejoin="round"
               initial={{ pathLength: 0 }}
               whileInView={{ pathLength: 1 }}
@@ -64,7 +64,7 @@ export function SketchBox({
               stroke="#0a0a0a"
               strokeWidth={strokeWidth}
               fill="none"
-              strokeLinecap="round"
+              strokeLinecap="butt"
               strokeLinejoin="round"
             />
           ))}

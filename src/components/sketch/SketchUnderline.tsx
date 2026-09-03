@@ -70,7 +70,7 @@ export function SketchUnderline({
         stroke="#0a0a0a"
         strokeWidth={strokeWidth}
         fill="none"
-        strokeLinecap="round"
+        strokeLinecap="butt"
         initial={{ pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
         viewport={{ once: true, margin: "-40px" }}

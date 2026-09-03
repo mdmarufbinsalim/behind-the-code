@@ -102,7 +102,7 @@ export function TimelineWave({
         stroke="#0a0a0a"
         strokeWidth={2.5}
         fill="none"
-        strokeLinecap="round"
+        strokeLinecap="butt"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: 1 }}
         transition={{ duration: 1.4, ease: "easeInOut" }}
