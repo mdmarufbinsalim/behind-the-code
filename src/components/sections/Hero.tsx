@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { SketchUnderline } from "@/components/sketch/SketchUnderline";
 import { SketchCircle } from "@/components/sketch/SketchCircle";
-import { SketchArrow } from "@/components/sketch/SketchArrow";
 
 export function Hero() {
   return (
@@ -15,7 +14,7 @@ export function Hero() {
         className="mb-3 text-sm tracking-wide text-neutral-500"
       >
         Software engineer, based in{" "}
-        <SketchCircle delay={1.1} paddingX={8} paddingY={4}>
+        <SketchCircle delay={1.1} paddingX={10} paddingY={6} className="mx-2.5">
           Dhaka
         </SketchCircle>
       </motion.p>
@@ -50,20 +49,15 @@ export function Hero() {
         when no one is looking. This is the story behind a few of them.
       </motion.p>
 
-      <motion.div
+      <motion.a
+        href="#work"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.6 }}
-        className="mt-10 flex items-center gap-1"
+        className="font-hand mt-10 text-xl underline decoration-2 underline-offset-4"
       >
-        <a
-          href="#work"
-          className="font-hand text-xl underline decoration-2 underline-offset-4"
-        >
-          See the case studies
-        </a>
-        <SketchArrow direction="down-right" width={44} height={40} delay={1.2} />
-      </motion.div>
+        See the case studies ↓
+      </motion.a>
     </section>
   );
 }
