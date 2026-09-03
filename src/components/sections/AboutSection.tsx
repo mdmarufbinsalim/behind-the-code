@@ -18,7 +18,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
         >
           <Image
             src="/about-image.png"
-            alt="Doodle illustration of the developer leaning back in his chair, feet up, staring at a ceiling full of thought bubbles — lightbulbs, question marks, code brackets, a bug, and a tangled scribble"
+            alt="Doodle illustration of the developer leaning back in his chair, feet up on the desk, hands behind his head, thinking — a lightbulb, a code bracket, and a question mark float above him"
             width={780}
             height={780}
             className="w-full max-w-[700px]"
