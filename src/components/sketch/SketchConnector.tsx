@@ -1,12 +1,26 @@
 "use client";
 
-import { useEffect, useMemo, useState, type RefObject } from "react";
+import { useEffect, useState, type RefObject } from "react";
 import { motion } from "framer-motion";
-import rough from "roughjs";
-import { roughDefaults, randomSeed } from "./roughDefaults";
 
-type RoughPath = { d: string; stroke?: string; strokeWidth?: number };
+type Point = [number, number];
 type Box = { top: number; left: number; width: number; height: number };
+
+function smoothPath(points: Point[]): string {
+  let d = `M ${points[0][0]} ${points[0][1]} `;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i - 1] ?? points[i];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[i + 2] ?? p2;
+    const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+    const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+    const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+    const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+    d += `C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2[0]} ${p2[1]} `;
+  }
+  return d;
+}
 
 export function SketchConnector({
   fromRef,
@@ -17,9 +31,9 @@ export function SketchConnector({
   toRef: RefObject<HTMLElement | null>;
   containerRef: RefObject<HTMLElement | null>;
 }) {
-  const generator = useMemo(() => rough.generator(), []);
   const [box, setBox] = useState<Box | null>(null);
-  const [paths, setPaths] = useState<RoughPath[]>([]);
+  const [linePath, setLinePath] = useState("");
+  const [headPath, setHeadPath] = useState("");
 
   useEffect(() => {
     function measure() {
@@ -64,51 +78,33 @@ export function SketchConnector({
       const ey = endY - top;
       const rx = rightZoneX - left;
 
-      const p1: [number, number] = [sx + (rx - sx) * 0.55, sy];
-      const p2: [number, number] = [rx, sy + (ey - sy) * 0.3];
-      const p3: [number, number] = [rx, sy + (ey - sy) * 0.75];
-      const p4: [number, number] = [ex + (rx - ex) * 0.3, ey];
+      const p1: Point = [sx + (rx - sx) * 0.55, sy];
+      const p2: Point = [rx, sy + (ey - sy) * 0.3];
+      const p3: Point = [rx, sy + (ey - sy) * 0.75];
+      const p4: Point = [ex + (rx - ex) * 0.3, ey];
+      const points: Point[] = [[sx, sy], p1, p2, p3, p4, [ex, ey]];
 
-      const curveOpts = {
-        ...roughDefaults,
-        strokeWidth: 2,
-        seed: randomSeed(),
-        roughness: 0.35,
-        bowing: 0.1,
-        disableMultiStroke: true,
-        curveFitting: 1,
-        curveStepCount: 18,
-      };
-
-      const curve = generator.curve([[sx, sy], p1, p2, p3, p4, [ex, ey]], curveOpts);
+      setLinePath(smoothPath(points));
 
       const angle = Math.atan2(ey - p4[1], ex - p4[0]);
-      const headLen = 11;
-      const spread = 0.5;
-      const a1: [number, number] = [
+      const headLen = 12;
+      const spread = 0.45;
+      const a1: Point = [
         ex - headLen * Math.cos(angle - spread),
         ey - headLen * Math.sin(angle - spread),
       ];
-      const a2: [number, number] = [
+      const a2: Point = [
         ex - headLen * Math.cos(angle + spread),
         ey - headLen * Math.sin(angle + spread),
       ];
 
-      const head = generator.linearPath([a1, [ex, ey], a2], {
-        ...roughDefaults,
-        strokeWidth: 2,
-        seed: randomSeed(),
-        roughness: 0.3,
-        disableMultiStroke: true,
-      });
-
-      setPaths([...generator.toPaths(curve), ...generator.toPaths(head)]);
+      setHeadPath(`M ${a1[0]} ${a1[1]} L ${ex} ${ey} L ${a2[0]} ${a2[1]}`);
     }
 
     measure();
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
-  }, [fromRef, toRef, containerRef, generator]);
+  }, [fromRef, toRef, containerRef]);
 
   if (!box) return null;
 
@@ -124,21 +120,30 @@ export function SketchConnector({
       }}
       aria-hidden="true"
     >
-      {paths.map((p, i) => (
-        <motion.path
-          key={i}
-          d={p.d}
-          stroke={p.stroke}
-          strokeWidth={p.strokeWidth}
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          initial={{ pathLength: 0 }}
-          whileInView={{ pathLength: 1 }}
-          viewport={{ once: true, margin: "-120px" }}
-          transition={{ duration: 1.1, delay: i * 0.2, ease: "easeInOut" }}
-        />
-      ))}
+      <motion.path
+        d={linePath}
+        stroke="#0a0a0a"
+        strokeWidth={2}
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={{ pathLength: 0 }}
+        whileInView={{ pathLength: 1 }}
+        viewport={{ once: true, margin: "-120px" }}
+        transition={{ duration: 1.1, ease: "easeInOut" }}
+      />
+      <motion.path
+        d={headPath}
+        stroke="#0a0a0a"
+        strokeWidth={2}
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={{ pathLength: 0 }}
+        whileInView={{ pathLength: 1 }}
+        viewport={{ once: true, margin: "-120px" }}
+        transition={{ duration: 0.3, delay: 1.05, ease: "easeInOut" }}
+      />
     </svg>
   );
 }
