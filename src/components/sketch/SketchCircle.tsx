@@ -35,9 +35,10 @@ export function SketchCircle({
       ...roughDefaults,
       strokeWidth,
       seed,
-      roughness: 1.4,
-      bowing: 1,
-      curveFitting: 0.97,
+      roughness: 1.1,
+      bowing: 0.6,
+      curveFitting: 0.98,
+      disableMultiStroke: true,
     });
     return generator.toPaths(ellipse);
   }, [size, paddingX, paddingY, strokeWidth, seed, generator]);

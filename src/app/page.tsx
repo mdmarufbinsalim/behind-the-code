@@ -1,8 +1,5 @@
 import { Nav } from "@/components/Nav";
-import { Hero } from "@/components/sections/Hero";
-import { CaseStudiesSection } from "@/components/sections/CaseStudiesSection";
-import { ExperienceSection } from "@/components/sections/ExperienceSection";
-import { AboutSection } from "@/components/sections/AboutSection";
+import { HomeContent } from "@/components/HomeContent";
 import { Footer } from "@/components/sections/Footer";
 import { getAllCaseStudies } from "@/lib/case-studies";
 import { experience } from "@content/experience";
@@ -15,10 +12,7 @@ export default function Home() {
     <>
       <Nav />
       <main className="flex-1">
-        <Hero />
-        <CaseStudiesSection caseStudies={caseStudies} />
-        <ExperienceSection experience={experience} />
-        <AboutSection about={about} />
+        <HomeContent caseStudies={caseStudies} experience={experience} about={about} />
       </main>
       <Footer />
     </>

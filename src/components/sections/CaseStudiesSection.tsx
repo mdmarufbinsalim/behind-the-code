@@ -1,12 +1,19 @@
 "use client";
 
+import type { RefObject } from "react";
 import { motion } from "framer-motion";
 import { CaseStudyCard } from "@/components/case-study/CaseStudyCard";
 import type { CaseStudy } from "@/lib/case-studies";
 
-export function CaseStudiesSection({ caseStudies }: { caseStudies: CaseStudy[] }) {
+export function CaseStudiesSection({
+  caseStudies,
+  headingRef,
+}: {
+  caseStudies: CaseStudy[];
+  headingRef?: RefObject<HTMLHeadingElement | null>;
+}) {
   return (
-    <section id="work" className="site-px py-24">
+    <section id="work" className="site-px py-16">
       <motion.h2
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -17,6 +24,7 @@ export function CaseStudiesSection({ caseStudies }: { caseStudies: CaseStudy[] }
         Selected work
       </motion.h2>
       <motion.h3
+        ref={headingRef}
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
