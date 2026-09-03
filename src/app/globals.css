@@ -41,17 +41,6 @@ body {
   font-family: var(--font-hand-alt);
 }
 
-/* Black-line doodle images (transparent background) are the one thing
-   that genuinely needs to flip per theme — everything else uses real
-   dark-mode color tokens instead of an inverted filter. */
-.invert-in-dark {
-  transition: filter 0.2s ease;
-}
-
-.dark .invert-in-dark {
-  filter: invert(1);
-}
-
 .site-px {
   padding-left: 1.5rem;
   padding-right: 1.5rem;

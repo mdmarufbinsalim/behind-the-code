@@ -76,7 +76,15 @@ export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> 
           width={620}
           height={620}
           priority
-          className="invert-in-dark w-full max-w-[560px]"
+          className="w-full max-w-[560px] dark:hidden"
+        />
+        <Image
+          src="/hero-image-dark.png"
+          alt="Doodle illustration of a developer at a dual-monitor desk, surrounded by notes reading Build, Ship, Improve and Clean Code, Better UX, Happy Users"
+          width={620}
+          height={620}
+          priority
+          className="hidden w-full max-w-[560px] dark:block"
         />
       </motion.div>
     </section>

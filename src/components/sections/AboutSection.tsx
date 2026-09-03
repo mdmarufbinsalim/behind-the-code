@@ -21,7 +21,14 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
             alt="Doodle illustration of the developer leaning back in his chair, feet up on the desk, hands behind his head, thinking — a lightbulb, a code bracket, and a question mark float above him"
             width={780}
             height={780}
-            className="invert-in-dark w-full max-w-[700px]"
+            className="w-full max-w-[700px] dark:hidden"
+          />
+          <Image
+            src="/about-image-dark.png"
+            alt="Doodle illustration of the developer leaning back in his chair, feet up on the desk, hands behind his head, thinking — a lightbulb, a code bracket, and a question mark float above him"
+            width={780}
+            height={780}
+            className="hidden w-full max-w-[700px] dark:block"
           />
         </motion.div>
 
