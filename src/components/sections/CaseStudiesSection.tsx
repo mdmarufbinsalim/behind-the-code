@@ -19,7 +19,7 @@ export function CaseStudiesSection({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.5 }}
-        className="mb-2 text-sm tracking-wide text-neutral-500"
+        className="mb-2 text-sm tracking-wide text-neutral-500 lg:text-right"
       >
         Selected work
       </motion.h2>

@@ -40,7 +40,7 @@ export function SketchCircle({
 }) {
   const { ref, size } = useElementSize<HTMLSpanElement>();
   const jitter = useMemo(
-    () => Array.from({ length: 11 }, () => 0.92 + Math.random() * 0.14),
+    () => Array.from({ length: 16 }, () => 0.985 + Math.random() * 0.03),
     []
   );
 

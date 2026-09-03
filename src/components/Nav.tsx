@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
@@ -13,6 +13,13 @@ const links = [
 
 export function Nav() {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-sm">
@@ -35,7 +42,7 @@ export function Nav() {
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="flex h-9 w-9 flex-col items-center justify-center gap-1.5 sm:hidden"
+          className="relative z-50 flex h-9 w-9 flex-col items-center justify-center gap-1.5 sm:hidden"
         >
           <motion.span
             animate={open ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
@@ -55,24 +62,25 @@ export function Nav() {
       <AnimatePresence>
         {open && (
           <motion.nav
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden border-t border-neutral-200 sm:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="fixed inset-0 z-40 flex h-dvh w-full flex-col items-center justify-center gap-8 bg-white sm:hidden"
           >
-            <div className="flex flex-col gap-1 px-6 py-4 text-lg">
-              {links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="font-hand py-2"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
+            {links.map((link, i) => (
+              <motion.a
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.08 + i * 0.06 }}
+                className="font-hand text-4xl"
+              >
+                {link.label}
+              </motion.a>
+            ))}
           </motion.nav>
         )}
       </AnimatePresence>
