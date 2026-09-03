@@ -1,0 +1,58 @@
+---
+title: "Giving a no-code tool a real backend"
+slug: low-code-backend
+role: "Full Stack Software Developer"
+stack: ["Node.js", "WeWeb", "PostgreSQL", "REST"]
+year: "2023"
+summary: "Bridging a no-code frontend platform to a custom Node.js backend so a distributed team could ship real business logic without hitting the ceiling of drag-and-drop."
+---
+
+## The problem
+
+The client's product was built on **WeWeb**, a no-code platform that's
+excellent for assembling interfaces fast — right up until the business
+logic gets complicated. Authentication flows with real role hierarchies,
+multi-step approval processes, data validation that depends on other
+records — none of that lives comfortably in a visual builder.
+
+The team needed the speed of no-code on the frontend without giving up
+the correctness of hand-written backend logic. That meant building a
+proper API layer WeWeb could talk to, designed for people who'd be wiring
+it up visually rather than reading its source.
+
+## The approach
+
+I architected a custom **Node.js backend** as the system of record, with
+WeWeb treated strictly as a rendering layer on top of it.
+
+- **Scalable REST APIs designed for a no-code consumer** — predictable
+  shapes, explicit error codes, and auth flows that WeWeb's visual
+  bindings could wire up without custom code on the frontend side.
+- **Authentication and role logic lived entirely in the backend**, so
+  permission rules stayed correct and auditable even as the frontend was
+  reassembled visually by non-engineers on the team.
+- **Web scraping and automation tooling** to pull structured data from
+  external sources into PostgreSQL and NoSQL stores, feeding the
+  platform's core workflows without manual data entry.
+
+Working with a distributed team of designers, low-code builders, and
+product stakeholders meant the API also had to be *legible* — clear
+naming, predictable behavior, and documentation good enough that
+non-backend engineers could self-serve most integration questions.
+
+## What shipped
+
+- A backend powerful enough to run real business logic, hidden behind an
+  API simple enough for a no-code frontend to consume directly.
+- Automation pipelines that replaced manual data entry with structured,
+  scheduled extraction into the platform's databases.
+- A working model for a hybrid team — low-code builders moving fast on
+  the frontend, hand-written backend underneath keeping it correct.
+
+## What I'd do differently
+
+No-code platforms move fast, but they make backend contract changes
+expensive — a renamed field can quietly break a dozen visual bindings
+with no compiler to catch it. I'd invest earlier in a lightweight schema
+contract between the two layers, so breaking changes surfaced before
+deploy instead of in a support ticket.

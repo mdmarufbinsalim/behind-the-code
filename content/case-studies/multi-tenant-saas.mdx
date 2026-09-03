@@ -1,0 +1,58 @@
+---
+title: "One codebase, a hundred tenants, zero crossed wires"
+slug: multi-tenant-saas
+role: "Software Engineer"
+stack: ["NestJS", "PostgreSQL", "TypeScript"]
+year: "2025"
+summary: "Architecting the multi-tenant backbone for an enterprise SaaS product — where the hardest bugs are the ones that leak one customer's data into another's screen."
+---
+
+## The problem
+
+The product was moving from single-customer deployments to a real
+multi-tenant SaaS model. That sounds like an infrastructure decision, but
+it's really an architecture decision that touches almost every layer:
+every query, every background job, every cache key now has to answer one
+question first — *whose data is this?*
+
+Get it right and tenants never notice the platform is shared. Get it
+wrong and you get the worst kind of bug: one that doesn't crash, doesn't
+log an error, and just quietly shows Tenant A's invoice to Tenant B.
+
+## The approach
+
+I architected the backend around **NestJS's module system**, treating
+tenant isolation as a cross-cutting concern enforced at the framework
+level rather than something each feature had to remember to do
+correctly.
+
+- **Tenant context as a request-scoped provider** — resolved once per
+  request from the authenticated session, then injected everywhere data
+  access happens, so there's exactly one place tenant scoping can go
+  wrong instead of every query site.
+- **Row-level scoping enforced at the repository layer** in PostgreSQL,
+  not left to individual service methods to remember — a missing
+  `WHERE tenant_id = ?` should be structurally hard to write, not just
+  discouraged in code review.
+- **Modular feature boundaries** so tenant-specific configuration and
+  billing logic didn't leak into core domain modules, keeping the system
+  extensible as new enterprise features arrived.
+
+## What shipped
+
+A backend that now runs the product for dozens of tenants on shared
+infrastructure, with:
+
+- Tenant isolation enforced structurally, not by convention.
+- A modular architecture that let new enterprise features ship without
+  destabilizing the multi-tenant core.
+- Clear system design that made onboarding new engineers to the
+  multi-tenant model straightforward instead of folklore.
+
+## What I'd do differently
+
+Request-scoped tenant context is clean until you hit background jobs and
+webhooks, which don't have a request to scope from. I'd design the
+tenant-context propagation for async work streams from day one, rather
+than retrofitting it once the first cross-tenant job scheduling bug
+showed up.

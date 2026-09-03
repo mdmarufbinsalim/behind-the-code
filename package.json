@@ -9,9 +9,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@mdx-js/react": "^3.1.1",
+    "@types/mdx": "^2.0.14",
+    "framer-motion": "^13.1.1",
+    "gray-matter": "^4.0.3",
     "next": "16.3.4",
+    "next-mdx-remote": "^6.0.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "roughjs": "^4.6.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

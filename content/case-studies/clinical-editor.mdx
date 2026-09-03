@@ -1,0 +1,60 @@
+---
+title: "A text editor doctors can actually trust"
+slug: clinical-editor
+role: "Software Engineer"
+stack: ["React", "Slate.js", "Node.js", "MongoDB"]
+year: "2025"
+summary: "Building a domain-specific rich text editor for clinical documentation, where a mangled paragraph isn't just a bug — it's a chart error."
+---
+
+## The problem
+
+Doctors were writing clinical notes in a generic rich text field that had
+been bolted onto an older internal tool. It technically worked. It also
+silently mangled formatting on save, choked on pasted content from other
+systems, and gave clinicians no way to structure a note the way they
+actually think — problem, assessment, plan — without fighting the editor.
+
+For most apps, a flaky text field is an annoyance. For clinical
+documentation, it's a liability. Notes get referenced by other doctors,
+audited, and sometimes end up in front of a court. The editor needed to
+be boring in the best sense: predictable, precise, and structured enough
+to hold domain-specific data without becoming a form.
+
+## The approach
+
+I built a custom editor on **Slate.js** rather than reaching for an
+off-the-shelf rich text library. Slate's document model is just a tree of
+plain JavaScript objects, which mattered a lot here — it meant the
+editor's content could be validated, diffed, and migrated like any other
+piece of structured data, instead of living as an opaque blob of HTML.
+
+Key pieces of the design:
+
+- **Custom node types** for clinical structures (sections, flagged
+  findings, medication blocks) instead of generic bold/italic soup —
+  each one serializes to a stable, versioned JSON shape.
+- **A NoSQL backend on Node.js**, storing documents in their native tree
+  shape rather than forcing them through a relational schema that would
+  fight the editor's model at every turn.
+- **Deterministic serialization** so the same document always produces
+  the same output — critical once notes started being diffed for
+  amendment history.
+
+## What shipped
+
+A production editor now used daily by clinicians, with:
+
+- Structured, queryable clinical notes instead of opaque rich text blobs.
+- An amendment history built directly on the document model, not bolted
+  on afterward.
+- Paste handling that normalizes content from Word, email, and other EHR
+  exports instead of leaving broken markup behind.
+
+## What I'd do differently
+
+Slate's flexibility is also its cost — there's no guardrail stopping you
+from building an inconsistent node schema as requirements grow. Next
+time, I'd invest earlier in a schema validation layer around the document
+tree, rather than trusting convention to hold as the node types
+multiplied.

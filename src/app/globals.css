@@ -1,2 +1,77 @@
 @import "tailwindcss";
 
+@theme inline {
+  --font-hand: var(--font-hand);
+  --font-hand-alt: var(--font-hand-alt);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root {
+  --paper: #ffffff;
+  --ink: #0a0a0a;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+.font-hand {
+  font-family: var(--font-hand);
+}
+
+.font-hand-alt {
+  font-family: var(--font-hand-alt);
+}
+
+@keyframes draw-in {
+  from {
+    stroke-dashoffset: var(--sketch-length, 1000);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.sketch-draw path,
+.sketch-draw line,
+.sketch-draw polyline,
+.sketch-draw circle {
+  stroke-dasharray: var(--sketch-length, 1000);
+  stroke-dashoffset: var(--sketch-length, 1000);
+  animation: draw-in 900ms ease forwards;
+}
+
+.case-content {
+  color: var(--ink);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+.case-content h2 {
+  font-family: var(--font-hand);
+  font-size: 1.75rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.case-content p {
+  margin-bottom: 1.25rem;
+  color: #404040;
+}
+
+.case-content ul {
+  margin: 0 0 1.25rem 1.25rem;
+  list-style: disc;
+  color: #404040;
+}
+
+.case-content li {
+  margin-bottom: 0.5rem;
+}
+
+.case-content strong {
+  color: var(--ink);
+  font-weight: 600;
+}
