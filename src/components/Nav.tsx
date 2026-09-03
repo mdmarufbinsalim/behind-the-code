@@ -29,7 +29,7 @@ export function Nav() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-950/90">
+    <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-sm dark:border-white/10 dark:bg-[var(--paper)]/90">
       <div className="site-px flex items-center justify-between py-4">
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
           <Image
@@ -94,7 +94,7 @@ export function Nav() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2, ease: "easeInOut" }}
-                className="fixed inset-0 z-40 flex h-dvh w-full flex-col items-center justify-center gap-8 bg-white sm:hidden dark:bg-neutral-950"
+                className="fixed inset-0 z-40 flex h-dvh w-full flex-col items-center justify-center gap-8 bg-white sm:hidden dark:bg-[var(--paper)]"
               >
                 {links.map((link, i) => (
                   <motion.a
