@@ -22,18 +22,18 @@ export function CaseStudyCard({
     >
       <Link href={`/case-studies/${frontmatter.slug}`} className="block h-full">
         <SketchBox className="h-full p-6 sm:p-8" padding={4}>
-          <p className="mb-3 text-sm text-neutral-500">
+          <p className="mb-3 text-sm text-neutral-500 dark:text-neutral-400">
             {frontmatter.year} · {frontmatter.role}
           </p>
           <h3 className="font-hand mb-3 text-2xl leading-snug sm:text-3xl">
             {frontmatter.title}
           </h3>
-          <p className="mb-6 text-neutral-600">{frontmatter.summary}</p>
+          <p className="mb-6 text-neutral-600 dark:text-neutral-400">{frontmatter.summary}</p>
           <div className="flex flex-wrap gap-2">
             {frontmatter.stack.map((tech) => (
               <span
                 key={tech}
-                className="rounded-full border border-neutral-300 px-3 py-1 text-xs text-neutral-600"
+                className="rounded-full border border-neutral-300 px-3 py-1 text-xs text-neutral-600 dark:border-neutral-700 dark:text-neutral-400"
               >
                 {tech}
               </span>

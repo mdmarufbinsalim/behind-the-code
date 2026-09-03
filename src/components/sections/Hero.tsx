@@ -14,7 +14,7 @@ export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="mb-3 text-sm tracking-wide text-neutral-500"
+          className="mb-3 text-sm tracking-wide text-neutral-500 dark:text-neutral-400"
         >
           Software engineer, based in{" "}
           <SketchCircle delay={1.1} paddingX={10} paddingY={6} className="mx-2.5">
@@ -45,7 +45,7 @@ export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-8 max-w-xl text-lg text-neutral-600"
+          className="mt-8 max-w-xl text-lg text-neutral-600 dark:text-neutral-400"
         >
           Md. Maruf Bin Salim Bhuiyan — clinical editors, multi-tenant SaaS
           backends, and the unglamorous infrastructure that has to hold up
@@ -76,7 +76,7 @@ export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> 
           width={620}
           height={620}
           priority
-          className="w-full max-w-[560px]"
+          className="invert-in-dark w-full max-w-[560px]"
         />
       </motion.div>
     </section>

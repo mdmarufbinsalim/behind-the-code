@@ -11,7 +11,7 @@ export function CaseStudyHero({ frontmatter }: { frontmatter: CaseStudyFrontmatt
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="mb-3 text-sm text-neutral-500"
+        className="mb-3 text-sm text-neutral-500 dark:text-neutral-400"
       >
         {frontmatter.year} · {frontmatter.role}
       </motion.p>

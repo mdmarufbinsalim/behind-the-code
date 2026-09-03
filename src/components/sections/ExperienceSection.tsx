@@ -35,7 +35,7 @@ export function ExperienceSection({ experience }: { experience: ExperienceEntry[
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.5 }}
-        className="mb-2 text-sm tracking-wide text-neutral-500"
+        className="mb-2 text-sm tracking-wide text-neutral-500 dark:text-neutral-400"
       >
         Where I've worked
       </motion.h2>
@@ -70,18 +70,25 @@ export function ExperienceSection({ experience }: { experience: ExperienceEntry[
               >
                 <span
                   ref={dotRefs[i] as React.RefObject<HTMLSpanElement>}
-                  className="absolute top-1.5 left-0 h-3.5 w-3.5 rounded-full border-2 border-neutral-900 bg-white sm:h-[18px] sm:w-[18px]"
+                  className="absolute top-1.5 left-0 h-3.5 w-3.5 rounded-full border-2 border-neutral-900 bg-white sm:h-[18px] sm:w-[18px] dark:border-neutral-100 dark:bg-neutral-950"
                 />
 
-                <p className="mb-1 text-sm text-neutral-500">
+                <p className="mb-1 text-sm text-neutral-500 dark:text-neutral-400">
                   {entry.start} — {entry.end}
                 </p>
                 <h4 className="font-hand text-2xl">
-                  {entry.role} <span className="text-neutral-500">· {entry.company}</span>
+                  {entry.role}{" "}
+                  <span className="text-neutral-500 dark:text-neutral-400">
+                    · {entry.company}
+                  </span>
                 </h4>
-                <p className="mb-3 text-sm text-neutral-500">{entry.location}</p>
-                <p className="mb-4 max-w-xl text-neutral-700">{entry.summary}</p>
-                <ul className="list-outside list-disc space-y-1 pl-5 text-sm text-neutral-600">
+                <p className="mb-3 text-sm text-neutral-500 dark:text-neutral-400">
+                  {entry.location}
+                </p>
+                <p className="mb-4 max-w-xl text-neutral-700 dark:text-neutral-300">
+                  {entry.summary}
+                </p>
+                <ul className="list-outside list-disc space-y-1 pl-5 text-sm text-neutral-600 dark:text-neutral-400">
                   {entry.highlights.map((h) => (
                     <li key={h}>{h}</li>
                   ))}

@@ -29,10 +29,23 @@ export function Nav() {
   }, [open]);
 
   return (
-    <header className="invert-in-dark sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/90 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-950/90">
       <div className="site-px flex items-center justify-between py-4">
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <Image src="/logo-black.svg" alt="Behind the Code" width={28} height={28} />
+          <Image
+            src="/logo-black.svg"
+            alt="Behind the Code"
+            width={28}
+            height={28}
+            className="dark:hidden"
+          />
+          <Image
+            src="/logo-white.svg"
+            alt="Behind the Code"
+            width={28}
+            height={28}
+            className="hidden dark:block"
+          />
           <span className="font-hand text-xl">Behind the Code</span>
         </Link>
 
@@ -58,15 +71,15 @@ export function Nav() {
           >
             <motion.span
               animate={open ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
-              className="block h-0.5 w-6 bg-neutral-900"
+              className="block h-0.5 w-6 bg-neutral-900 dark:bg-neutral-100"
             />
             <motion.span
               animate={open ? { opacity: 0 } : { opacity: 1 }}
-              className="block h-0.5 w-6 bg-neutral-900"
+              className="block h-0.5 w-6 bg-neutral-900 dark:bg-neutral-100"
             />
             <motion.span
               animate={open ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
-              className="block h-0.5 w-6 bg-neutral-900"
+              className="block h-0.5 w-6 bg-neutral-900 dark:bg-neutral-100"
             />
           </button>
         </div>
@@ -81,7 +94,7 @@ export function Nav() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2, ease: "easeInOut" }}
-                className="invert-in-dark fixed inset-0 z-40 flex h-dvh w-full flex-col items-center justify-center gap-8 bg-white sm:hidden"
+                className="fixed inset-0 z-40 flex h-dvh w-full flex-col items-center justify-center gap-8 bg-white sm:hidden dark:bg-neutral-950"
               >
                 {links.map((link, i) => (
                   <motion.a

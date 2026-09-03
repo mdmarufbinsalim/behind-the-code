@@ -76,7 +76,7 @@ export function SketchCircle({
         {path && (
           <motion.path
             d={path}
-            stroke="#0a0a0a"
+            stroke="var(--ink)"
             strokeWidth={strokeWidth}
             fill="none"
             strokeLinecap="butt"

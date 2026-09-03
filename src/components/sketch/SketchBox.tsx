@@ -48,7 +48,7 @@ export function SketchBox({
           (animate ? (
             <motion.path
               d={path}
-              stroke="#0a0a0a"
+              stroke="var(--ink)"
               strokeWidth={strokeWidth}
               fill="none"
               strokeLinecap="butt"
@@ -61,7 +61,7 @@ export function SketchBox({
           ) : (
             <path
               d={path}
-              stroke="#0a0a0a"
+              stroke="var(--ink)"
               strokeWidth={strokeWidth}
               fill="none"
               strokeLinecap="butt"

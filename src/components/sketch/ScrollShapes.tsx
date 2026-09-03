@@ -54,7 +54,7 @@ function ShapeSvg({
     >
       <path
         d={placed.shape.path}
-        stroke="#0a0a0a"
+        stroke="var(--ink)"
         strokeWidth={2}
         fill="none"
         strokeLinecap="butt"

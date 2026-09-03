@@ -104,7 +104,7 @@ export function SketchConnector({
     >
       <motion.path
         d={linePath}
-        stroke="#0a0a0a"
+        stroke="var(--ink)"
         strokeWidth={2}
         fill="none"
         strokeLinecap="butt"
@@ -116,7 +116,7 @@ export function SketchConnector({
       />
       <motion.path
         d={headPath}
-        stroke="#0a0a0a"
+        stroke="var(--ink)"
         strokeWidth={2}
         fill="none"
         strokeLinecap="butt"

@@ -99,7 +99,7 @@ export function TimelineWave({
     >
       <motion.path
         d={path}
-        stroke="#0a0a0a"
+        stroke="var(--ink)"
         strokeWidth={2.5}
         fill="none"
         strokeLinecap="butt"

@@ -21,7 +21,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
             alt="Doodle illustration of the developer leaning back in his chair, feet up on the desk, hands behind his head, thinking — a lightbulb, a code bracket, and a question mark float above him"
             width={780}
             height={780}
-            className="w-full max-w-[700px]"
+            className="invert-in-dark w-full max-w-[700px]"
           />
         </motion.div>
 
@@ -31,7 +31,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5 }}
-            className="mb-2 text-sm tracking-wide text-neutral-500"
+            className="mb-2 text-sm tracking-wide text-neutral-500 dark:text-neutral-400"
           >
             About
           </motion.h2>
@@ -60,7 +60,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="text-neutral-700"
+                className="text-neutral-700 dark:text-neutral-300"
               >
                 {para}
               </motion.p>
