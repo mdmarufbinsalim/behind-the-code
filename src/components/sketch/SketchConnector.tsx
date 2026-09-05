@@ -20,10 +20,12 @@ export function SketchConnector({
   const [headPath, setHeadPath] = useState("");
 
   useEffect(() => {
+    const from = fromRef.current;
+    const to = toRef.current;
+    if (!from || !to) return;
+
     function measure() {
       const container = containerRef.current;
-      const from = fromRef.current;
-      const to = toRef.current;
       if (!container || !from || !to) return;
 
       const containerRect = container.getBoundingClientRect();
@@ -83,9 +85,45 @@ export function SketchConnector({
       setHeadPath(`M ${a1[0]} ${a1[1]} L ${ex} ${ey} L ${a2[0]} ${a2[1]}`);
     }
 
-    measure();
+    // `from`/`to` are animated by framer-motion via CSS transforms, which
+    // move getBoundingClientRect() results without firing resize/layout
+    // events. Keep re-measuring on every frame for a bit after mount and
+    // again once the target scrolls into view (its whileInView animation
+    // kicks off then), so the arrow settles on the final, post-animation
+    // positions instead of freezing on a mid-animation snapshot.
+    let rafId: number | null = null;
+    function settleFor(ms: number) {
+      const stopAt = performance.now() + ms;
+      function tick() {
+        measure();
+        if (performance.now() < stopAt) {
+          rafId = requestAnimationFrame(tick);
+        } else {
+          rafId = null;
+        }
+      }
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      tick();
+    }
+
+    settleFor(1500);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          settleFor(800);
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(to);
+
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    return () => {
+      window.removeEventListener("resize", measure);
+      observer.disconnect();
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, [fromRef, toRef, containerRef]);
 
   if (!box) return null;
