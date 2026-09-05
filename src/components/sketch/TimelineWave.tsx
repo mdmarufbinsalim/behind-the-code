@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type RefObject } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 type Point = [number, number];
 
@@ -30,6 +30,12 @@ export function TimelineWave({
 }) {
   const [path, setPath] = useState("");
   const [box, setBox] = useState({ top: 0, left: 0, width: 0, height: 0 });
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 0.8", "end 0.6"],
+  });
+  const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   const bowSeeds = useMemo(
     () => dotRefs.map(() => 0.5 + Math.random() * 0.5),
@@ -103,9 +109,7 @@ export function TimelineWave({
         strokeWidth={2.5}
         fill="none"
         strokeLinecap="butt"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
-        transition={{ duration: 1.4, ease: "easeInOut" }}
+        style={{ pathLength }}
       />
     </svg>
   );

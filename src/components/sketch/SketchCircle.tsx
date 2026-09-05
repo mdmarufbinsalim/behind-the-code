@@ -83,7 +83,7 @@ export function SketchCircle({
             strokeLinejoin="round"
             initial={{ pathLength: 0 }}
             whileInView={{ pathLength: 1 }}
-            viewport={{ once: true, margin: "-40px" }}
+            viewport={{ once: false, margin: "-40px" }}
             transition={{ duration: 0.7, delay, ease: "easeInOut" }}
           />
         )}

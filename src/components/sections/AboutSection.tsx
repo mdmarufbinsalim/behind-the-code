@@ -12,7 +12,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, margin: "-100px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="hidden lg:block"
         >
@@ -36,7 +36,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
           <motion.h2
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.5 }}
             className="mb-2 text-sm tracking-wide text-neutral-500 dark:text-neutral-400"
           >
@@ -46,7 +46,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
           <motion.h3
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.5, delay: 0.05 }}
             className="font-hand relative mb-10 inline-block text-3xl sm:text-4xl"
           >
@@ -65,7 +65,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
                 key={i}
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
+                viewport={{ once: false, margin: "-80px" }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 className="text-neutral-700 dark:text-neutral-300"
               >

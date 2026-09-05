@@ -149,7 +149,7 @@ export function SketchConnector({
         strokeLinejoin="round"
         initial={{ pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
-        viewport={{ once: true, margin: "-120px" }}
+        viewport={{ once: false, margin: "-120px" }}
         transition={{ duration: 1.1, ease: "easeInOut" }}
       />
       <motion.path
@@ -161,7 +161,7 @@ export function SketchConnector({
         strokeLinejoin="round"
         initial={{ pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
-        viewport={{ once: true, margin: "-120px" }}
+        viewport={{ once: false, margin: "-120px" }}
         transition={{ duration: 0.3, delay: 1.05, ease: "easeInOut" }}
       />
     </svg>

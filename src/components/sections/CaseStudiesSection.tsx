@@ -17,7 +17,7 @@ export function CaseStudiesSection({
       <motion.h2
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, margin: "-100px" }}
         transition={{ duration: 0.5 }}
         className="mb-2 text-sm tracking-wide text-neutral-500 lg:text-right dark:text-neutral-400"
       >
@@ -27,7 +27,7 @@ export function CaseStudiesSection({
         ref={headingRef}
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, margin: "-100px" }}
         transition={{ duration: 0.5, delay: 0.05 }}
         className="mb-12 max-w-2xl text-3xl font-medium sm:text-4xl lg:ml-auto lg:text-right"
       >
