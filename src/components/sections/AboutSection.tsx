@@ -13,7 +13,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
           initial={{ opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: false, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.84, ease: "easeOut" }}
           className="hidden lg:block"
         >
           <Image
@@ -37,7 +37,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: "-100px" }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.7 }}
             className="mb-2 text-sm tracking-wide text-neutral-500 dark:text-neutral-400"
           >
             About
@@ -47,7 +47,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: "-100px" }}
-            transition={{ duration: 0.5, delay: 0.05 }}
+            transition={{ duration: 0.7, delay: 0.07 }}
             className="font-hand relative mb-10 inline-block text-3xl sm:text-4xl"
           >
             {about.intro}
@@ -66,7 +66,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, margin: "-80px" }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
+                transition={{ duration: 0.7, delay: i * 0.112 }}
                 className="text-neutral-700 dark:text-neutral-300"
               >
                 {para}

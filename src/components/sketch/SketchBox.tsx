@@ -56,7 +56,7 @@ export function SketchBox({
               initial={{ pathLength: 0 }}
               whileInView={{ pathLength: 1 }}
               viewport={{ once: false, margin: "-40px" }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
+              transition={{ duration: 1.12, ease: "easeInOut" }}
             />
           ) : (
             <path

@@ -13,7 +13,7 @@ export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> 
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.7, delay: 0.14 }}
           className="mb-3 text-sm tracking-wide text-neutral-500 dark:text-neutral-400"
         >
           Software engineer, based in{" "}
@@ -25,7 +25,7 @@ export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> 
         <motion.h1
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.84, delay: 0.28 }}
           className="max-w-3xl text-4xl leading-tight font-medium sm:text-6xl"
         >
           I build the systems{" "}
@@ -44,7 +44,7 @@ export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> 
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.7, delay: 0.56 }}
           className="mt-8 max-w-xl text-lg text-neutral-600 dark:text-neutral-400"
         >
           Md. Maruf Bin Salim Bhuiyan — clinical editors, multi-tenant SaaS
@@ -57,7 +57,7 @@ export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> 
           href="#work"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
+          transition={{ duration: 0.7, delay: 0.84 }}
           className="font-hand mt-10 text-xl underline decoration-2 underline-offset-4"
         >
           See the case studies ↓
@@ -67,7 +67,7 @@ export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> 
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+        transition={{ duration: 0.84, delay: 0.42, ease: "easeOut" }}
         className="hidden justify-self-end lg:block"
       >
         <Image

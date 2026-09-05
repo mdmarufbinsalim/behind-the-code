@@ -10,7 +10,7 @@ export function CaseStudyHero({ frontmatter }: { frontmatter: CaseStudyFrontmatt
       <motion.p
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.56 }}
         className="mb-3 text-sm text-neutral-500 dark:text-neutral-400"
       >
         {frontmatter.year} · {frontmatter.role}
@@ -19,7 +19,7 @@ export function CaseStudyHero({ frontmatter }: { frontmatter: CaseStudyFrontmatt
       <motion.h1
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.08 }}
+        transition={{ duration: 0.7, delay: 0.112 }}
         className="relative max-w-2xl text-3xl leading-tight font-medium sm:text-5xl"
       >
         {frontmatter.title}
@@ -34,7 +34,7 @@ export function CaseStudyHero({ frontmatter }: { frontmatter: CaseStudyFrontmatt
       <motion.p
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.16 }}
+        transition={{ duration: 0.7, delay: 0.224 }}
         className="mt-8 max-w-xl text-lg text-neutral-600"
       >
         {frontmatter.summary}
@@ -43,7 +43,7 @@ export function CaseStudyHero({ frontmatter }: { frontmatter: CaseStudyFrontmatt
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.24 }}
+        transition={{ duration: 0.7, delay: 0.336 }}
         className="mt-6 flex flex-wrap gap-2"
       >
         {frontmatter.stack.map((tech) => (

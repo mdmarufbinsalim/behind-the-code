@@ -150,7 +150,7 @@ export function SketchConnector({
         initial={{ pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
         viewport={{ once: false, margin: "-120px" }}
-        transition={{ duration: 1.1, ease: "easeInOut" }}
+        transition={{ duration: 1.54, ease: "easeInOut" }}
       />
       <motion.path
         d={headPath}
@@ -162,7 +162,7 @@ export function SketchConnector({
         initial={{ pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
         viewport={{ once: false, margin: "-120px" }}
-        transition={{ duration: 0.3, delay: 1.05, ease: "easeInOut" }}
+        transition={{ duration: 0.42, delay: 1.47, ease: "easeInOut" }}
       />
     </svg>
   );

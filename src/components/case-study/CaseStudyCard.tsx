@@ -17,7 +17,7 @@ export function CaseStudyCard({
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, margin: "-80px" }}
-      transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
+      transition={{ duration: 0.7, delay: index * 0.14, ease: "easeOut" }}
       whileHover={{ rotate: index % 2 === 0 ? -0.6 : 0.6, y: -4 }}
     >
       <Link href={`/case-studies/${frontmatter.slug}`} className="block h-full">

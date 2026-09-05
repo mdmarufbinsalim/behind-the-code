@@ -93,7 +93,7 @@ export function Nav() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
+                transition={{ duration: 0.28, ease: "easeInOut" }}
                 className="fixed inset-0 z-40 flex h-dvh w-full flex-col items-center justify-center gap-8 bg-white sm:hidden dark:bg-[var(--paper)]"
               >
                 {links.map((link, i) => (
@@ -103,7 +103,7 @@ export function Nav() {
                     onClick={() => setOpen(false)}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.08 + i * 0.06 }}
+                    transition={{ duration: 0.42, delay: 0.112 + i * 0.084 }}
                     className="font-hand text-4xl"
                   >
                     {link.label}

@@ -10,13 +10,13 @@ import { TimelineWave } from "@/components/sketch/TimelineWave";
 const listVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.08 },
+    transition: { staggerChildren: 0.112 },
   },
 };
 
 const itemVariants = {
   hidden: { opacity: 0, x: -16 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.7 } },
 };
 
 export function ExperienceSection({ experience }: { experience: ExperienceEntry[] }) {
@@ -34,7 +34,7 @@ export function ExperienceSection({ experience }: { experience: ExperienceEntry[
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: false, margin: "-100px" }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.7 }}
         className="mb-2 text-sm tracking-wide text-neutral-500 dark:text-neutral-400"
       >
         Where I've worked
@@ -43,7 +43,7 @@ export function ExperienceSection({ experience }: { experience: ExperienceEntry[
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: false, margin: "-100px" }}
-        transition={{ duration: 0.5, delay: 0.05 }}
+        transition={{ duration: 0.7, delay: 0.07 }}
         className="mb-14 max-w-2xl text-3xl font-medium sm:text-4xl"
       >
         A path through a few different problems

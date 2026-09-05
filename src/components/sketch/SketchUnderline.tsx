@@ -74,7 +74,7 @@ export function SketchUnderline({
         initial={{ pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
         viewport={{ once: false, margin: "-40px" }}
-        transition={{ duration: 0.7, delay, ease: "easeInOut" }}
+        transition={{ duration: 0.98, delay, ease: "easeInOut" }}
       />
     </svg>
   );
