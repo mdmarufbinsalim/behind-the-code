@@ -129,3 +129,31 @@ body {
   color: var(--ink);
   font-weight: 600;
 }
+
+/* Theme switch: the new theme is clipped in as a circle growing from the
+   toggle (see ThemeToggle.tsx), so the default root cross-fade has to go and
+   the incoming snapshot has to sit on top of the outgoing one. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Expanding (going dark): the incoming theme is clipped open on top. */
+:root[data-theme-sweep="expand"]::view-transition-old(root) {
+  z-index: 0;
+}
+
+:root[data-theme-sweep="expand"]::view-transition-new(root) {
+  z-index: 1;
+}
+
+/* Collapsing (going light): the outgoing theme stays on top and is clipped
+   shut, draining back into the toggle to reveal the new theme underneath. */
+:root[data-theme-sweep="collapse"]::view-transition-old(root) {
+  z-index: 1;
+}
+
+:root[data-theme-sweep="collapse"]::view-transition-new(root) {
+  z-index: 0;
+}
