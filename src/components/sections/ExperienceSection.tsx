@@ -67,7 +67,7 @@ export function ExperienceSection({ experience }: { experience: ExperienceEntry[
               >
                 <span
                   ref={dotRefs[i] as React.RefObject<HTMLSpanElement>}
-                  className="absolute top-1 left-0 h-[18px] w-[18px] rounded-full border-[4.5px] border-neutral-900 bg-white sm:h-[22px] sm:w-[22px] dark:border-neutral-100 dark:bg-neutral-950"
+                  className="absolute top-1.5 left-0 h-3.5 w-3.5 rounded-full border-[2.5px] border-neutral-900 bg-white sm:h-[18px] sm:w-[18px] dark:border-neutral-100 dark:bg-neutral-950"
                 />
 
                 <p className="mb-1 text-sm text-neutral-500 dark:text-neutral-400">
