@@ -3,6 +3,7 @@
 import { useMemo, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { useElementSize } from "./useElementSize";
+import { SKETCH_STROKE } from "@/components/sketch/stroke";
 
 type Point = [number, number];
 
@@ -26,7 +27,7 @@ function catmullRomLoop(points: Point[]): string {
 export function SketchCircle({
   children,
   className = "",
-  strokeWidth = 2.5,
+  strokeWidth = SKETCH_STROKE,
   paddingX = 14,
   paddingY = 10,
   delay = 0,

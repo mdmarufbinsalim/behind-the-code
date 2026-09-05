@@ -2,8 +2,31 @@
 
 import { useEffect, useMemo, useState, type RefObject } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  GHOST_DASH,
+  GHOST_OPACITY,
+  GHOST_STROKE,
+  SKETCH_STROKE,
+} from "@/components/sketch/stroke";
 
 type Point = [number, number];
+
+// Layout position of `el` inside `container`, walking the offsetParent chain.
+// Deliberately not getBoundingClientRect(): the entries are animated with CSS
+// transforms (and re-animate every time they re-enter the viewport), which
+// would move the measured dots out from under an already-drawn path. Offsets
+// ignore transforms, so the wave always lands on the dots' resting positions.
+function offsetWithin(el: HTMLElement, container: HTMLElement): Point {
+  let x = 0;
+  let y = 0;
+  let node: HTMLElement | null = el;
+  while (node && node !== container) {
+    x += node.offsetLeft;
+    y += node.offsetTop;
+    node = node.offsetParent as HTMLElement | null;
+  }
+  return [x, y];
+}
 
 function smoothOpenPath(points: Point[]): string {
   let d = `M ${points[0][0]} ${points[0][1]} `;
@@ -49,13 +72,9 @@ export function TimelineWave({
       const dots = dotRefs.map((r) => r.current).filter(Boolean) as HTMLElement[];
       if (dots.length < 2) return;
 
-      const containerRect = container.getBoundingClientRect();
       const dotPoints: Point[] = dots.map((dot) => {
-        const r = dot.getBoundingClientRect();
-        return [
-          r.left - containerRect.left + r.width / 2,
-          r.top - containerRect.top + r.height / 2,
-        ];
+        const [x, y] = offsetWithin(dot, container);
+        return [x + dot.offsetWidth / 2, y + dot.offsetHeight / 2];
       });
 
       const amplitude = 10;
@@ -82,15 +101,16 @@ export function TimelineWave({
       setPath(smoothOpenPath(points.map(([x, y]) => [x - left, y - top])));
     }
 
-    // This component only mounts once the caller confirms every dot's
-    // entrance animation has finished, so the first measurement already
-    // reflects final positions. Keep one extra pass for a web font that
-    // might still be swapping in.
+    // Offsets are already final at mount, so no waiting on entrance
+    // animations. A ResizeObserver covers everything that does move the dots
+    // for real: reflow, a web font swapping in, the viewport changing.
     measure();
-    const fontSettleTimer = setTimeout(measure, 250);
+    const observer = new ResizeObserver(measure);
+    const container = containerRef.current;
+    if (container) observer.observe(container);
     window.addEventListener("resize", measure);
     return () => {
-      clearTimeout(fontSettleTimer);
+      observer.disconnect();
       window.removeEventListener("resize", measure);
     };
   }, [containerRef, dotRefs, bowSeeds]);
@@ -103,10 +123,21 @@ export function TimelineWave({
       style={{ top: box.top, left: box.left, width: box.width, height: box.height }}
       aria-hidden="true"
     >
+      {/* Ghost: the full route, dotted and faint, so the scroll-drawn stroke
+          reads as tracing a path that was already there. */}
+      <path
+        d={path}
+        stroke="var(--ink)"
+        strokeWidth={GHOST_STROKE}
+        strokeOpacity={GHOST_OPACITY}
+        strokeDasharray={GHOST_DASH}
+        fill="none"
+        strokeLinecap="round"
+      />
       <motion.path
         d={path}
         stroke="var(--ink)"
-        strokeWidth={2.5}
+        strokeWidth={SKETCH_STROKE}
         fill="none"
         strokeLinecap="butt"
         style={{ pathLength }}

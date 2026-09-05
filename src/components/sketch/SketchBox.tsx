@@ -3,11 +3,12 @@
 import { useMemo, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { useElementSize } from "./useElementSize";
+import { SKETCH_STROKE } from "@/components/sketch/stroke";
 
 export function SketchBox({
   children,
   className = "",
-  strokeWidth = 2,
+  strokeWidth = SKETCH_STROKE,
   padding = 3,
   animate = true,
 }: {

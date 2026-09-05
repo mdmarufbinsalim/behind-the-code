@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import type { ExperienceEntry } from "@content/experience";
 import { TimelineWave } from "@/components/sketch/TimelineWave";
@@ -26,7 +26,6 @@ export function ExperienceSection({ experience }: { experience: ExperienceEntry[
     () => experience.map(() => ({ current: null }) as React.RefObject<HTMLElement | null>),
     [experience]
   );
-  const [entriesReady, setEntriesReady] = useState(false);
 
   return (
     <section id="experience" ref={sectionRef} className="site-px relative py-16">
@@ -50,7 +49,7 @@ export function ExperienceSection({ experience }: { experience: ExperienceEntry[
       </motion.h3>
 
       <div ref={containerRef} className="relative max-w-3xl">
-        {entriesReady && <TimelineWave containerRef={containerRef} dotRefs={dotRefs} />}
+        <TimelineWave containerRef={containerRef} dotRefs={dotRefs} />
 
         <motion.ol
           initial="hidden"
@@ -60,17 +59,15 @@ export function ExperienceSection({ experience }: { experience: ExperienceEntry[
           className="space-y-14"
         >
           {experience.map((entry, i) => {
-            const isLast = i === experience.length - 1;
             return (
               <motion.li
                 key={`${entry.company}-${entry.start}`}
                 variants={itemVariants}
-                onAnimationComplete={isLast ? () => setEntriesReady(true) : undefined}
                 className="relative pl-8 sm:pl-10"
               >
                 <span
                   ref={dotRefs[i] as React.RefObject<HTMLSpanElement>}
-                  className="absolute top-1.5 left-0 h-3.5 w-3.5 rounded-full border-2 border-neutral-900 bg-white sm:h-[18px] sm:w-[18px] dark:border-neutral-100 dark:bg-neutral-950"
+                  className="absolute top-1 left-0 h-[18px] w-[18px] rounded-full border-[4.5px] border-neutral-900 bg-white sm:h-[22px] sm:w-[22px] dark:border-neutral-100 dark:bg-neutral-950"
                 />
 
                 <p className="mb-1 text-sm text-neutral-500 dark:text-neutral-400">

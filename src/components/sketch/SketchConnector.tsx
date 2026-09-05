@@ -1,7 +1,13 @@
 "use client";
 
-import { useEffect, useState, type RefObject } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState, type RefObject } from "react";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import {
+  GHOST_DASH,
+  GHOST_OPACITY,
+  GHOST_STROKE,
+  SKETCH_STROKE,
+} from "@/components/sketch/stroke";
 
 type Point = [number, number];
 type Box = { top: number; left: number; width: number; height: number };
@@ -128,8 +134,41 @@ export function SketchConnector({
 
   if (!box) return null;
 
+  return <ConnectorSvg box={box} linePath={linePath} headPath={headPath} />;
+}
+
+// Split out so the ref `useScroll` tracks exists on this component's very
+// first render — the parent renders nothing until it has measured.
+function ConnectorSvg({
+  box,
+  linePath,
+  headPath,
+}: {
+  box: Box;
+  linePath: string;
+  headPath: string;
+}) {
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // The line draws itself as the arrow's own span scrolls through the
+  // viewport: nothing at the moment it appears from the bottom, complete
+  // by the time its tip has climbed to the middle of the screen.
+  const { scrollYProgress } = useScroll({
+    // useScroll's target is typed for HTML elements; an SVG root tracks fine.
+    target: svgRef as unknown as RefObject<HTMLElement>,
+    offset: ["start 0.92", "end 0.55"],
+  });
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 140,
+    damping: 30,
+    restDelta: 0.001,
+  });
+  // The head only lands in the last stretch, once the line has arrived.
+  const headLength = useTransform(progress, [0.84, 1], [0, 1], { clamp: true });
+
   return (
     <svg
+      ref={svgRef}
       className="pointer-events-none absolute hidden lg:block"
       style={{
         top: box.top,
@@ -140,29 +179,44 @@ export function SketchConnector({
       }}
       aria-hidden="true"
     >
+      {/* Ghost: the whole route, dotted and faint, always visible so the
+          scroll-drawn stroke reads as tracing a path that was already there. */}
+      <path
+        d={linePath}
+        stroke="var(--ink)"
+        strokeWidth={GHOST_STROKE}
+        strokeOpacity={GHOST_OPACITY}
+        strokeDasharray={GHOST_DASH}
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d={headPath}
+        stroke="var(--ink)"
+        strokeWidth={GHOST_STROKE}
+        strokeOpacity={GHOST_OPACITY}
+        strokeDasharray={GHOST_DASH}
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
       <motion.path
         d={linePath}
         stroke="var(--ink)"
-        strokeWidth={2}
+        strokeWidth={SKETCH_STROKE}
         fill="none"
         strokeLinecap="butt"
         strokeLinejoin="round"
-        initial={{ pathLength: 0 }}
-        whileInView={{ pathLength: 1 }}
-        viewport={{ once: false, margin: "-120px" }}
-        transition={{ duration: 1.54, ease: "easeInOut" }}
+        style={{ pathLength: progress }}
       />
       <motion.path
         d={headPath}
         stroke="var(--ink)"
-        strokeWidth={2}
+        strokeWidth={SKETCH_STROKE}
         fill="none"
         strokeLinecap="butt"
         strokeLinejoin="round"
-        initial={{ pathLength: 0 }}
-        whileInView={{ pathLength: 1 }}
-        viewport={{ once: false, margin: "-120px" }}
-        transition={{ duration: 0.42, delay: 1.47, ease: "easeInOut" }}
+        style={{ pathLength: headLength }}
       />
     </svg>
   );

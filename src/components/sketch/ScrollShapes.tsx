@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type RefObject } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { SKETCH_STROKE } from "@/components/sketch/stroke";
 
 const SHAPES = [
   {
@@ -55,7 +56,7 @@ function ShapeSvg({
       <path
         d={placed.shape.path}
         stroke="var(--ink)"
-        strokeWidth={2}
+        strokeWidth={SKETCH_STROKE}
         fill="none"
         strokeLinecap="butt"
         strokeLinejoin="round"

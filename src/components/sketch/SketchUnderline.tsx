@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { SKETCH_STROKE } from "@/components/sketch/stroke";
 
 type Point = [number, number];
 
@@ -25,7 +26,7 @@ export function SketchUnderline({
   className = "",
   width = 240,
   height = 16,
-  strokeWidth = 3,
+  strokeWidth = SKETCH_STROKE,
   delay = 0,
 }: {
   className?: string;
