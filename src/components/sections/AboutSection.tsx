@@ -3,34 +3,31 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { SketchUnderline } from "@/components/sketch/SketchUnderline";
+import { SketchReveal } from "@/components/sketch/SketchReveal";
 import type { about as AboutType } from "@content/about";
 
 export function AboutSection({ about }: { about: typeof AboutType }) {
   return (
     <section id="about" className="site-px py-16">
       <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-8">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: false, margin: "-100px" }}
-          transition={{ duration: 0.84, ease: "easeOut" }}
-          className="hidden lg:block"
-        >
-          <Image
-            src="/about-image.png"
-            alt="Doodle illustration of the developer leaning back in his chair, feet up on the desk, hands behind his head, thinking — a lightbulb, a code bracket, and a question mark float above him"
-            width={780}
-            height={780}
-            className="w-full max-w-[700px] dark:hidden"
-          />
-          <Image
-            src="/about-image-dark.png"
-            alt="Doodle illustration of the developer leaning back in his chair, feet up on the desk, hands behind his head, thinking — a lightbulb, a code bracket, and a question mark float above him"
-            width={780}
-            height={780}
-            className="hidden w-full max-w-[700px] dark:block"
-          />
-        </motion.div>
+        <div className="hidden lg:block">
+          <SketchReveal width={780} height={780} triggerOnView once={false} className="max-w-[700px]">
+            <Image
+              src="/about-image.png"
+              alt="Doodle illustration of the developer leaning back in his chair, feet up on the desk, hands behind his head, thinking — a lightbulb, a code bracket, and a question mark float above him"
+              width={780}
+              height={780}
+              className="w-full max-w-[700px] dark:hidden"
+            />
+            <Image
+              src="/about-image-dark.png"
+              alt="Doodle illustration of the developer leaning back in his chair, feet up on the desk, hands behind his head, thinking — a lightbulb, a code bracket, and a question mark float above him"
+              width={780}
+              height={780}
+              className="hidden w-full max-w-[700px] dark:block"
+            />
+          </SketchReveal>
+        </div>
 
         <div className="max-w-2xl lg:text-right">
           <motion.h2

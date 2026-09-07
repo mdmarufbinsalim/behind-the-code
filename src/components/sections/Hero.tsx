@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { SketchUnderline } from "@/components/sketch/SketchUnderline";
 import { SketchCircle } from "@/components/sketch/SketchCircle";
+import { SketchReveal } from "@/components/sketch/SketchReveal";
 
 export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> }) {
   return (
@@ -64,29 +65,26 @@ export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> 
         </motion.a>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.84, delay: 0.42, ease: "easeOut" }}
-        className="hidden justify-self-end lg:block"
-      >
-        <Image
-          src="/hero-image.png"
-          alt="Doodle illustration of a developer at a dual-monitor desk, surrounded by notes reading Build, Ship, Improve and Clean Code, Better UX, Happy Users"
-          width={620}
-          height={620}
-          priority
-          className="w-full max-w-[560px] dark:hidden"
-        />
-        <Image
-          src="/hero-image-dark.png"
-          alt="Doodle illustration of a developer at a dual-monitor desk, surrounded by notes reading Build, Ship, Improve and Clean Code, Better UX, Happy Users"
-          width={620}
-          height={620}
-          priority
-          className="hidden w-full max-w-[560px] dark:block"
-        />
-      </motion.div>
+      <div className="hidden justify-self-end lg:block">
+        <SketchReveal width={620} height={620} delay={0.42} className="max-w-[560px]">
+          <Image
+            src="/hero-image.png"
+            alt="Doodle illustration of a developer at a dual-monitor desk, surrounded by notes reading Build, Ship, Improve and Clean Code, Better UX, Happy Users"
+            width={620}
+            height={620}
+            priority
+            className="w-full max-w-[560px] dark:hidden"
+          />
+          <Image
+            src="/hero-image-dark.png"
+            alt="Doodle illustration of a developer at a dual-monitor desk, surrounded by notes reading Build, Ship, Improve and Clean Code, Better UX, Happy Users"
+            width={620}
+            height={620}
+            priority
+            className="hidden w-full max-w-[560px] dark:block"
+          />
+        </SketchReveal>
+      </div>
     </section>
   );
 }
