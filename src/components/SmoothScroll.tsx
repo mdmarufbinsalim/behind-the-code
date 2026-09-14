@@ -43,8 +43,17 @@ export function SmoothScroll() {
 
     document.addEventListener("click", onClick);
 
+    // A fullscreen lightbox can't stop the page moving behind it by hiding
+    // overflow, because Lenis scrolls the window itself.
+    const stop = () => lenis.stop();
+    const start = () => lenis.start();
+    window.addEventListener("lightbox:open", stop);
+    window.addEventListener("lightbox:close", start);
+
     return () => {
       document.removeEventListener("click", onClick);
+      window.removeEventListener("lightbox:open", stop);
+      window.removeEventListener("lightbox:close", start);
       cancelAnimationFrame(rafId);
       lenis.destroy();
     };

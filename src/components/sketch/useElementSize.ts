@@ -10,12 +10,15 @@ export function useElementSize<T extends HTMLElement>() {
     const el = ref.current;
     if (!el) return;
 
+    // offsetWidth/Height, not getBoundingClientRect: the rect reports the
+    // *transformed* box, so measuring inside something Framer is scaling (a
+    // card on hover, a figure morphing open into the lightbox) captures a
+    // mid-animation size and draws the border at the wrong scale.
     const measure = () => {
-      const rect = el.getBoundingClientRect();
+      const width = el.offsetWidth;
+      const height = el.offsetHeight;
       setSize((prev) =>
-        prev.width === rect.width && prev.height === rect.height
-          ? prev
-          : { width: rect.width, height: rect.height }
+        prev.width === width && prev.height === height ? prev : { width, height }
       );
     };
 
