@@ -283,9 +283,11 @@ clicking a button somewhere in the medical history re-renders the
 extraoral exam.
 
 <Illustration
-  label="Diagram: before and after, one keystroke"
-  note="Left: every element in the tree lit up as re-rendering, because each one subscribed to the editor. Right: the same keystroke lighting up one element."
-  ratio="16 / 7"
+  src="/clerkal/rerender-before-after.png"
+  alt="Hand-drawn before and after of a React component tree on one keystroke. Before: every box in the tree vibrating and tangled together by subscription lines, labelled every element subscribed, with a tortoise. After: the same tree calm, one arrow running from the key to a single vibrating box labelled just this one, with a hare"
+  width="1774"
+  height="887"
+  caption="One keystroke. Left: the whole tree. Right: the element that actually changed."
 />
 
 <Callout label="What actually fixed it">
