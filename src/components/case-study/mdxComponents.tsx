@@ -1,6 +1,8 @@
 import { Figure } from "./Figure";
 import { Callout } from "./Callout";
 import { Video } from "./Video";
+import { Facts, Fact } from "./Facts";
+import { Illustration } from "./Illustration";
 
 /** Components case-study MDX bodies can reach for. */
-export const mdxComponents = { Figure, Callout, Video };
+export const mdxComponents = { Figure, Callout, Video, Facts, Fact, Illustration };
