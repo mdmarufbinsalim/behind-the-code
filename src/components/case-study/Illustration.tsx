@@ -33,8 +33,9 @@ export function Illustration({
   label?: string;
   note?: string;
   ratio?: string;
-  width?: number;
-  height?: number;
+  /** Strings, because MDX only passes plain attributes through — see Facts. */
+  width?: number | string;
+  height?: number | string;
 }) {
   const { ref, size } = useElementSize<HTMLDivElement>();
 
@@ -57,9 +58,9 @@ export function Illustration({
         <Image
           src={src}
           alt={alt ?? label ?? ""}
-          width={width}
-          height={height}
-          className="w-full dark:invert"
+          width={Number(width)}
+          height={Number(height)}
+          className="h-auto w-full dark:invert"
         />
       ) : (
         <div
