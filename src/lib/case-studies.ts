@@ -11,6 +11,11 @@ export type CaseStudyFrontmatter = {
   stack: string[];
   year: string;
   summary: string;
+  /** Lower sorts first. Lets the flagship work lead regardless of year. */
+  order?: number;
+  /** Optional cover image shown on the card, e.g. the product's own landing page. */
+  cover?: string;
+  coverAlt?: string;
 };
 
 export type CaseStudy = {
@@ -43,5 +48,9 @@ export function getAllCaseStudies(): CaseStudy[] {
   return getCaseStudySlugs()
     .map((slug) => getCaseStudy(slug))
     .filter((cs): cs is CaseStudy => cs !== null)
-    .sort((a, b) => Number(b.frontmatter.year) - Number(a.frontmatter.year));
+    .sort((a, b) => {
+      const order = (a.frontmatter.order ?? 99) - (b.frontmatter.order ?? 99);
+      if (order !== 0) return order;
+      return Number(b.frontmatter.year) - Number(a.frontmatter.year);
+    });
 }

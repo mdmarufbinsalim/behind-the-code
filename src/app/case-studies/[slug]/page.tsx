@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/sections/Footer";
 import { CaseStudyHero } from "@/components/case-study/CaseStudyHero";
+import { mdxComponents } from "@/components/case-study/mdxComponents";
 import { getAllCaseStudies, getCaseStudy, getCaseStudySlugs } from "@/lib/case-studies";
 
 export function generateStaticParams() {
@@ -50,7 +51,7 @@ export default async function CaseStudyPage({
           <CaseStudyHero frontmatter={caseStudy.frontmatter} />
 
           <div className="case-content mt-10">
-            <MDXRemote source={caseStudy.content} />
+            <MDXRemote source={caseStudy.content} components={mdxComponents} />
           </div>
 
           {others.length > 0 && (

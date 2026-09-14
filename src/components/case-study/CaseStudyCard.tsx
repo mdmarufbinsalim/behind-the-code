@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { SketchBox } from "@/components/sketch/SketchBox";
 import type { CaseStudyFrontmatter } from "@/lib/case-studies";
@@ -22,6 +23,17 @@ export function CaseStudyCard({
     >
       <Link href={`/case-studies/${frontmatter.slug}`} className="block h-full">
         <SketchBox className="h-full p-6 sm:p-8" padding={4}>
+          {frontmatter.cover && (
+            <div className="mb-5 overflow-hidden border border-neutral-200 dark:border-neutral-800">
+              <Image
+                src={frontmatter.cover}
+                alt={frontmatter.coverAlt ?? ""}
+                width={1892}
+                height={902}
+                className="aspect-[16/9] w-full object-cover object-top dark:brightness-[0.87]"
+              />
+            </div>
+          )}
           <p className="mb-3 text-sm text-neutral-500 dark:text-neutral-400">
             {frontmatter.year} · {frontmatter.role}
           </p>

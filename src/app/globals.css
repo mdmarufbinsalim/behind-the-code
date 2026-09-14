@@ -157,3 +157,37 @@ body {
 :root[data-theme-sweep="collapse"]::view-transition-new(root) {
   z-index: 0;
 }
+
+.case-content h3 {
+  font-family: var(--font-hand);
+  font-size: 1.35rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.case-content a {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.case-content a:hover {
+  opacity: 0.6;
+}
+
+.case-content code {
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  border: 1px solid #d4d4d4;
+  border-radius: 3px;
+}
+
+.dark .case-content code {
+  border-color: #3f3f3f;
+}
+
+/* Callout bodies come through MDX as paragraphs, so the last one's page-level
+   bottom margin has to be taken back or the box looks bottom-heavy. */
+.case-content .callout p:last-child {
+  margin-bottom: 0;
+}
