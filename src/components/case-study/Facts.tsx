@@ -25,13 +25,21 @@ export function Facts({ children }: { children: ReactNode }) {
   );
 }
 
-export function Fact({ label, value }: { label: string; value: string }) {
+export function Fact({
+  label,
+  value,
+  children,
+}: {
+  label: string;
+  value?: string;
+  children?: ReactNode;
+}) {
   return (
     <div>
       <dt className="mb-1 text-xs tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
         {label}
       </dt>
-      <dd className="text-[0.975rem] leading-relaxed">{value}</dd>
+      <dd className="text-[0.975rem] leading-relaxed">{value ?? children}</dd>
     </div>
   );
 }
