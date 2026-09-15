@@ -1,15 +1,20 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 
 export function SmoothScroll() {
+  const lenisRef = useRef<Lenis | null>(null);
+  const pathname = usePathname();
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.54,
       easing: (t: number) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
     });
+    lenisRef.current = lenis;
 
     let rafId: number;
     function raf(time: number) {
@@ -56,8 +61,20 @@ export function SmoothScroll() {
       window.removeEventListener("lightbox:close", start);
       cancelAnimationFrame(rafId);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
+
+  // `html` has `overflow-x: clip` (see globals.css) to keep position: sticky
+  // working, but that puts the root element in "overflow propagated to the
+  // viewport" mode: its box height then tracks the viewport, not the
+  // document's scroll height, so Lenis's own ResizeObserver-driven auto-resize
+  // never notices a route change growing or shrinking the page. Force a
+  // recalculation whenever the pathname changes so the wheel-scroll limit
+  // matches the new page instead of the one Lenis was created on.
+  useEffect(() => {
+    lenisRef.current?.resize();
+  }, [pathname]);
 
   return null;
 }
