@@ -2,9 +2,7 @@
 
 import { useMemo } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { useElementSize } from "@/components/sketch/useElementSize";
-import { SketchReveal } from "@/components/sketch/SketchReveal";
 import { GHOST_DASH, GHOST_OPACITY, GHOST_STROKE } from "@/components/sketch/stroke";
 
 /**
@@ -48,32 +46,15 @@ export function Illustration({
   }, [size]);
 
   return (
-    <motion.figure
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, margin: "-60px" }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="my-10 lg:-mx-20 xl:-mx-32"
-    >
+    <figure className="my-10 lg:-mx-20 xl:-mx-32">
       {src ? (
-        // Roughed in like the hero: a few loose strokes around the bounds,
-        // then the drawing wipes in underneath them. The reveal geometry is
-        // normalised to ~1000 wide so the scribble keeps the site's pen
-        // weight whatever the illustration's intrinsic size is.
-        <SketchReveal
-          width={1000}
-          height={Math.round((1000 * Number(height)) / Number(width))}
-          triggerOnView
-          once={false}
-        >
-          <Image
-            src={src}
-            alt={alt ?? label ?? ""}
-            width={Number(width)}
-            height={Number(height)}
-            className="h-auto w-full dark:invert"
-          />
-        </SketchReveal>
+        <Image
+          src={src}
+          alt={alt ?? label ?? ""}
+          width={Number(width)}
+          height={Number(height)}
+          className="h-auto w-full dark:invert"
+        />
       ) : (
         <div
           ref={ref}
@@ -105,6 +86,6 @@ export function Illustration({
           {caption}
         </figcaption>
       )}
-    </motion.figure>
+    </figure>
   );
 }
