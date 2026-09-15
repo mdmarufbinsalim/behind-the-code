@@ -15,7 +15,7 @@ export function Callout({ label, children }: { label: string; children: ReactNod
       className="my-9"
     >
       <SketchBox className="px-6 py-5 sm:px-8" padding={4}>
-        <p className="font-hand mb-2 text-xl">{label}</p>
+        <p className="mb-2 text-xl font-medium">{label}</p>
         <div className="callout">{children}</div>
       </SketchBox>
     </motion.aside>

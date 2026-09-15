@@ -43,9 +43,7 @@ export function Figure({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: false, margin: "-60px" }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        /* Screenshots are dense, so they break out of the prose column on wide
-           screens rather than shrinking to its measure. */
-        className="my-10 lg:-mx-20 xl:-mx-32"
+        className="my-10"
       >
         <SketchBox className="p-2" padding={3}>
           <button
@@ -66,7 +64,7 @@ export function Figure({
           </button>
         </SketchBox>
         {caption && (
-          <figcaption className="font-hand mt-3 text-center text-lg text-neutral-500 dark:text-neutral-400">
+          <figcaption className="mt-3 text-center text-lg text-neutral-500 dark:text-neutral-400">
             {caption}
           </figcaption>
         )}

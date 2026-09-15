@@ -37,7 +37,7 @@ export function CaseStudyCard({
           <p className="mb-3 text-sm text-neutral-500 dark:text-neutral-400">
             {frontmatter.year} · {frontmatter.role}
           </p>
-          <h3 className="font-hand mb-3 text-2xl leading-snug sm:text-3xl">
+          <h3 className="mb-3 text-2xl leading-snug font-medium sm:text-3xl">
             {frontmatter.title}
           </h3>
           <p className="mb-6 text-neutral-600 dark:text-neutral-400">{frontmatter.summary}</p>

@@ -46,7 +46,7 @@ export function Nav() {
             height={28}
             className="hidden dark:block"
           />
-          <span className="font-hand text-xl">Behind the Code</span>
+          <span className="text-xl">Behind the Code</span>
         </Link>
 
         <div className="hidden items-center gap-6 sm:flex">
@@ -104,7 +104,7 @@ export function Nav() {
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.42, delay: 0.112 + i * 0.084 }}
-                    className="font-hand text-4xl"
+                    className="text-4xl"
                   >
                     {link.label}
                   </motion.a>

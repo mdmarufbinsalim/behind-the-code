@@ -62,7 +62,7 @@ export default async function CaseStudyPage({
                   <Link
                     key={cs.frontmatter.slug}
                     href={`/case-studies/${cs.frontmatter.slug}`}
-                    className="font-hand text-2xl underline decoration-2 underline-offset-4 hover:opacity-70"
+                    className="text-2xl font-medium underline decoration-2 underline-offset-4 hover:opacity-70"
                   >
                     {cs.frontmatter.title}
                   </Link>

@@ -96,7 +96,7 @@ export function Lightbox({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.18, duration: 0.3 }}
-          className="font-hand max-w-2xl text-center text-lg text-neutral-500 dark:text-neutral-400"
+          className="max-w-2xl text-center text-lg text-neutral-500 dark:text-neutral-400"
         >
           {caption}
         </motion.p>

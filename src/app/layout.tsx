@@ -1,20 +1,7 @@
 import type { Metadata } from "next";
-import { Caveat, Kalam } from "next/font/google";
 import Script from "next/script";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
-
-const caveat = Caveat({
-  variable: "--font-hand",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
-
-const kalam = Kalam({
-  variable: "--font-hand-alt",
-  subsets: ["latin"],
-  weight: ["300", "400", "700"],
-});
 
 export const metadata: Metadata = {
   title: "Behind the Code — Md. Maruf Bin Salim",
@@ -28,7 +15,7 @@ const themeInitScript = `(function(){try{if(localStorage.getItem('theme')==='dar
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`h-full ${caveat.variable} ${kalam.variable}`}>
+    <html lang="en" className="h-full">
       <head>
         <Script id="theme-init" strategy="beforeInteractive">
           {themeInitScript}

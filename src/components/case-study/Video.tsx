@@ -35,7 +35,7 @@ export function Video({
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: "easeOut" }}
-      className="my-10 lg:-mx-20 xl:-mx-32"
+      className="my-10"
     >
       <SketchBox className="p-2" padding={3}>
         <video
@@ -51,7 +51,7 @@ export function Video({
         />
       </SketchBox>
       {caption && (
-        <figcaption className="font-hand mt-3 text-center text-lg text-neutral-500 dark:text-neutral-400">
+        <figcaption className="mt-3 text-center text-lg text-neutral-500 dark:text-neutral-400">
           {caption}
         </figcaption>
       )}

@@ -59,7 +59,7 @@ export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.84 }}
-          className="font-hand mt-10 text-xl underline decoration-2 underline-offset-4"
+          className="mt-10 text-xl underline decoration-2 underline-offset-4"
         >
           See the case studies ↓
         </motion.a>

@@ -73,7 +73,7 @@ export function ExperienceSection({ experience }: { experience: ExperienceEntry[
                 <p className="mb-1 text-sm text-neutral-500 dark:text-neutral-400">
                   {entry.start} — {entry.end}
                 </p>
-                <h4 className="font-hand text-2xl">
+                <h4 className="text-2xl font-medium">
                   {entry.role}{" "}
                   <span className="text-neutral-500 dark:text-neutral-400">
                     · {entry.company}

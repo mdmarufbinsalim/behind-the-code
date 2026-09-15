@@ -45,7 +45,7 @@ export function AboutSection({ about }: { about: typeof AboutType }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.7, delay: 0.07 }}
-            className="font-hand relative mb-10 inline-block text-3xl sm:text-4xl"
+            className="relative mb-10 inline-block text-3xl font-medium sm:text-4xl"
           >
             {about.intro}
             <SketchUnderline

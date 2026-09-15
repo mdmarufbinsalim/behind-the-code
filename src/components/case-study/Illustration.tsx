@@ -46,7 +46,7 @@ export function Illustration({
   }, [size]);
 
   return (
-    <figure className="my-10 lg:-mx-20 xl:-mx-32">
+    <figure className="my-10">
       {src ? (
         <Image
           src={src}
@@ -74,7 +74,7 @@ export function Illustration({
               />
             )}
           </svg>
-          <p className="font-hand text-xl text-neutral-500 dark:text-neutral-400">{label}</p>
+          <p className="text-xl text-neutral-500 dark:text-neutral-400">{label}</p>
           {note && (
             <p className="max-w-md text-sm text-neutral-400 dark:text-neutral-500">{note}</p>
           )}
@@ -82,7 +82,7 @@ export function Illustration({
       )}
 
       {caption && (
-        <figcaption className="font-hand mt-3 text-center text-lg text-neutral-500 dark:text-neutral-400">
+        <figcaption className="mt-3 text-center text-lg text-neutral-500 dark:text-neutral-400">
           {caption}
         </figcaption>
       )}

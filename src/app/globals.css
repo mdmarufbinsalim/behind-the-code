@@ -3,8 +3,6 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --font-hand: var(--font-hand);
-  --font-hand-alt: var(--font-hand-alt);
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
@@ -37,12 +35,87 @@ body {
     color 0.2s ease;
 }
 
-.font-hand {
-  font-family: var(--font-hand);
+/* Hand-drawn-feeling dotted rules for Expandable: plain border-dotted ties
+   dot size to border-width and gives no control over spacing, so these draw
+   the dots as a repeating background instead — wide gaps, wide dots. Their
+   own CSS variable, not `currentColor`, so the faint tint can never inherit
+   into the real text these rules sit next to. */
+.dotted-rule-h,
+.dotted-rule-v {
+  --dot-color: rgb(10 10 10 / 10%);
 }
 
-.font-hand-alt {
-  font-family: var(--font-hand-alt);
+.dark .dotted-rule-h,
+.dark .dotted-rule-v {
+  --dot-color: rgb(232 229 220 / 10%);
+}
+
+.dotted-rule-h {
+  height: 3px;
+  margin-top: 0.75rem;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--dot-color) 0,
+    var(--dot-color) 3px,
+    transparent 3px,
+    transparent 27px
+  );
+}
+
+.dotted-rule-v {
+  position: relative;
+}
+
+.dotted-rule-v::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--dot-color) 0,
+    var(--dot-color) 3px,
+    transparent 3px,
+    transparent 27px
+  );
+}
+
+/* Expandable's open/close: <details> content is UA-hidden with display:none
+   when closed, which can't be transitioned, so this forces the row to stay
+   a grid item always and animates grid-template-rows instead — the
+   well-supported way to animate to/from an unknown content height. The
+   inner content fades and drifts in a beat behind the row opening, rather
+   than appearing all at once, so the reveal reads as one unique motion
+   instead of a generic accordion snap. */
+details > .expandable-rows {
+  display: grid !important;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 420ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+details[open] > .expandable-rows {
+  grid-template-rows: 1fr;
+}
+
+.expandable-clip {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.expandable-clip > * {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity 260ms ease,
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+details[open] > .expandable-rows .expandable-clip > * {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 110ms;
 }
 
 .site-px {
@@ -96,8 +169,8 @@ body {
 }
 
 .case-content h2 {
-  font-family: var(--font-hand);
   font-size: 1.75rem;
+  font-weight: 500;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
 }
@@ -159,8 +232,8 @@ body {
 }
 
 .case-content h3 {
-  font-family: var(--font-hand);
   font-size: 1.35rem;
+  font-weight: 500;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
 }
