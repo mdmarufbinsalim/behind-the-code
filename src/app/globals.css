@@ -291,7 +291,7 @@ body {
 }
 
 .resume-head {
-  margin-bottom: 14px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
@@ -309,7 +309,7 @@ body {
 }
 
 .resume section {
-  margin-top: 14px;
+  margin-top: 22px;
 }
 
 .resume h2 {
@@ -318,8 +318,8 @@ body {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   border-bottom: 1px solid #000;
-  padding-bottom: 2px;
-  margin-bottom: 8px;
+  padding-bottom: 3px;
+  margin-bottom: 10px;
 }
 
 .resume h3 {
@@ -392,15 +392,19 @@ body {
   }
 
   .resume section {
-    margin-top: 9px;
+    margin-top: 20px;
   }
 
   .resume-entry {
-    margin-bottom: 7px;
+    margin-bottom: 11px;
+  }
+
+  .resume h2 {
+    margin-bottom: 9px;
   }
 
   .resume-head {
-    margin-bottom: 10px;
+    margin-bottom: 18px;
   }
 
   .resume li {
