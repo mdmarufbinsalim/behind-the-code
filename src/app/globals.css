@@ -369,9 +369,14 @@ body {
   margin-left: 0;
 }
 
-@page {
-  size: A4;
-  margin: 12mm;
+/* Skills read as label/value pairs, so two columns fit them in half the rows
+   and buy back the vertical space. Each group stays contiguous in the markup,
+   so a parser still reads a label with its own items. */
+.resume-skills.two-up {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 26px;
+  row-gap: 3px;
 }
 
 @media print {
@@ -392,11 +397,11 @@ body {
   }
 
   .resume section {
-    margin-top: 15px;
+    margin-top: 13px;
   }
 
   .resume-entry {
-    margin-bottom: 9px;
+    margin-bottom: 8px;
   }
 
   .resume h2 {
@@ -404,7 +409,7 @@ body {
   }
 
   .resume-head {
-    margin-bottom: 18px;
+    margin-bottom: 15px;
   }
 
   .resume li {

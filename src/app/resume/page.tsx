@@ -65,7 +65,7 @@ export default function ResumePage() {
 
             <section>
               <h2>Skills</h2>
-              <ul className="resume-skills">
+              <ul className="resume-skills two-up">
                 {resume.skills.map((skill) => (
                   <li key={skill.group}>
                     <strong>{skill.group}:</strong> {skill.items.join(", ")}

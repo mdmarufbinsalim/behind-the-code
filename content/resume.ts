@@ -36,13 +36,12 @@ export const resume = {
     { label: "github.com/mdmarufbinsalim", href: "https://github.com/mdmarufbinsalim" },
   ],
   summary:
-    "Software engineer who designs and ships scalable systems where correctness matters - multi-tenant SaaS backends, domain-specific editors, and custom APIs on modern frameworks. Strong ownership of feature delivery end to end, from architecture decisions through production rollout.",
+    "Software engineer who designs and ships systems where correctness matters - multi-tenant SaaS backends, domain-specific editors and the APIs behind them - owning delivery from architecture decisions through production rollout.",
   skills: [
     { group: "Backend", items: ["NestJS", "Node.js", "Express", "Go", "REST API design", "WebSockets"] },
     { group: "Frontend", items: ["React", "Next.js", "Vue", "Nuxt.js", "TypeScript", "Redux Toolkit"] },
-    { group: "Data", items: ["PostgreSQL", "MongoDB", "TypeORM", "Redis", "Database & schema design"] },
+    { group: "Data & platform", items: ["PostgreSQL", "MongoDB", "TypeORM", "Redis", "Docker", "AWS", "CI/CD (GitHub Actions)", "Git"] },
     { group: "Practice", items: ["Agile / Scrum", "Technical leadership", "Code review", "Scalable architecture", "Multi-tenancy", "Queues & background jobs"] },
-    { group: "Platform", items: ["Docker", "AWS", "CI/CD (GitHub Actions)", "Git"] },
   ],
   experience: [
     {
@@ -52,10 +51,9 @@ export const resume = {
       start: "May 2025",
       end: "Present",
       bullets: [
-        "Led a team of six across API, web and mobile in Agile cycles - sprint planning, code review, release - building a 31-module NestJS API of 204 endpoints and 6 background workers behind one generated OpenAPI contract.",
+        "Led a team of six across API, web and mobile in Agile cycles - sprint planning, code review, release - building a 31-module NestJS API of 204 endpoints behind one generated OpenAPI contract, with an in-app currency on an append-only ledger whose escrowed bids settle under row-level locking rather than double-spending a balance.",
         "Architected a multi-tenant SaaS backend in NestJS with tenant isolation enforced at the framework level, alongside a modular, maintainable structure for an enterprise-grade product.",
         "Built a custom Slate-based text editor for clinicians on a Node.js and NoSQL backend, cutting per-keystroke re-renders across documents of 2,000+ custom elements to the single element that changed.",
-        "Designed an in-app currency on an append-only ledger with escrowed bidding and row-level locking, so concurrent bids settle without double-spending a balance, and shipped it to production and staging behind automated CI/CD.",
       ],
     },
     {
