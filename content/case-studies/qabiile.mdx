@@ -7,7 +7,7 @@ year: "2026"
 order: 2
 cover: "/qabiile/landing.jpg"
 coverAlt: "Qabiile's landing page: Enter in a New World of Qabiles, Status, Reward and Opportunity, over an illustrated floating city"
-summary: "An invite-only social platform where posting, bidding and winning all move real in-app currency - built on an append-only ledger, escrowed bids, and a Go worker that reads Turkish ID cards."
+summary: "An invite-only social platform with its own currency, its own auctions and its own ID checks. I led the team of six and owned the parts where a mistake costs someone money."
 ---
 
 <Illustration
@@ -17,10 +17,10 @@ summary: "An invite-only social platform where posting, bidding and winning all 
 />
 
 <Facts>
-  <Fact label="Problem">One product that is really five - an invite-only feed, an auction marketplace, an in-app currency, identity verification, and realtime messaging - all of which have to agree about the same balance, in two languages.</Fact>
-  <Fact label="What I built">The NestJS API behind all of it, a Go microservice that reads Turkish national ID cards, the Next.js web client on top, the generated contract that keeps three codebases honest, and the pipeline that ships it.</Fact>
-  <Fact label="Where it is" value="Phase 1, in active build: production and staging both running, feature work continuing." />
-  <Fact label="My role" value="Team and dev lead. API architecture and most of its money, identity and queue code; the OCR service end to end; web; deployment." />
+  <Fact label="Problem">One product that is really five - a feed, short video, clans, an auction marketplace and messaging - all sharing one in-app currency that has to be right to the last unit, in two languages.</Fact>
+  <Fact label="What I built">The API behind all of it, a separate service that verifies government ID from a photo, the web app on top, and the deployment that ships the lot.</Fact>
+  <Fact label="Where it is" value="Phase 1, in active build - production and staging both live, feature work continuing." />
+  <Fact label="My role" value="Team and dev lead for six engineers: architecture, the money and identity code, the web client, deployment, and code review across the rest." />
   <Fact label="Timeline" value="June 2026 - ongoing." />
 </Facts>
 
@@ -28,26 +28,22 @@ summary: "An invite-only social platform where posting, bidding and winning all 
 
 <Expandable title="The problem" label="the constraints">
 
-Qabiile is a gamified, invitation-only social network for the Turkish market.
-Four tabs: **Agora**, the feed. **Reels**, short video. **Forest**, where
-auction-style listings called hunts live. And **Qabile**, the clans - each one
-carrying a reputation score and a global ranking that members push up
-together.
+Qabiile is an invitation-only social platform for the Turkish market, built
+on one idea: everything you do there earns you something. Posting, watching a
+video, finishing a daily challenge, winning an auction - all of it pays out in
+the platform's own currency, and in experience that moves your account up a
+ladder of ranks. Your balance and your rank follow you across every screen.
 
-Underneath all four sits a single number. Every post, reel, mission and hunt
-win pays out **Qabi**, the in-app currency, and **EXP**, which moves an
-account up a tier ladder that gates what it can reach. The balance is on
-screen at all times, on every tab, next to a rank that people care about.
+That turns a social app into something closer to a small bank. A like that
+fails to register is an annoyance; currency that lands in the wrong place is
+an argument with a real person about money they earned. And because members
+trade real goods with strangers, an account has to be provably a real person -
+which in this market means checking a government ID.
 
-That is what makes it a different kind of build. A like that fails to
-register is an annoyance. A bid moves currency out of one wallet and holds it
-against another, and if two people bid at the same instant, someone's balance
-is about to be wrong in a way that is very hard to explain afterwards.
-
-Identity is the other half of it. Hunts are real trades between strangers, so
-an account has to be provably a person - which for this market means reading
-a Turkish national ID card, from a photo, taken by a user, in whatever
-lighting they happened to be standing in.
+I came in as team and dev lead: six engineers across the API, the web app and
+the mobile app, with me responsible for the architecture, for the parts where
+a mistake is expensive, and for making the decisions everyone else builds
+against clear enough that nobody has to ask.
 
 <ExpandableDetail>
 
@@ -74,16 +70,15 @@ The constraints that shaped everything after this:
 
 <Expandable title="The approach" label="the alternatives I ruled out">
 
-One API owns the truth, and everything downstream is generated from it. The
-NestJS app is a modular monolith - 31 modules with hard boundaries, each
-owning its entities and its queues - rather than a constellation of services,
-because six engineers cannot pay the operational tax of microservices and
-still ship a feed.
+One API holds the truth, and every client is generated from it rather than
+written by hand. The server is a single well-partitioned application rather
+than a fleet of small ones, because a team this size pays for every extra
+moving part in operations instead of in features.
 
-The exception is where the work genuinely wasn't JavaScript. Reading an ID
-card is CPU-bound image work with a native toolchain behind it, so it became
-a separate Go worker with its own container, its own deploy, and no shared
-runtime with the API at all.
+The one exception is identity verification. Reading an ID card out of a
+photograph is a different kind of work with a different toolchain behind it,
+so it runs as its own small service, in Go, with no shared runtime with the
+rest.
 
 <ContractFlow />
 
@@ -166,77 +161,58 @@ because a half-completed profile is not a state anyone wanted to support.
 
 ### Identity: reading a Turkish ID card in Go
 
-The OCR service reads both halves of the card: the **MRZ**, the machine
-readable strip along the bottom, which is fixed-format and reliable, and the
-**VIZ**, the human-readable face of the card, which is a photograph of
-printed text and is not. Both get extracted, and a failed read retries once
-against an upscaled image before giving up.
-
-The interesting part is the seam between the two runtimes.
+A Turkish ID card carries the same information twice: once as printed text a
+human reads, and once as a machine-readable strip designed to be parsed. The
+service reads both, because the strip is reliable and the printed face is a
+photograph taken in whatever lighting the user was standing in. A failed read
+gets one retry against a cleaned-up image before it gives up.
 
 <OcrPipeline />
 
-**Why not BullMQ, when the API already runs BullMQ for everything else.**
-BullMQ's job format is MessagePack and Lua-script driven, and it is not
-documented as a stable wire protocol - it's an implementation detail of the
-library, and the library is JavaScript. Reimplementing it in Go would have
-meant tracking someone else's internals across versions forever. A JSON
-payload on a plain Redis list is trivial to implement identically on both
-sides, and the only thing the two codebases share is four key names.
+Three decisions worth the space:
 
-**Why the key names look like that.** Production Redis is ElastiCache
-Serverless, which runs in cluster mode, and `BRPOPLPUSH` touches two keys in
-one call. Without the `{nidocr}` hash tag forcing both lists into the same
-slot, every single call fails with `CROSSSLOT`. That hash tag is load-bearing
-in two codebases at once, which is exactly the kind of thing that needs a
-comment rather than a convention.
+**It runs as its own service, in another language.** Image work is CPU-bound
+and wants a native toolchain, and running it inside the API would mean one bad
+photo could slow down the feed. As a separate worker it can be starved,
+restarted or scaled without anything else noticing.
 
-**Why `BRPOPLPUSH` rather than `BRPOP`.** The payload moves onto a processing
-list before it is worked on and is removed only once it has been handled.
-Crash a worker mid-job and the job is still sitting there, recoverable,
-instead of having evaporated between the pop and the crash. The API's side of
-this runs its own dedicated Redis connection, because a blocking command
-monopolises whatever connection it runs on - sharing the app's client would
-quietly wedge everything else.
+**The two sides talk through a deliberately dumb queue.** The API already runs
+a job library, but that library's job format is a JavaScript implementation
+detail, not a documented protocol - reimplementing it in Go would have meant
+tracking someone else's internals forever. Instead both sides agree on a
+plain list of JSON messages, which is a page of code in either language. The
+queue is arranged so that a worker dying mid-job leaves the job recoverable
+rather than lost, which matters when the job is someone's identity check.
 
-**What comes back still has to be believed.** A successful read is not a
-verification. The extracted fields get matched against what the user claimed,
-with the small indignities that real documents involve: Turkish cards print
-sex as `E/K` (Erkek/Kadın) on the visual side and `M/F` in the MRZ, so the
-comparison normalises both alphabets before it decides anything. Anything
-that doesn't match cleanly goes to a human in the admin queue.
+**A successful read is not a verification.** What comes back gets matched
+against what the user claimed about themselves, and anything that doesn't
+line up cleanly goes to a human in the admin queue rather than being waved
+through or rejected outright. The automation is there to make the reviewer's
+job small, not to replace them.
 
 ### Money: a wallet that never gets edited
 
-Every wallet balance in Qabiile is a cache. The truth is an append-only
-ledger, and `balance`, `heldBalance` and `expBalance` are just the current
-sum of entries against it. Nothing in the system ever writes a new number
-into a wallet row and hopes.
+No balance in Qabiile is ever edited. Every wallet is a running total of an
+append-only list of entries - earned here, spent there, held against a bid -
+so the number on screen can always be explained by pointing at the entries
+that produced it. This is the single decision the rest of the money code
+depends on: there is no code path anywhere that writes a new balance and
+hopes.
 
 <EarningLoop />
 
-A bid is the one place where that ledger has to hold something back rather
-than pay it out.
+A bid is the hard case, because it has to hold money without spending it. The
+amount is held against the bidder's wallet while the auction runs, released
+the moment they're outbid, and settled only if they win. Two people bidding at
+the same instant are serialised on the listing itself, so the last write can't
+quietly overwrite the one before it - the failure mode I care about here isn't
+a slow bid, it's two people who both believe they won.
 
 <EscrowLifecycle />
 
-A bid is the hard case, because it is a hold rather than a payment. Placing
-one runs in a transaction that takes a `pessimistic_write` lock on the hunt
-row first - so simultaneous bids on the same hunt serialise on the hunt,
-instead of racing each other through two different wallets in whatever order
-they arrive and deadlocking when the lock ordering disagrees.
-
-The hold writes a `held` ledger entry against the bidder's wallet. Get
-outbid, and it writes a `released` entry that returns the money to spendable
-balance. Win, and it settles: Qabi transfers, and the winner earns EXP worth
-a tenth of what they spent, which is what moves them up the tiers the
-platform gates access with.
-
-Hunts close on a scheduler that runs every minute, picks up any published
-hunt past its window, and captures the winning bid. It is deliberately
-self-healing: it looks for expired hunts rather than trusting a timer it set
-earlier, so a restart in the middle of the night doesn't leave a hunt open
-forever.
+Auctions close on a sweep that looks for listings past their deadline, rather
+than on a timer set when the listing was created. Timers don't survive
+restarts; a sweep does, and it heals anything an outage left half-finished.
 
 <Figure
   src="/qabiile/feed.jpg"
@@ -248,16 +224,17 @@ forever.
 
 ### Everything that happens after the response
 
-Six BullMQ workers do the things nobody should wait for: transactional mail,
-reel transcoding, search indexing, payments, hunt expiry, survey expiry. The
-reels pipeline is the heaviest of them.
+Anything slow happens after the response: sending mail, processing uploaded
+video, indexing for search, settling payments, closing auctions. The video
+pipeline is the heaviest - an upload is accepted immediately and only becomes
+playable once a worker has transcoded it into the formats a phone can stream.
 
 <ReelPipeline />
 
-Realtime runs on a Socket.io gateway with a session registry mapping users to
-sockets, plus an internal endpoint that lets other modules push events without
-importing the gateway - the alternative being every module reaching into the
-socket layer and the whole thing becoming impossible to reason about.
+Realtime - messages, notifications, live bid updates - runs over a socket
+layer that the rest of the application talks to through one internal seam
+rather than by reaching into it directly. That seam is the only reason the
+messaging feature didn't end up entangled with everything else.
 
 <Figure
   src="/qabiile/messages.jpg"
@@ -277,11 +254,10 @@ socket layer and the whole thing becoming impossible to reason about.
 
 ### The web app: four tabs and a wallet in the header
 
-The web client is Next.js 16 on the App Router, and its route groups are the
-product's own shape: `(public)` for the marketing site and the legal pages,
-`(auth)` for invitation, OTP, sign-in and account deletion, `(request)` for
-request-access, and `(app)` for everything behind the wall - the four user
-tabs, onboarding, and a separate admin area.
+The web app is Next.js on the App Router, and its structure mirrors the
+product: a public marketing side, an invitation and sign-in flow, and
+everything behind the wall - the four tabs, onboarding, and a separate admin
+area for the people who run the platform.
 
 <Figure
   src="/qabiile/sign-in.jpg"
@@ -291,30 +267,22 @@ tabs, onboarding, and a separate admin area.
   caption="The public half of the app. Everything past this point needs an invite."
 />
 
-None of the client types are hand-written. The web app consumes the same
-generated contracts package the mobile app does, through `openapi-fetch`, so
-a response shape that changes in the API fails the web build rather than
-failing a user.
+None of its API types are written by hand - it consumes the same generated
+package the mobile app does, so a change to a response shape breaks a build
+instead of a user.
 
-The frontend problems worth naming:
+The three frontend problems that actually took thought:
 
-- **The balance is in the header, on every page.** Finishing a mission in one
-  tab has to move the number in the chrome of another. That is Redux Toolkit
-  holding wallet state, refreshed off the same socket that delivers
-  notifications - not a page reload, and not a poll.
-- **Reels play the transcoder's output.** `hls.js` in the browser, pointed at
-  the multi-rendition HLS the reels worker wrote to S3, with the watch and
-  reward events the backend counts fired from the player itself.
-- **Buying Qabi is a real payment.** Stripe Elements on the front, the
-  payments queue on the back, and a wallet that must not credit twice if a
-  webhook arrives twice.
-- **Two languages, one component tree.** `next-intl` carries EN and TR
-  through the UI, matched by the API's own message catalogues, so an error
-  toast and the error behind it are in the same language.
-- **The awkward, unglamorous surfaces.** Avatar cropping in onboarding, OTP
-  inputs that handle paste, an emoji picker and attachments in chat, a
-  masonry grid for media, a lightbox for post images. None of it is hard.
-  All of it is the difference between a demo and something people use.
+- **The balance is in the header of every page.** Finishing a challenge in one
+  part of the app has to move a number in the chrome of another, live, without
+  a reload or a poll. Wallet state is held centrally and refreshed off the same
+  socket that carries notifications.
+- **Paying real money for in-app currency.** Card payments on the front,
+  settlement on a queue at the back, and a wallet that must not credit twice
+  if the payment provider tells us the same thing twice.
+- **Two languages through one component tree.** English and Turkish across the
+  UI, matched by the API's own translated responses, so an error message and
+  the error behind it are never in different languages.
 
 <Figure
   src="/qabiile/clans.jpg"
@@ -338,17 +306,15 @@ The frontend problems worth naming:
 
 ### Shipping it on one box
 
-Production and staging run on the same EC2 instance as two Compose projects
-with two checkouts, behind a single Caddy that terminates TLS for four
-hostnames and renews its own certificates. Two GitHub Actions workflows, one
-per branch, SSH in, check out, build the three images in sequence to keep
-peak memory under control, and bring the stack up.
+Production and staging run on the same server as two separate stacks, behind
+one reverse proxy that handles TLS for both and renews its own certificates.
+Each branch has its own deploy pipeline, and the staging pipeline physically
+cannot write to the production checkout - a guard that exists because the cost
+of getting that wrong once is much higher than the cost of the guard.
 
-Two details that took an incident each to learn: the staging workflow refuses
-to run unless its target directory ends in `-staging`, so a copied production
-secret can't overwrite the production checkout; and the deploy prunes build
-cache older than 72 hours rather than all of it, because wiping the cache on
-every deploy turns a two-minute deploy into a full reinstall and recompile.
+The other lesson was cheaper to learn and easy to forget: a deploy that throws
+away its build cache every time turns a two-minute release into a full rebuild,
+so the pipeline keeps recent cache deliberately.
 
 </ExpandableDetail>
 

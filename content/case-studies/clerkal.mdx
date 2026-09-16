@@ -64,10 +64,10 @@ The constraints that shaped everything after this:
 The editor has to be a form *and* a document at the same time. You interact
 with it like an app - clicking options, toggling lines on and off - and
 what comes out the other end is clean prose you can paste into a
-twenty-year-old Windows EHR without a single stray character. Every
-template in Clerkal is one **Slate.js** document that renders two ways: an
-interactive note you click through, and the plain-text note the record
-actually keeps.
+twenty-year-old Windows EHR without a single stray character. So every
+template is a single document that renders two ways at once: the
+interactive note a clinician clicks through, and the plain-text note the
+patient record actually keeps.
 
 <DocumentFlowDiagram />
 
@@ -88,9 +88,9 @@ prose on the way out.
 
 <Expandable title="What I built" label="how it was built">
 
-Every template is one Slate.js document rendered two ways: a clickable
-note the clinician fills in, and the plain-text note the record keeps -
-live, side by side, updating as you click.
+One document, rendered two ways at the same time: the clickable note the
+clinician fills in on the left, and the finished note the record keeps on
+the right, assembling itself as they click.
 
 <Figure
   src="/clerkal/note-preview.png"
@@ -155,11 +155,10 @@ in one move.
   caption="The right-click menu is ours, which means undo and redo had to be too."
 />
 
-The context menu above is a good example of how little comes for free
-here. Taking over right-click means taking over the clipboard entries and
-the history entries with it, so undo and redo run on our own stacks
-pushed alongside Slate's - otherwise a converted selection unwinds one
-element at a time instead of one action at a time.
+That context menu is a good example of how little comes for free here:
+the moment you replace the browser's right-click, cut, copy, paste, undo
+and redo all become yours to implement - and undo has to unwind one
+action, not the twenty small edits the action was made of.
 
 ### Logic, and elements that outlive a template
 
@@ -186,11 +185,11 @@ element, and every template that references it changes.
 ### Dictation that lands in the right place
 
 Transcription is the part everyone asks about, and the interesting
-problem isn't the model - it's the seam. Audio comes back as text that
-has to be inserted into a live Slate document whose selection may have
-moved, inside a template the clinician is still clicking through. The
-pointer element exists precisely so the insertion target is explicit
-state rather than a guess about where the cursor was a second ago.
+problem isn't the model - it's where the words go. Speech comes back
+seconds later, into a document the clinician has carried on clicking
+through in the meantime, so the insertion point has to be something the
+document holds on purpose rather than a guess about where the cursor
+used to be. That's what the pointer element is for.
 
 The control itself is push-to-talk: hold to speak, drag it anywhere on
 screen, slide to lock it open, auto-stop on silence - designed for
@@ -241,14 +240,13 @@ top of whatever application is in front - the clinician works through
 the note against the PMS on screen, then closes it and everything
 returns to the main screen with nothing lost.
 
-The interesting part is that it is one editor in two windows, not a
-copy. The React tree is rendered into a second window's document, which
-means none of the things you take for granted are there any more:
-stylesheets don't follow the tree across, events and selection belong to
-a different `window`, and the clipboard is that window's clipboard. Get
-any of it slightly wrong and you have two editors drifting apart -
-which for a clinical note is the worst possible failure mode, because
-both copies look plausible.
+The part that made it hard is that it has to be one editor in two
+windows, not a copy of one. Rendering the same live editor into a second
+window means very little of what a browser normally hands you comes
+along - styling, events, selection and the clipboard all belong to the
+other window now. Get any of it slightly wrong and you have two editors
+drifting apart, which for a clinical note is the worst failure mode
+available: both copies look completely plausible.
 
 ### Paste is a protocol, not a feature
 
@@ -268,21 +266,20 @@ thousands - of custom elements in one document. And the first honest
 version of this editor re-rendered nearly all of them on every
 keystroke.
 
-The cause was a habit, not a bug. Slate makes editor access easy:
-`useSlate()` in any element component and you have the editor. But
-`useSlate` subscribes that component to *every* change in the document.
-Do it in every element renderer - which is the natural way to write
-them - and each character typed invalidates the entire tree. At fifty
-elements nobody notices. At two thousand, typing has visible lag, and
-clicking a button somewhere in the medical history re-renders the
-extraoral exam.
+The cause was a habit rather than a bug. The convenient way to reach the
+editor from inside an element also subscribes that element to every
+change anywhere in the document - and written that way in every element
+type, one keystroke invalidates the entire tree. At fifty elements
+nobody notices. At two thousand, typing lags, and clicking an option in
+the medical history redraws the rest of the note with it.
 
 <Callout label="What actually fixed it">
-  `React.memo` on every element renderer, and then the unglamorous
-  part - going element by element and replacing editor-hook access with
-  explicitly passed props, so a component re-renders when *its own* data
-  changes and not when the document does. Memoisation only pays when the
-  props are stable, so most of the work was making them stable.
+  Memoising every element, and then the unglamorous half: going through
+  them one at a time so each element is handed exactly the data it needs
+  instead of reaching into the document for it. An element then redraws
+  when *its own* data changes, not when anything in the note does.
+  Memoisation only pays once the inputs are stable, so most of the work
+  was making them stable.
 </Callout>
 
 There was no clever trick at the end of it. It was a long stretch of
@@ -349,19 +346,22 @@ commit - every element type is a shape that now lives in real patients'
 saved documents forever, and migrating that later is far more delicate
 than getting it right early.
 
-I'd also build the logic engine on a typed AST from day one rather than
-growing it out of the panel UI, and I'd write the performance rule down
-as a lint rule instead of a habit: an element renderer may not subscribe
-to the editor. That one line, enforced, would have saved weeks.
+I'd also design the logic engine as a proper little language from day
+one, rather than letting it grow out of the panel that configures it.
+And I'd have written the performance rule down and enforced it
+automatically - no element may reach into the whole document - instead
+of relying on everyone remembering. That one rule, enforced early, would
+have saved weeks of undoing it later.
 
 ### What I took from it
 
-Most of what I learned here wasn't Slate - it was React's actual
-rendering model, learned the hard way with a profiler open, and the
-discipline of treating a document as data with a contract rather than as
-markup. The other half is domain: when the user is a clinician between
-patients, the measure of a feature isn't what it can do, it's how few
-gestures it takes and how obviously it behaves.
+Most of what I learned here wasn't the editor library - it was how
+React actually decides to redraw things, learned the hard way with a
+profiler open, and the discipline of treating a document as structured
+data with a contract rather than as markup you can nudge. The other half
+is domain: when your user is a clinician between patients, the measure
+of a feature isn't what it can do, it's how few gestures it takes and
+how obviously it behaves.
 
 ### What it took to get there
 
