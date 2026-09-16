@@ -4,7 +4,8 @@ import { Video } from "./Video";
 import { Facts, Fact } from "./Facts";
 import { Illustration } from "./Illustration";
 import { Expandable, ExpandableDetail } from "./Expandable";
-import { DocumentFlowDiagram } from "./DocumentFlowDiagram";
+import { DocumentFlowDiagram } from "./clerkal/DocumentFlowDiagram";
+import { NinetyTenSplit } from "./clerkal/NinetyTenSplit";
 
 /** Components case-study MDX bodies can reach for. */
 export const mdxComponents = {
@@ -17,4 +18,5 @@ export const mdxComponents = {
   Expandable,
   ExpandableDetail,
   DocumentFlowDiagram,
+  NinetyTenSplit,
 };
