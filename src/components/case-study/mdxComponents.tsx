@@ -3,7 +3,7 @@ import { Callout } from "./Callout";
 import { Video } from "./Video";
 import { Facts, Fact } from "./Facts";
 import { Illustration } from "./Illustration";
-import { Expandable } from "./Expandable";
+import { Expandable, ExpandableDetail } from "./Expandable";
 import { DocumentFlowDiagram } from "./DocumentFlowDiagram";
 
 /** Components case-study MDX bodies can reach for. */
@@ -15,5 +15,6 @@ export const mdxComponents = {
   Fact,
   Illustration,
   Expandable,
+  ExpandableDetail,
   DocumentFlowDiagram,
 };

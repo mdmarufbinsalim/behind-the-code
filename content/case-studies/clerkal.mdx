@@ -26,7 +26,7 @@ summary: "A clinical note editor that trades typing for clicking - built to feel
 
 <p className="-mt-4 mb-10 text-sm text-neutral-500 dark:text-neutral-400">Three engineers, engaged via Mediusware Ltd - with <a href="https://www.linkedin.com/in/sidul567/" target="_blank" rel="noopener noreferrer">Sidul</a> and <a href="https://www.linkedin.com/in/kalin-chakma-334079190/" target="_blank" rel="noopener noreferrer">Kalin Chakma</a>.</p>
 
-## The problem
+<Expandable title="The problem" label="the constraints">
 
 A clinician finishes an appointment and has to write it up - presenting
 complaint, history, exam, treatment, plan. Ninety percent of the words are
@@ -44,7 +44,7 @@ because a clinical note is a legal record.
   caption="One section of one template. Multiply it by every visit, every patient, every day."
 />
 
-<Expandable label="the constraints">
+<ExpandableDetail>
 
 The constraints that shaped everything after this:
 
@@ -59,9 +59,11 @@ The constraints that shaped everything after this:
 - **Nothing may be silently mangled.** A note is a legal record; a
   formatting bug is a chart error.
 
+</ExpandableDetail>
+
 </Expandable>
 
-## The approach
+<Expandable title="The approach" label="the alternatives I ruled out">
 
 The editor has to be a form *and* a document at the same time. You interact
 with it like an app - clicking options, toggling lines on and off - and
@@ -73,7 +75,7 @@ actually keeps.
 
 <DocumentFlowDiagram />
 
-<Expandable label="the alternatives I ruled out">
+<ExpandableDetail>
 
 Two obvious alternatives both fail. A **plain rich text editor** means
 retyping the skeleton every time - it solves nothing. A **form** stops
@@ -84,9 +86,11 @@ document in the middle is what's left once both of those are ruled out -
 an editor that behaves like a form while it's being edited and reads like
 prose on the way out.
 
+</ExpandableDetail>
+
 </Expandable>
 
-## What I built
+<Expandable title="What I built" label="how it was built">
 
 Every template is one Slate.js document rendered two ways: a clickable
 note the clinician fills in, and the plain-text note the record keeps -
@@ -98,7 +102,7 @@ live, side by side, updating as you click.
   caption="Nothing on the right was typed - every line came from a click on the left."
 />
 
-<Expandable label="how it was built">
+<ExpandableDetail>
 
 ### Edit mode: the same document, wiring exposed
 
@@ -324,9 +328,11 @@ The editor is the hard part but not the whole product. Alongside it:
   caption="The library, filtered by country and language."
 />
 
+</ExpandableDetail>
+
 </Expandable>
 
-## The outcome
+<Expandable title="The outcome" label="what I'd do differently">
 
 Clerkal is live and in daily clinical use. A note that used to be typed
 out in full is now clicked together from a template the practice
@@ -340,7 +346,7 @@ own claim is up to 70% less time on record-keeping.
   caption="An ordinary Tuesday in a dental practice, one template at a time."
 />
 
-<Expandable label="what I'd do differently">
+<ExpandableDetail>
 
 If I started this again, I'd version the element schema from the first
 commit - every element type is a shape that now lives in real patients'
@@ -373,5 +379,7 @@ gestures it takes and how obviously it behaves.
   edits rather than flattening it into dead text.
 - **The product around it.** Templates, library, teams, clinics, RBAC,
   Stripe subscriptions and group billing.
+
+</ExpandableDetail>
 
 </Expandable>

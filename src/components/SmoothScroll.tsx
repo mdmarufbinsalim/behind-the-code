@@ -75,15 +75,13 @@ export function SmoothScroll() {
     window.addEventListener("case-study:scroll-to", onScrollTo);
 
     // Same ResizeObserver blind spot as the route-change one below: opening
-    // or closing a <details> (Expandable) changes the document's scroll
-    // height without changing html's own box, so Lenis never notices on its
-    // own. `toggle` doesn't bubble, so this has to listen on the capture
-    // phase to catch it from every <details> on the page. Expandable now
-    // animates its height rather than snapping it (see globals.css), so the
-    // scroll height at the instant `toggle` fires is still the pre-animation
-    // one - resize again once that transition actually finishes.
+    // or closing an Expandable changes the document's scroll height without
+    // changing html's own box, so Lenis never notices on its own.
+    // Expandable animates its height rather than snapping it (see
+    // globals.css), so the scroll height at the instant this fires is still
+    // the pre-animation one - resize again once that transition finishes.
     const onToggle = () => lenis.resize();
-    document.addEventListener("toggle", onToggle, true);
+    window.addEventListener("case-study:expandable-toggle", onToggle);
 
     const onTransitionEnd = (e: TransitionEvent) => {
       if (e.propertyName === "grid-template-rows") lenis.resize();
@@ -94,7 +92,7 @@ export function SmoothScroll() {
       document.removeEventListener("click", onClick);
       window.removeEventListener("lightbox:open", stop);
       window.removeEventListener("lightbox:close", start);
-      document.removeEventListener("toggle", onToggle, true);
+      window.removeEventListener("case-study:expandable-toggle", onToggle);
       document.removeEventListener("transitionend", onTransitionEnd, true);
       window.removeEventListener("case-study:scroll-to", onScrollTo);
       cancelAnimationFrame(rafId);
