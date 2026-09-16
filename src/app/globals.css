@@ -270,3 +270,136 @@ body {
 .case-content .callout p:last-child {
   margin-bottom: 0;
 }
+
+/* Resume: a plain, single-column document an applicant tracking system can
+   parse, sized for A4 and printed straight to the downloadable PDF. Its
+   colours are fixed rather than themed - a CV is a white page. */
+.resume {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.42;
+  color: #000;
+}
+
+.resume a {
+  color: #000;
+  text-decoration: none;
+}
+
+.resume-head {
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.resume h1 {
+  font-size: 19pt;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.resume-contact {
+  font-size: 9.5pt;
+  color: #222;
+}
+
+.resume section {
+  margin-top: 14px;
+}
+
+.resume h2 {
+  font-size: 10.5pt;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #000;
+  padding-bottom: 2px;
+  margin-bottom: 8px;
+}
+
+.resume h3 {
+  font-size: 10.5pt;
+  font-weight: 700;
+}
+
+.resume-entry {
+  margin-bottom: 11px;
+  break-inside: avoid;
+}
+
+.resume-entry:last-child {
+  margin-bottom: 0;
+}
+
+.resume-entry-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.resume-dates {
+  font-size: 9.5pt;
+  white-space: nowrap;
+  color: #222;
+}
+
+.resume-meta {
+  font-size: 9.5pt;
+  color: #444;
+  margin-bottom: 3px;
+}
+
+.resume ul {
+  margin: 4px 0 0 16px;
+  list-style: disc;
+}
+
+.resume li {
+  margin-bottom: 3px;
+}
+
+.resume-skills {
+  list-style: none;
+  margin-left: 0;
+}
+
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff;
+  }
+
+  /* Tightened so four roles, education and references land on one page - a
+     second page holding three lines reads as a document that overran. */
+  .resume {
+    font-size: 9.4pt;
+    line-height: 1.32;
+  }
+
+  .resume h1 {
+    font-size: 16.5pt;
+  }
+
+  .resume section {
+    margin-top: 9px;
+  }
+
+  .resume-entry {
+    margin-bottom: 7px;
+  }
+
+  .resume-head {
+    margin-bottom: 10px;
+  }
+
+  .resume li {
+    margin-bottom: 1px;
+  }
+}

@@ -34,3 +34,16 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## License
 
 See [LICENSE](./LICENSE).
+
+## Resume
+
+The resume lives at `/resume`, rendered from `content/resume.ts`. The
+downloadable PDF is printed from that same page, so the two can't drift:
+
+```bash
+pnpm resume:pdf     # regenerates public/md-maruf-bin-salim-bhuiyan-resume.pdf
+```
+
+Run it after editing the content, the page's markup, or the print styles in
+`globals.css`. It reuses a server already running on :3000 and starts one
+itself otherwise.

@@ -12,6 +12,7 @@ const links = [
   { href: "/#work", label: "Work" },
   { href: "/#experience", label: "Experience" },
   { href: "/#about", label: "About" },
+  { href: "/resume", label: "Resume" },
 ];
 
 export function Nav() {
