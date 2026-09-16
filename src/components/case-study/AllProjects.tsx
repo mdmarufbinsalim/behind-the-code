@@ -148,10 +148,7 @@ export function AllProjects({ projects }: { projects: CaseStudyFrontmatter[] }) 
         <span className="hidden h-4 w-px bg-neutral-200 sm:block dark:bg-neutral-800" />
 
         {/* stack: too many to leave lying around, so they live in a menu */}
-        <div ref={stackRef} className="relative flex items-center gap-x-4">
-          <span className="w-10 shrink-0 text-xs tracking-wide text-neutral-400 uppercase sm:hidden dark:text-neutral-500">
-            Built
-          </span>
+        <div ref={stackRef} className="relative hidden items-center gap-x-4 sm:flex">
           <button
             type="button"
             onClick={() => setStackOpen((v) => !v)}
