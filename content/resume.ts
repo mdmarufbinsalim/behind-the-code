@@ -41,7 +41,8 @@ export const resume = {
     { group: "Backend", items: ["NestJS", "Node.js", "Express", "Go", "REST API design", "WebSockets"] },
     { group: "Frontend", items: ["React", "Next.js", "Vue", "Nuxt.js", "TypeScript", "Redux Toolkit"] },
     { group: "Data", items: ["PostgreSQL", "MongoDB", "TypeORM", "Redis", "Database & schema design"] },
-    { group: "Practice", items: ["Scalable architecture", "Multi-tenancy", "Queues & background jobs", "CI/CD", "Docker", "AWS"] },
+    { group: "Practice", items: ["Agile / Scrum", "Technical leadership", "Code review", "Scalable architecture", "Multi-tenancy", "Queues & background jobs"] },
+    { group: "Platform", items: ["Docker", "AWS", "CI/CD (GitHub Actions)", "Git"] },
   ],
   experience: [
     {
@@ -52,9 +53,9 @@ export const resume = {
       end: "Present",
       bullets: [
         "Architected a multi-tenant SaaS backend in NestJS with tenant isolation enforced at the framework level, alongside a modular, maintainable structure for an enterprise-grade product.",
-        "Built a custom Slate-based text editor for clinicians on a Node.js and NoSQL backend, supporting structured clinical documents at production scale.",
-        "Led a team of six across API, web and mobile on an invite-only social platform with an in-app currency: append-only ledger, escrowed bidding, and a Go microservice that verifies national ID documents.",
-        "Owned complex feature delivery and technical execution end to end, from architecture decisions to production rollout.",
+        "Built a custom Slate-based text editor for clinicians on a Node.js and NoSQL backend, cutting per-keystroke re-renders across documents of 2,000+ custom elements to the single element that changed.",
+        "Led a team of six across API, web and mobile in Agile cycles - sprint planning, code review, release - building a 31-module NestJS API of 204 endpoints and 6 background workers behind one generated OpenAPI contract.",
+        "Designed an in-app currency on an append-only ledger with escrowed bidding and row-level locking, so concurrent bids settle without double-spending a balance, and shipped it to production and staging behind automated CI/CD.",
       ],
     },
     {
