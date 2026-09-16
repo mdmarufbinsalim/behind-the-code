@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -14,6 +15,11 @@ const links = [
 ];
 
 export function Nav() {
+  const pathname = usePathname();
+  // The home page is the person; everywhere else is the publication the work
+  // is written up in.
+  const wordmark = pathname === "/" ? "Md Maruf Bin Salim" : "Behind the Code";
+
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -34,19 +40,19 @@ export function Nav() {
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
           <Image
             src="/logo-black.svg"
-            alt="Behind the Code"
+            alt=""
             width={28}
             height={28}
             className="dark:hidden"
           />
           <Image
             src="/logo-white.svg"
-            alt="Behind the Code"
+            alt=""
             width={28}
             height={28}
             className="hidden dark:block"
           />
-          <span className="text-xl">Behind the Code</span>
+          <span className="text-xl">{wordmark}</span>
         </Link>
 
         <div className="hidden items-center gap-6 sm:flex">

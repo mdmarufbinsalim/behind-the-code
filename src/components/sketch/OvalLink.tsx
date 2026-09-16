@@ -63,7 +63,7 @@ export function OvalLink({
           ry={ry}
           fill="none"
           stroke="var(--ink)"
-          strokeWidth={5}
+          strokeWidth={3}
           strokeLinecap="round"
           strokeDasharray={`${perimeter * 0.62} ${perimeter * 0.38}`}
           initial={{ strokeDashoffset: perimeter }}
