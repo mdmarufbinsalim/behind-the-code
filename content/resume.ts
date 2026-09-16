@@ -52,9 +52,9 @@ export const resume = {
       start: "May 2025",
       end: "Present",
       bullets: [
+        "Led a team of six across API, web and mobile in Agile cycles - sprint planning, code review, release - building a 31-module NestJS API of 204 endpoints and 6 background workers behind one generated OpenAPI contract.",
         "Architected a multi-tenant SaaS backend in NestJS with tenant isolation enforced at the framework level, alongside a modular, maintainable structure for an enterprise-grade product.",
         "Built a custom Slate-based text editor for clinicians on a Node.js and NoSQL backend, cutting per-keystroke re-renders across documents of 2,000+ custom elements to the single element that changed.",
-        "Led a team of six across API, web and mobile in Agile cycles - sprint planning, code review, release - building a 31-module NestJS API of 204 endpoints and 6 background workers behind one generated OpenAPI contract.",
         "Designed an in-app currency on an append-only ledger with escrowed bidding and row-level locking, so concurrent bids settle without double-spending a balance, and shipped it to production and staging behind automated CI/CD.",
       ],
     },
