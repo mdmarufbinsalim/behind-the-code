@@ -275,7 +275,11 @@ body {
    parse, sized for A4 and printed straight to the downloadable PDF. Its
    colours are fixed rather than themed - a CV is a white page. */
 .resume {
-  font-family: Arial, Helvetica, sans-serif;
+  /* Georgia rather than Arial: a CV reads as a document, and a serif with
+     real numerals carries dates and job titles better at this size. It ships
+     with every OS, so the page and the printed PDF match anywhere, and it has
+     no bearing on parsing - an ATS reads the text layer, not the typeface. */
+  font-family: Georgia, "Times New Roman", Times, serif;
   font-size: 10.5pt;
   line-height: 1.42;
   color: #000;
