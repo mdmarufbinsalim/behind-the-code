@@ -20,6 +20,7 @@ export function CaseStudyCard({
       viewport={{ once: false, margin: "-80px" }}
       transition={{ duration: 0.7, delay: index * 0.14, ease: "easeOut" }}
       whileHover={{ rotate: index % 2 === 0 ? -0.6 : 0.6, y: -4 }}
+      className="h-full"
     >
       <Link href={`/case-studies/${frontmatter.slug}`} className="block h-full">
         <SketchBox className="h-full p-6 sm:p-8" padding={4}>

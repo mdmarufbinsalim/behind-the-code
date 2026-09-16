@@ -12,10 +12,12 @@ import type { about as AboutType } from "@content/about";
 
 export function HomeContent({
   caseStudies,
+  totalCaseStudies,
   experience,
   about,
 }: {
   caseStudies: CaseStudy[];
+  totalCaseStudies: number;
   experience: ExperienceEntry[];
   about: typeof AboutType;
 }) {
@@ -27,7 +29,11 @@ export function HomeContent({
     <div ref={containerRef} className="relative">
       <Hero ctaRef={ctaRef} />
       <SketchConnector fromRef={ctaRef} toRef={workHeadingRef} containerRef={containerRef} />
-      <CaseStudiesSection caseStudies={caseStudies} headingRef={workHeadingRef} />
+      <CaseStudiesSection
+        caseStudies={caseStudies}
+        total={totalCaseStudies}
+        headingRef={workHeadingRef}
+      />
       <ExperienceSection experience={experience} />
       <AboutSection about={about} />
     </div>

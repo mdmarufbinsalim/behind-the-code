@@ -3,13 +3,17 @@
 import type { RefObject } from "react";
 import { motion } from "framer-motion";
 import { CaseStudyCard } from "@/components/case-study/CaseStudyCard";
+import { OvalLink } from "@/components/sketch/OvalLink";
 import type { CaseStudy } from "@/lib/case-studies";
 
 export function CaseStudiesSection({
   caseStudies,
+  total,
   headingRef,
 }: {
   caseStudies: CaseStudy[];
+  /** How many exist in all, so the link can say what's behind it. */
+  total: number;
   headingRef?: RefObject<HTMLHeadingElement | null>;
 }) {
   return (
@@ -39,6 +43,20 @@ export function CaseStudiesSection({
           <CaseStudyCard key={cs.frontmatter.slug} frontmatter={cs.frontmatter} index={i} />
         ))}
       </div>
+
+      {total > caseStudies.length && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: false, margin: "-80px" }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="mt-14 flex justify-center"
+        >
+          <OvalLink href="/case-studies" label={`View all ${total} projects`}>
+            View all
+          </OvalLink>
+        </motion.div>
+      )}
     </section>
   );
 }

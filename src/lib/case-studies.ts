@@ -9,6 +9,8 @@ export type CaseStudyFrontmatter = {
   slug: string;
   role: string;
   stack: string[];
+  /** Who the work was for - drives the organisation filter on /case-studies. */
+  organization?: string;
   year: string;
   summary: string;
   /** Lower sorts first. Lets the flagship work lead regardless of year. */
