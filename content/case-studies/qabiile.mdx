@@ -1,0 +1,405 @@
+---
+title: "Qabiile - A social network with an economy underneath it"
+slug: qabiile
+role: "Team & dev lead - API, web, and a Go OCR service"
+stack: ["NestJS", "PostgreSQL", "TypeORM", "Redis / BullMQ", "Go", "Next.js", "AWS"]
+year: "2026"
+order: 2
+cover: "/qabiile/landing.jpg"
+coverAlt: "Qabiile's landing page: Enter in a New World of Qabiles, Status, Reward and Opportunity, over an illustrated floating city"
+summary: "An invite-only social platform where posting, bidding and winning all move real in-app currency - built on an append-only ledger, escrowed bids, and a Go worker that reads Turkish ID cards."
+---
+
+<Illustration
+  label="Video: the Qabiile hero reel"
+  note="30s cut from app screenshots - feed, a hunt with live bids, the wallet, ID verification clearing. Placeholder until the screen recordings are in."
+  ratio="16 / 9"
+/>
+
+<Facts>
+  <Fact label="Problem">One product that is really five - an invite-only feed, an auction marketplace, an in-app currency, identity verification, and realtime messaging - all of which have to agree about the same balance, in two languages.</Fact>
+  <Fact label="What I built">The NestJS API behind all of it, a Go microservice that reads Turkish national ID cards, the Next.js web client on top, the generated contract that keeps three codebases honest, and the pipeline that ships it.</Fact>
+  <Fact label="Where it is" value="Phase 1, in active build: production and staging both running, feature work continuing." />
+  <Fact label="My role" value="Team and dev lead. API architecture and most of its money, identity and queue code; the OCR service end to end; web; deployment." />
+  <Fact label="Timeline" value="June 2026 - ongoing." />
+</Facts>
+
+<p className="-mt-4 mb-10 text-sm text-neutral-500 dark:text-neutral-400">Six engineers across API, web and mobile, engaged via Mediusware Ltd. Live at <a href="https://qabiile.com" target="_blank" rel="noopener noreferrer">qabiile.com</a>.</p>
+
+<Expandable title="The problem" label="the constraints">
+
+Qabiile is a gamified, invitation-only social network for the Turkish market.
+Four tabs: **Agora**, the feed. **Reels**, short video. **Forest**, where
+auction-style listings called hunts live. And **Qabile**, the clans - each one
+carrying a reputation score and a global ranking that members push up
+together.
+
+Underneath all four sits a single number. Every post, reel, mission and hunt
+win pays out **Qabi**, the in-app currency, and **EXP**, which moves an
+account up a tier ladder that gates what it can reach. The balance is on
+screen at all times, on every tab, next to a rank that people care about.
+
+That is what makes it a different kind of build. A like that fails to
+register is an annoyance. A bid moves currency out of one wallet and holds it
+against another, and if two people bid at the same instant, someone's balance
+is about to be wrong in a way that is very hard to explain afterwards.
+
+Identity is the other half of it. Hunts are real trades between strangers, so
+an account has to be provably a person - which for this market means reading
+a Turkish national ID card, from a photo, taken by a user, in whatever
+lighting they happened to be standing in.
+
+<ExpandableDetail>
+
+The constraints that shaped everything after this:
+
+- **Every feature touches the wallet.** Onboarding steps, daily missions,
+  posts, reels watched, surveys, hunt wins - they all pay out. There is no
+  corner of this product where money is somebody else's problem, and the
+  balance is visible on every screen, so a wrong number is never quiet.
+- **Three clients, one API.** Web, mobile and admin all consume the same
+  endpoints, and the mobile app ships on its own schedule. A silent response
+  shape change is a broken release.
+- **Two languages, from the first migration.** English and Turkish, including
+  the strings the API itself returns.
+- **One host, two environments.** Production and staging run on the same EC2
+  box for cost reasons, which is fine right up until a deploy script points at
+  the wrong checkout.
+- **Small team, wide surface.** Six people building a feed, an auction house,
+  a currency, a messaging system and a verification flow at the same time.
+
+</ExpandableDetail>
+
+</Expandable>
+
+<Expandable title="The approach" label="the alternatives I ruled out">
+
+One API owns the truth, and everything downstream is generated from it. The
+NestJS app is a modular monolith - 31 modules with hard boundaries, each
+owning its entities and its queues - rather than a constellation of services,
+because six engineers cannot pay the operational tax of microservices and
+still ship a feed.
+
+The exception is where the work genuinely wasn't JavaScript. Reading an ID
+card is CPU-bound image work with a native toolchain behind it, so it became
+a separate Go worker with its own container, its own deploy, and no shared
+runtime with the API at all.
+
+<ContractFlow />
+
+<ExpandableDetail>
+
+What I ruled out, and why:
+
+- **Microservices per domain.** The boundaries in this product are real, but
+  they are transactional: bids touch wallets touch ledgers. Splitting those
+  across services would have bought us distributed transactions in exchange
+  for nothing we needed at this size.
+- **Hand-written API clients.** Three codebases writing their own request
+  types is three codebases that disagree by the end of the month. The API
+  emits `openapi.json`, a package generates TypeScript from it, web and
+  mobile consume the package. Break a response shape and their builds fail on
+  the next generate.
+- **An off-the-shelf KYC vendor.** Priced per check, and the market is narrow
+  enough that the general-purpose vendors read Turkish cards poorly. The
+  cards themselves are standardised and machine-readable - the MRZ at the
+  bottom is designed to be parsed - so this was a solvable problem rather
+  than a bought one.
+
+</ExpandableDetail>
+
+</Expandable>
+
+<Expandable title="What I built" label="the parts worth explaining">
+
+### Getting in: invite-only, as a backend flow
+
+Nobody signs up for Qabiile. An admin sends an invite, the code arrives by
+email, and that code buys you exactly one thing: a short-lived registration
+token, good only for finishing the registration it was issued for. Onboarding
+arrives afterwards as a single request - avatar, interests, clan, together -
+because a half-completed profile is not a state anyone wanted to support.
+
+<InviteFunnel />
+
+<Figure
+  src="/qabiile/admin.png"
+  alt="The Qabiile admin dashboard: counts for invites sent, pending invitations, joined users and admins, with tables of recent invitations and recently joined users"
+  width="1896"
+  height="898"
+  caption="Invite-only means the admin surface is the front door, not an afterthought."
+/>
+
+### Identity: reading a Turkish ID card in Go
+
+The OCR service reads both halves of the card: the **MRZ**, the machine
+readable strip along the bottom, which is fixed-format and reliable, and the
+**VIZ**, the human-readable face of the card, which is a photograph of
+printed text and is not. Both get extracted, and a failed read retries once
+against an upscaled image before giving up.
+
+The interesting part is the seam between the two runtimes.
+
+<OcrPipeline />
+
+<ExpandableDetail>
+
+**Why not BullMQ, when the API already runs BullMQ for everything else.**
+BullMQ's job format is MessagePack and Lua-script driven, and it is not
+documented as a stable wire protocol - it's an implementation detail of the
+library, and the library is JavaScript. Reimplementing it in Go would have
+meant tracking someone else's internals across versions forever. A JSON
+payload on a plain Redis list is trivial to implement identically on both
+sides, and the only thing the two codebases share is four key names.
+
+**Why the key names look like that.** Production Redis is ElastiCache
+Serverless, which runs in cluster mode, and `BRPOPLPUSH` touches two keys in
+one call. Without the `{nidocr}` hash tag forcing both lists into the same
+slot, every single call fails with `CROSSSLOT`. That hash tag is load-bearing
+in two codebases at once, which is exactly the kind of thing that needs a
+comment rather than a convention.
+
+**Why `BRPOPLPUSH` rather than `BRPOP`.** The payload moves onto a processing
+list before it is worked on and is removed only once it has been handled.
+Crash a worker mid-job and the job is still sitting there, recoverable,
+instead of having evaporated between the pop and the crash. The API's side of
+this runs its own dedicated Redis connection, because a blocking command
+monopolises whatever connection it runs on - sharing the app's client would
+quietly wedge everything else.
+
+**What comes back still has to be believed.** A successful read is not a
+verification. The extracted fields get matched against what the user claimed,
+with the small indignities that real documents involve: Turkish cards print
+sex as `E/K` (Erkek/Kadın) on the visual side and `M/F` in the MRZ, so the
+comparison normalises both alphabets before it decides anything. Anything
+that doesn't match cleanly goes to a human in the admin queue.
+
+</ExpandableDetail>
+
+### Money: a wallet that never gets edited
+
+Every wallet balance in Qabiile is a cache. The truth is an append-only
+ledger, and `balance`, `heldBalance` and `expBalance` are just the current
+sum of entries against it. Nothing in the system ever writes a new number
+into a wallet row and hopes.
+
+<EarningLoop />
+
+A bid is the one place where that ledger has to hold something back rather
+than pay it out.
+
+<EscrowLifecycle />
+
+<ExpandableDetail>
+
+A bid is the hard case, because it is a hold rather than a payment. Placing
+one runs in a transaction that takes a `pessimistic_write` lock on the hunt
+row first - so simultaneous bids on the same hunt serialise on the hunt,
+instead of racing each other through two different wallets in whatever order
+they arrive and deadlocking when the lock ordering disagrees.
+
+The hold writes a `held` ledger entry against the bidder's wallet. Get
+outbid, and it writes a `released` entry that returns the money to spendable
+balance. Win, and it settles: Qabi transfers, and the winner earns EXP worth
+a tenth of what they spent, which is what moves them up the tiers the
+platform gates access with.
+
+Hunts close on a scheduler that runs every minute, picks up any published
+hunt past its window, and captures the winning bid. It is deliberately
+self-healing: it looks for expired hunts rather than trusting a timer it set
+earlier, so a restart in the middle of the night doesn't leave a hunt open
+forever.
+
+</ExpandableDetail>
+
+<Figure
+  src="/qabiile/feed.jpg"
+  alt="The Qabiile web feed: a Qabi balance of 1.18M with a lifetime total, an XP bar showing progress to the next rank, today's missions, and a post from a user tagged with the Cirak (Apprentice) tier"
+  width="1896"
+  height="898"
+  caption="The balance, the tier and the missions are all reads of the same ledger."
+/>
+
+### Everything that happens after the response
+
+Six BullMQ workers do the things nobody should wait for: transactional mail,
+reel transcoding, search indexing, payments, hunt expiry, survey expiry. The
+reels pipeline is the heaviest of them.
+
+<ReelPipeline />
+
+Realtime runs on a Socket.io gateway with a session registry mapping users to
+sockets, plus an internal endpoint that lets other modules push events without
+importing the gateway - the alternative being every module reaching into the
+socket layer and the whole thing becoming impossible to reason about.
+
+<Figure
+  src="/qabiile/messages.jpg"
+  alt="The Qabiile web messages view: a conversation list on the left, an open direct-message thread in the middle, and follow suggestions on the right"
+  width="1896"
+  height="898"
+  caption="Messaging: the part where a dropped socket is immediately somebody's problem."
+/>
+
+<Figure
+  src="/qabiile/reels.jpg"
+  alt="The Qabiile reels tab: a playing reel with like, comment, share and save counts, a session reward counter reading 50 Qabi earned, mission progress, and a trending reels list where every entry is worth 5 Qabi"
+  width="1896"
+  height="898"
+  caption="Every one of these actions is a wallet write, a mission check and a queue job."
+/>
+
+### The web app: four tabs and a wallet in the header
+
+The web client is Next.js 16 on the App Router, and its route groups are the
+product's own shape: `(public)` for the marketing site and the legal pages,
+`(auth)` for invitation, OTP, sign-in and account deletion, `(request)` for
+request-access, and `(app)` for everything behind the wall - the four user
+tabs, onboarding, and a separate admin area.
+
+<Figure
+  src="/qabiile/sign-in.jpg"
+  alt="The Qabiile web sign-in page: an illustrated banner of clan members at sunrise on the left under the heading Enter the Gathering Grounds, and a login card on the right"
+  width="1896"
+  height="898"
+  caption="The public half of the app. Everything past this point needs an invite."
+/>
+
+None of the client types are hand-written. The web app consumes the same
+generated contracts package the mobile app does, through `openapi-fetch`, so
+a response shape that changes in the API fails the web build rather than
+failing a user.
+
+<ExpandableDetail>
+
+The frontend problems worth naming:
+
+- **The balance is in the header, on every page.** Finishing a mission in one
+  tab has to move the number in the chrome of another. That is Redux Toolkit
+  holding wallet state, refreshed off the same socket that delivers
+  notifications - not a page reload, and not a poll.
+- **Reels play the transcoder's output.** `hls.js` in the browser, pointed at
+  the multi-rendition HLS the reels worker wrote to S3, with the watch and
+  reward events the backend counts fired from the player itself.
+- **Buying Qabi is a real payment.** Stripe Elements on the front, the
+  payments queue on the back, and a wallet that must not credit twice if a
+  webhook arrives twice.
+- **Two languages, one component tree.** `next-intl` carries EN and TR
+  through the UI, matched by the API's own message catalogues, so an error
+  toast and the error behind it are in the same language.
+- **The awkward, unglamorous surfaces.** Avatar cropping in onboarding, OTP
+  inputs that handle paste, an emoji picker and attachments in chat, a
+  masonry grid for media, a lightbox for post images. None of it is hard.
+  All of it is the difference between a demo and something people use.
+
+</ExpandableDetail>
+
+<Figure
+  src="/qabiile/clans.jpg"
+  alt="The Qabiile web clans tab: a clan page with reputation, global ranking and member count, a Visit Qabile Hall button, joined clans as cards, and a trending clans leaderboard"
+  width="1896"
+  height="898"
+  caption="Clans: reputation and global ranking, which is where most of the competitive pull comes from."
+/>
+
+### The parts that are only visible when they're missing
+
+- **Search** runs on Typesense, indexed by a queue worker fed from entity
+  subscribers, so a new post is searchable without the write path waiting for
+  an index round-trip.
+- **Localisation** covers the API's own responses, not just the clients:
+  English and Turkish message catalogues resolved per request.
+- **Rate limiting** is Redis-backed rather than in-memory, because two
+  containers with their own counters is not a rate limit.
+- **Account deletion and retention** exist as first-class flows - a deletion
+  request, a grace period, and a scheduler that actually removes the data.
+
+<PhoneRow caption="Three of the surfaces this backend exists for.">
+  <Phone
+    index="0"
+    src="/qabiile/mobile-invite.jpg"
+    width="720"
+    height="1600"
+    label="The invite gate - no invite, no account"
+    alt="The Qabiile mobile invite screen, asking for an email address to get an invitation code"
+  />
+  <Phone
+    index="1"
+    src="/qabiile/mobile-feed.jpg"
+    width="720"
+    height="1600"
+    label="Agora - the feed, with reactions and reposts"
+    alt="The Qabiile mobile feed with posts, care and love reactions, comment and repost actions"
+  />
+  <Phone
+    index="2"
+    src="/qabiile/mobile-clans.jpg"
+    width="720"
+    height="1600"
+    label="Qabiles - clans, ranking and reputation"
+    alt="The Qabiile mobile clans tab showing a clan with members, ranking and reputation, and a list of joined clans"
+  />
+</PhoneRow>
+
+### Shipping it on one box
+
+Production and staging run on the same EC2 instance as two Compose projects
+with two checkouts, behind a single Caddy that terminates TLS for four
+hostnames and renews its own certificates. Two GitHub Actions workflows, one
+per branch, SSH in, check out, build the three images in sequence to keep
+peak memory under control, and bring the stack up.
+
+Two details that took an incident each to learn: the staging workflow refuses
+to run unless its target directory ends in `-staging`, so a copied production
+secret can't overwrite the production checkout; and the deploy prunes build
+cache older than 72 hours rather than all of it, because wiping the cache on
+every deploy turns a two-minute deploy into a full reinstall and recompile.
+
+</Expandable>
+
+<Expandable title="The outcome" label="what I'd do differently">
+
+Phase 1 is in active build, with production and staging both live. What
+exists today, on the backend alone:
+
+<ApiSurface />
+
+<ExpandableDetail>
+
+### What I actually did here
+
+Leading this meant owning the decisions that are expensive to reverse - the
+module boundaries, the ledger being append-only, the contract being generated
+rather than written, the OCR service being a separate runtime - and then
+writing the parts where being wrong costs the most: the wallet and bidding
+code, the verification pipeline end to end, the web client's session and
+wallet plumbing, and the deployment. The rest of the team built against those
+seams, which is the point of drawing them carefully.
+
+### What I'd do differently
+
+I'd have written the reliable-queue helper once. The API consumes its results
+list with a hand-rolled `BRPOPLPUSH` loop, a dedicated connection and a
+shutdown flag, and the Go side has its own equivalent; that is the same
+pattern implemented twice in two languages from the same paragraph of
+reasoning. A tiny shared spec document - or a generated one - would have made
+the second implementation a transcription rather than a translation.
+
+I'd also have put the reward configuration in the database from the start
+rather than arriving there. It lives in a `reward_settings` table now, which
+means the business can change what an activity is worth without a deploy, and
+every week it spent as a constant in the codebase was a week of deploys that
+should have been an edit.
+
+### What I took from it
+
+Two things. First, that the interesting problems in a social product turn out
+to be the boring ones from banking: what is the source of truth for a
+balance, what happens when two writes arrive together, what do you do when a
+job dies halfway. Second, that a queue between two languages is a protocol,
+and protocols want to be written down - the comment above those four key names
+is doing more work than most of the code underneath it.
+
+</ExpandableDetail>
+
+</Expandable>

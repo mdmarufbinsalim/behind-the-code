@@ -3,9 +3,18 @@ import { Callout } from "./Callout";
 import { Video } from "./Video";
 import { Facts, Fact } from "./Facts";
 import { Illustration } from "./Illustration";
+
 import { Expandable, ExpandableDetail } from "./Expandable";
 import { DocumentFlowDiagram } from "./clerkal/DocumentFlowDiagram";
 import { NinetyTenSplit } from "./clerkal/NinetyTenSplit";
+import { OcrPipeline } from "./qabiile/OcrPipeline";
+import { EscrowLifecycle } from "./qabiile/EscrowLifecycle";
+import { ContractFlow } from "./qabiile/ContractFlow";
+import { ApiSurface } from "./qabiile/ApiSurface";
+import { InviteFunnel } from "./qabiile/InviteFunnel";
+import { EarningLoop } from "./qabiile/EarningLoop";
+import { ReelPipeline } from "./qabiile/ReelPipeline";
+import { PhoneRow, Phone } from "./qabiile/PhoneRow";
 
 /** Components case-study MDX bodies can reach for. */
 export const mdxComponents = {
@@ -19,4 +28,14 @@ export const mdxComponents = {
   ExpandableDetail,
   DocumentFlowDiagram,
   NinetyTenSplit,
+  // Qabiile: the shape of these flows is the argument, so they're drawn.
+  OcrPipeline,
+  EscrowLifecycle,
+  ContractFlow,
+  InviteFunnel,
+  EarningLoop,
+  ReelPipeline,
+  ApiSurface,
+  PhoneRow,
+  Phone,
 };
