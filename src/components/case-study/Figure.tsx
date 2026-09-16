@@ -8,7 +8,7 @@ import { Lightbox } from "@/components/case-study/Lightbox";
 
 /**
  * A screenshot inside a hand-drawn frame. Clicking it opens the full-size
- * version in place — the thumbnail morphs up into a fullscreen view rather than
+ * version in place - the thumbnail morphs up into a fullscreen view rather than
  * dumping the raw file into a new tab.
  *
  * The product shots are light-UI, so in dark mode they get dimmed a touch: a

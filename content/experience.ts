@@ -16,7 +16,7 @@ export const experience: ExperienceEntry[] = [
     start: "May 2025",
     end: "Present",
     summary:
-      "Building domain-specific systems where correctness isn't optional — clinical documentation and multi-tenant SaaS infrastructure.",
+      "Building domain-specific systems where correctness isn't optional - clinical documentation and multi-tenant SaaS infrastructure.",
     highlights: [
       "Built a custom Slate-based text editor for doctors with a NoSQL Node.js backend, handling structured clinical documents at production scale.",
       "Architected a multi-tenant SaaS backend in NestJS with tenant isolation enforced at the framework level, not by convention.",
@@ -32,14 +32,14 @@ export const experience: ExperienceEntry[] = [
     summary:
       "Backend services and internal tooling for trading and operational systems, where query performance and data integrity were non-negotiable.",
     highlights: [
-      "Architected backend services in NestJS and PostgreSQL — scalable APIs, background jobs, and automation workflows.",
+      "Architected backend services in NestJS and PostgreSQL - scalable APIs, background jobs, and automation workflows.",
       "Built internal tools in React and NestJS with role-based access and real-time data handling.",
       "Designed and optimized database schemas across trading and operational systems.",
     ],
   },
   {
     role: "Technical Consultant & Software Engineer",
-    company: "Independent — Fiverr / Upwork",
+    company: "Independent - Fiverr / Upwork",
     location: "Remote",
     start: "Jan 2022",
     end: "Nov 2023",

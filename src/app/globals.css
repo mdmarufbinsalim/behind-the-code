@@ -37,7 +37,7 @@ body {
 
 /* Hand-drawn-feeling dotted rules for Expandable: plain border-dotted ties
    dot size to border-width and gives no control over spacing, so these draw
-   the dots as a repeating background instead — wide gaps, wide dots. Their
+   the dots as a repeating background instead - wide gaps, wide dots. Their
    own CSS variable, not `currentColor`, so the faint tint can never inherit
    into the real text these rules sit next to. */
 .dotted-rule-h,
@@ -84,7 +84,7 @@ body {
 
 /* Expandable's open/close: <details> content is UA-hidden with display:none
    when closed, which can't be transitioned, so this forces the row to stay
-   a grid item always and animates grid-template-rows instead — the
+   a grid item always and animates grid-template-rows instead - the
    well-supported way to animate to/from an unknown content height. The
    inner content fades and drifts in a beat behind the row opening, rather
    than appearing all at once, so the reveal reads as one unique motion

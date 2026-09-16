@@ -48,7 +48,7 @@ export function Hero({ ctaRef }: { ctaRef?: RefObject<HTMLAnchorElement | null> 
           transition={{ duration: 0.7, delay: 0.56 }}
           className="mt-8 max-w-xl text-lg text-neutral-600 dark:text-neutral-400"
         >
-          Md. Maruf Bin Salim Bhuiyan — clinical editors, multi-tenant SaaS
+          Md. Maruf Bin Salim Bhuiyan - clinical editors, multi-tenant SaaS
           backends, and the unglamorous infrastructure that has to hold up
           when no one is looking. This is the story behind a few of them.
         </motion.p>

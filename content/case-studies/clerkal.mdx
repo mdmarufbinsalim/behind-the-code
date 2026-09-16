@@ -1,13 +1,13 @@
 ---
 title: "A text editor where clicking beats typing"
 slug: clerkal
-role: "Frontend Engineer — editor core"
+role: "Frontend Engineer - editor core"
 stack: ["React", "Slate.js", "Redux Toolkit", "RTK Query", "Node.js", "MongoDB"]
 year: "2025"
 order: 1
 cover: "/clerkal/landing.png"
 coverAlt: "Clerkal's landing page: AI Powered Clinical Notes For Dentists, over a photo of a dentist reviewing notes on a tablet in a surgery"
-summary: "A clinical note editor that trades typing for clicking — built to feel instant under a gloved hand between patients."
+summary: "A clinical note editor that trades typing for clicking - built to feel instant under a gloved hand between patients."
 ---
 
 <Video
@@ -17,25 +17,25 @@ summary: "A clinical note editor that trades typing for clicking — built to fe
 />
 
 <Facts>
-  <Fact label="Problem">Clinicians retyped the same clinical note after every appointment — the ten percent that actually varies got rushed because the other ninety had to be typed by hand.</Fact>
+  <Fact label="Problem">Clinicians retyped the same clinical note after every appointment - the ten percent that actually varies got rushed because the other ninety had to be typed by hand.</Fact>
   <Fact label="What I built">A Slate.js document that behaves like a form and serialises like prose: click through a template, dictate the rest, get one clean plain-text note.</Fact>
   <Fact label="What changed" value="Clerkal's own claim: up to 70% less time on record-keeping, now used daily across clinical practices." />
   <Fact label="My role" value="Editor core: the Slate.js document model, the custom element set, dictation and AI seams, performance." />
   <Fact label="Timeline" value="2025, completed." />
 </Facts>
 
-<p className="-mt-4 mb-10 text-sm text-neutral-500 dark:text-neutral-400">Three engineers, engaged via Mediusware Ltd — with <a href="https://www.linkedin.com/in/sidul567/" target="_blank" rel="noopener noreferrer">Sidul</a> and <a href="https://www.linkedin.com/in/kalin-chakma-334079190/" target="_blank" rel="noopener noreferrer">Kalin Chakma</a>.</p>
+<p className="-mt-4 mb-10 text-sm text-neutral-500 dark:text-neutral-400">Three engineers, engaged via Mediusware Ltd - with <a href="https://www.linkedin.com/in/sidul567/" target="_blank" rel="noopener noreferrer">Sidul</a> and <a href="https://www.linkedin.com/in/kalin-chakma-334079190/" target="_blank" rel="noopener noreferrer">Kalin Chakma</a>.</p>
 
-## 1 — Ninety percent of the note was always the same
+## The problem
 
-A clinician finishes an appointment and has to write it up — presenting
+A clinician finishes an appointment and has to write it up - presenting
 complaint, history, exam, treatment, plan. Ninety percent of the words are
 identical to the last patient's; the ten percent that differ are what
 actually matters clinically, and they're the part that gets rushed, because
 the other ninety still has to be typed by hand while the next patient is
 already in the waiting room. A real template runs to hundreds of these
 fields, all of it boilerplate a clinician re-types or re-clicks through
-every single visit. Get it wrong and it isn't a typo — it's a chart error,
+every single visit. Get it wrong and it isn't a typo - it's a chart error,
 because a clinical note is a legal record.
 
 <Figure
@@ -52,8 +52,8 @@ The constraints that shaped everything after this:
   pasted into a twenty-year-old Windows EHR with no stray characters.
 - **No install.** It runs in the browser next to 200+ healthcare
   systems, because practices can't add software to clinical machines.
-- **Documents get big.** A real template is hundreds — sometimes
-  thousands — of custom elements, and it has to stay responsive.
+- **Documents get big.** A real template is hundreds - sometimes
+  thousands - of custom elements, and it has to stay responsive.
 - **The users aren't software people.** Dentists use this between
   patients, often gloved, always in a hurry.
 - **Nothing may be silently mangled.** A note is a legal record; a
@@ -61,10 +61,10 @@ The constraints that shaped everything after this:
 
 </Expandable>
 
-## 2 — One document, two serialisations
+## The approach
 
 The editor has to be a form *and* a document at the same time. You interact
-with it like an app — clicking options, toggling lines on and off — and
+with it like an app - clicking options, toggling lines on and off - and
 what comes out the other end is clean prose you can paste into a
 twenty-year-old Windows EHR without a single stray character. Every
 template in Clerkal is one **Slate.js** document that renders two ways: an
@@ -76,33 +76,33 @@ actually keeps.
 <Expandable label="the alternatives I ruled out">
 
 Two obvious alternatives both fail. A **plain rich text editor** means
-retyping the skeleton every time — it solves nothing. A **form** stops
+retyping the skeleton every time - it solves nothing. A **form** stops
 being a note: the output has to leave the app as plain text, because it
 gets pasted into whichever of two hundred-plus patient management systems
 the practice runs, and a form doesn't serialise into prose. The Slate.js
-document in the middle is what's left once both of those are ruled out —
+document in the middle is what's left once both of those are ruled out -
 an editor that behaves like a form while it's being edited and reads like
 prose on the way out.
 
 </Expandable>
 
-## 3 — A form that reads like prose
+## What I built
 
 Every template is one Slate.js document rendered two ways: a clickable
-note the clinician fills in, and the plain-text note the record keeps —
+note the clinician fills in, and the plain-text note the record keeps -
 live, side by side, updating as you click.
 
 <Figure
   src="/clerkal/note-preview.png"
   alt="The Clerkal editor in use: an interactive template on the left, the generated plain-text clinical note rendering live on the right"
-  caption="Nothing on the right was typed — every line came from a click on the left."
+  caption="Nothing on the right was typed - every line came from a click on the left."
 />
 
 <Expandable label="how it was built">
 
 ### Edit mode: the same document, wiring exposed
 
-Everything above is **use** mode — what the clinician sees day to day.
+Everything above is **use** mode - what the clinician sees day to day.
 **Edit** mode is the same document with its wiring showing: a checkbox
 gutter down the left for what's active by default, a toolbar across the
 top of every element type you can drop in.
@@ -119,27 +119,27 @@ Ten-plus custom Slate element types, all domain-specific, all of them
 things a clinician actually needed rather than things a text editor
 usually has:
 
-- **Buttons** — inline option groups. Click to select, Ctrl-click for
+- **Buttons** - inline option groups. Click to select, Ctrl-click for
   multi-select, right-click to *negate* an option (which is how you say
   "no caries" in one gesture instead of a sentence).
-- **Clickable lines and clickable text** — content that sits in the
+- **Clickable lines and clickable text** - content that sits in the
   template greyed out and only enters the note when it's relevant.
 - **Blank inputs, single-select dropdowns, multi-select dropdowns,
-  grids, toggle blocks, annotations** — the rest of the form vocabulary.
-- **A speech-to-text pointer** — an element that marks where dictated
+  grids, toggle blocks, annotations** - the rest of the form vocabulary.
+- **A speech-to-text pointer** - an element that marks where dictated
   text is going to land.
 
 <Figure
   src="/clerkal/examination-template.png"
   alt="A real dental examination template in Clerkal, dense with buttons, dropdowns and inactive lines across medical, social and dental history sections"
-  caption="A real examination template — this is the section the crop above came from."
+  caption="A real examination template - this is the section the crop above came from."
 />
 
 ### Authoring affordances, and a context menu of our own
 
 Authoring that by hand would be miserable, so the editor grew the
 affordances of a real writing tool: a `/` command menu, keyboard
-shortcuts for everything, and **Convert** — select any run of text and
+shortcuts for everything, and **Convert** - select any run of text and
 turn the elements in it into buttons, or the text in it into buttons,
 in one move.
 
@@ -158,7 +158,7 @@ in one move.
 The context menu above is a good example of how little comes for free
 here. Taking over right-click means taking over the clipboard entries and
 the history entries with it, so undo and redo run on our own stacks
-pushed alongside Slate's — otherwise a converted selection unwinds one
+pushed alongside Slate's - otherwise a converted selection unwinds one
 element at a time instead of one action at a time.
 
 ### Logic, and elements that outlive a template
@@ -166,14 +166,14 @@ element at a time instead of one action at a time.
 <Figure
   src="/clerkal/logic-panel.png"
   alt="Clerkal's logic panel docked at the bottom of the editor, showing a rule reading WHEN Clinician (Input) is helo THEN Dropdown set text to world"
-  caption="WHEN this is clicked, THEN that dropdown sets itself — conditional notes, no code."
+  caption="WHEN this is clicked, THEN that dropdown sets itself - conditional notes, no code."
 />
 
 The **logic panel** above is an if/else system over the custom elements:
 *when* this input is `X`, *then* set that dropdown to `Y`. Clinicians
 build conditional notes without writing anything resembling code.
 
-**Dynamic elements** are defined once and referenced everywhere — your
+**Dynamic elements** are defined once and referenced everywhere - your
 name, your nurse list, your standard set of materials. Change the
 element, and every template that references it changes.
 
@@ -186,14 +186,14 @@ element, and every template that references it changes.
 ### Dictation that lands in the right place
 
 Transcription is the part everyone asks about, and the interesting
-problem isn't the model — it's the seam. Audio comes back as text that
+problem isn't the model - it's the seam. Audio comes back as text that
 has to be inserted into a live Slate document whose selection may have
 moved, inside a template the clinician is still clicking through. The
 pointer element exists precisely so the insertion target is explicit
 state rather than a guess about where the cursor was a second ago.
 
 The control itself is push-to-talk: hold to speak, drag it anywhere on
-screen, slide to lock it open, auto-stop on silence — designed for
+screen, slide to lock it open, auto-stop on silence - designed for
 someone holding a mirror in their other hand.
 
 <Figure
@@ -209,8 +209,8 @@ Three model-backed features sit on top of the note.
 - **Summarisation** collapses a long, dictated, circling account of an
   appointment into the tight clinical summary that actually belongs in
   the record.
-- **Cleanup** removes the debris dictation leaves behind — false starts,
-  duplicated phrases, stray punctuation, sentences that trail off —
+- **Cleanup** removes the debris dictation leaves behind - false starts,
+  duplicated phrases, stray punctuation, sentences that trail off -
   without touching clinical meaning. This is the one where being
   helpful is dangerous. A model that tidies the phrasing of a drug dose
   is a model that has to be fenced in.
@@ -223,7 +223,7 @@ Three model-backed features sit on top of the note.
 <Callout label="The rule">
   A model returns text. The document is a tree. Dropping a rewritten
   block straight into the selection would flatten every button, dropdown
-  and clickable line inside it into dead prose — the template would come
+  and clickable line inside it into dead prose - the template would come
   back looking fine and be permanently broken. So each of these runs
   over a resolved range and writes back as a structured edit, leaving
   the elements it didn't ask to change exactly where they were. And
@@ -237,7 +237,7 @@ system is the window that matters, and Clerkal spends most of its life
 covering it up.
 
 NotePal pops the template out into its own small window that floats on
-top of whatever application is in front — the clinician works through
+top of whatever application is in front - the clinician works through
 the note against the PMS on screen, then closes it and everything
 returns to the main screen with nothing lost.
 
@@ -246,7 +246,7 @@ copy. The React tree is rendered into a second window's document, which
 means none of the things you take for granted are there any more:
 stylesheets don't follow the tree across, events and selection belong to
 a different `window`, and the clipboard is that window's clipboard. Get
-any of it slightly wrong and you have two editors drifting apart —
+any of it slightly wrong and you have two editors drifting apart -
 which for a clinical note is the worst possible failure mode, because
 both copies look plausible.
 
@@ -263,23 +263,23 @@ comes back as a support ticket.
 
 ### The performance problem, which was the real project
 
-A production template is not a demo. It's hundreds — sometimes
-thousands — of custom elements in one document. And the first honest
+A production template is not a demo. It's hundreds - sometimes
+thousands - of custom elements in one document. And the first honest
 version of this editor re-rendered nearly all of them on every
 keystroke.
 
 The cause was a habit, not a bug. Slate makes editor access easy:
 `useSlate()` in any element component and you have the editor. But
 `useSlate` subscribes that component to *every* change in the document.
-Do it in every element renderer — which is the natural way to write
-them — and each character typed invalidates the entire tree. At fifty
+Do it in every element renderer - which is the natural way to write
+them - and each character typed invalidates the entire tree. At fifty
 elements nobody notices. At two thousand, typing has visible lag, and
 clicking a button somewhere in the medical history re-renders the
 extraoral exam.
 
 <Callout label="What actually fixed it">
   `React.memo` on every element renderer, and then the unglamorous
-  part — going element by element and replacing editor-hook access with
+  part - going element by element and replacing editor-hook access with
   explicitly passed props, so a component re-renders when *its own* data
   changes and not when the document does. Memoisation only pays when the
   props are stable, so most of the work was making them stable.
@@ -287,7 +287,7 @@ extraoral exam.
 
 There was no clever trick at the end of it. It was a long stretch of
 profiling, changing one element's prop contract, measuring, and moving
-to the next — and it taught me more about React's actual rendering model
+to the next - and it taught me more about React's actual rendering model
 than any amount of reading had.
 
 The other thing that consumed time and doesn't show up in a commit
@@ -302,7 +302,7 @@ The editor is the hard part but not the whole product. Alongside it:
 
 - **Templates, folders and a shared library**, scoped by country and
   language, so a UK dental practice sees UK dental templates.
-- **Teams and clinics** — sharing templates and documents across a
+- **Teams and clinics** - sharing templates and documents across a
   practice, with clinic-level branding on patient-facing letters.
 - **Role-based access control** over all of it: who can edit a shared
   template versus who can only use it, and what a clinic owner can do
@@ -326,7 +326,7 @@ The editor is the hard part but not the whole product. Alongside it:
 
 </Expandable>
 
-## 4 — 70% faster, and the one thing I'd change
+## The outcome
 
 Clerkal is live and in daily clinical use. A note that used to be typed
 out in full is now clicked together from a template the practice
@@ -334,18 +334,18 @@ maintains itself, dictated into where it needs prose, tidied by the AI
 layer, and copied into the patient record in one action. The company's
 own claim is up to 70% less time on record-keeping.
 
-If I started this again, I'd version the element schema from the first
-commit — every element type is a shape that now lives in real patients'
-saved documents forever, and migrating that later is far more delicate
-than getting it right early.
-
 <Figure
   src="/clerkal/template-in-use.png"
   alt="A Clerkal template open in use, with inline option buttons, clickable lines and highlighted guidance running through the clinical note"
   caption="An ordinary Tuesday in a dental practice, one template at a time."
 />
 
-<Expandable label="the rest of the reflection">
+<Expandable label="what I'd do differently">
+
+If I started this again, I'd version the element schema from the first
+commit - every element type is a shape that now lives in real patients'
+saved documents forever, and migrating that later is far more delicate
+than getting it right early.
 
 I'd also build the logic engine on a typed AST from day one rather than
 growing it out of the panel UI, and I'd write the performance rule down
@@ -354,7 +354,7 @@ to the editor. That one line, enforced, would have saved weeks.
 
 ### What I took from it
 
-Most of what I learned here wasn't Slate — it was React's actual
+Most of what I learned here wasn't Slate - it was React's actual
 rendering model, learned the hard way with a profiler open, and the
 discipline of treating a document as data with a contract rather than as
 markup. The other half is domain: when the user is a clinician between

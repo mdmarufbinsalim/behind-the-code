@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { SKETCH_STROKE } from "@/components/sketch/stroke";
 
 // Where the pinned bar sits, and the boundary a section counts as "read
-// past" — Nav.tsx's height doesn't vary by content, so it's safe to
+// past" - Nav.tsx's height doesn't vary by content, so it's safe to
 // hardcode rather than plumb through as a variable.
 const NAV_CLEARANCE = 65;
 
@@ -62,7 +62,7 @@ const BAR_CLASSES =
 /**
  * The deep material for a section: present in the DOM (so it's searchable
  * and printable) but collapsed by default, opened with a native <details>.
- * `label` names what's inside — rendered as "Show {label}" / "Hide {label}".
+ * `label` names what's inside - rendered as "Show {label}" / "Hide {label}".
  *
  * The toggle bar pins to the top of the viewport for exactly as long as
  * *this* section is open and still being scrolled through, not a moment
@@ -71,7 +71,7 @@ const BAR_CLASSES =
  * auto-collapse below share one boundary instead of two mechanisms that
  * could drift out of sync.
  */
-// The grid-rows collapse transition (globals.css) — kept in sync with it so
+// The grid-rows collapse transition (globals.css) - kept in sync with it so
 // the post-close scroll waits for the same span rather than a hardcoded
 // guess or a `transitionend` that a scroll-driven auto-collapse racing the
 // click can cause to fire before the click's own handler runs.
@@ -93,8 +93,8 @@ export function Expandable({ label, children }: { label: string; children: React
   // A reader closing a section on purpose wants to land on whatever comes
   // next, not wherever the collapse happened to leave the viewport. Timed
   // off the click rather than the collapse's `transitionend`: that event
-  // can already have fired — consumed by the auto-collapse below, which
-  // runs on every scroll frame — before this handler even runs, since
+  // can already have fired - consumed by the auto-collapse below, which
+  // runs on every scroll frame - before this handler even runs, since
   // Lenis keeps easing for a while after the wheel input that triggered it.
   function closeAndAdvance() {
     const el = detailsRef.current;
@@ -154,7 +154,7 @@ export function Expandable({ label, children }: { label: string; children: React
           below is the one actually visible. */}
       <summary
         onClick={(e) => {
-          // The native toggle is what should open it — only step in to
+          // The native toggle is what should open it - only step in to
           // additionally advance the scroll when this click is the one
           // closing it.
           if (detailsRef.current?.open) {

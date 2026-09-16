@@ -159,7 +159,7 @@ export function DocumentFlowDiagram({
 
         {box(1240, 290, 140, 100, "pms")}
         <text x={1310} y={332} textAnchor="middle" fontSize={19} fontWeight={600} fill="var(--ink)">
-          Practice's
+          {"Practice's"}
         </text>
         <text x={1310} y={357} textAnchor="middle" fontSize={19} fontWeight={600} fill="var(--ink)">
           PMS

@@ -41,7 +41,7 @@ export function SketchConnector({
       const startX = fromRect.right - containerRect.left + 10;
       const startY = fromRect.top - containerRect.top + fromRect.height / 2;
       // The heading now sits on the right, so approach its top-left
-      // corner from above — the line never travels through its own
+      // corner from above - the line never travels through its own
       // text row, only toward it.
       const endX = toRect.left - containerRect.left - 14;
       const endY = toRect.top - containerRect.top - 6;
@@ -66,7 +66,7 @@ export function SketchConnector({
 
       // Classic S-curve: both control points sit at the horizontal
       // midpoint, one level with the start, one level with the end.
-      // Continuously varying curvature with a single inflection —
+      // Continuously varying curvature with a single inflection -
       // no seams, no jitter.
       const midX = sx + (ex - sx) * 0.5;
       const cp1: Point = [midX, sy];
@@ -138,7 +138,7 @@ export function SketchConnector({
 }
 
 // Split out so the ref `useScroll` tracks exists on this component's very
-// first render — the parent renders nothing until it has measured.
+// first render - the parent renders nothing until it has measured.
 function ConnectorSvg({
   box,
   linePath,

@@ -21,6 +21,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsDark(document.documentElement.classList.contains("dark"));
   }, []);
 
@@ -75,7 +76,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
           easing: SWEEP_EASING,
           // Without this the clip is dropped the moment the animation ends,
           // and the snapshot flashes back to full-screen for the frame or two
-          // before the browser tears the pseudo tree down — a dark blink at
+          // before the browser tears the pseudo tree down - a dark blink at
           // the end of the collapse.
           fill: "forwards",
           pseudoElement: goingDark

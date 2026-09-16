@@ -1,4 +1,4 @@
-# Portfolio Site Design — "Behind The Code"
+# Portfolio Site Design - "Behind The Code"
 
 Date: 2026-09-03
 Status: Approved for planning
@@ -7,7 +7,7 @@ Status: Approved for planning
 
 A personal portfolio site for Md. Maruf Bin Salim that tells a story: case
 studies first (priority content), then work experience, then a short
-about-me. The site should feel hand-crafted — sketched, not templated —
+about-me. The site should feel hand-crafted - sketched, not templated -
 using a doodle/freehand visual language, while navigation between the
 story overview and individual case studies feels seamless (no visible
 page-load break).
@@ -15,10 +15,10 @@ page-load break).
 ## Non-goals (v1)
 
 - No 3D animation (deferred as a possible fast-follow).
-- No color accent — strict black & white, matching the existing
+- No color accent - strict black & white, matching the existing
   logo/favicon.
-- No headless CMS — content is authored in-repo.
-- No blog/articles section — only case studies, experience, about.
+- No headless CMS - content is authored in-repo.
+- No blog/articles section - only case studies, experience, about.
 
 ## Content model
 
@@ -32,7 +32,7 @@ page-load break).
 - Body: freeform MDX narrative (problem → approach → what was built →
   outcome), able to use custom components (`<SketchCallout>`,
   `<BeforeAfter>`, `<SketchArrow>`, etc.) inline.
-- The set of case studies is open-ended — the template must support
+- The set of case studies is open-ended - the template must support
   any number without code changes, driven by reading all files in the
   `content/case-studies/` directory.
 
@@ -52,16 +52,16 @@ page-load break).
 
 Single scrolling home page (`/`) with sections in this order:
 
-1. **Hero** — large logo mark, animated hand-drawn tagline underline,
+1. **Hero** - large logo mark, animated hand-drawn tagline underline,
    sets the "sketchbook" tone.
-2. **Case studies** — grid/row of cards (title, summary, cover doodle,
+2. **Case studies** - grid/row of cards (title, summary, cover doodle,
    sketchy border). This is the priority section, positioned right
    after the hero.
-3. **Work experience** — hand-drawn vertical timeline connecting roles,
+3. **Work experience** - hand-drawn vertical timeline connecting roles,
    entries reveal on scroll as if being sketched in.
-4. **About me** — short personal section with an illustration, closing
+4. **About me** - short personal section with an illustration, closing
    the narrative loop.
-5. **Footer** — contact/social links, minimal.
+5. **Footer** - contact/social links, minimal.
 
 Each case study also has its own route: `/case-studies/[slug]`,
 rendering the MDX narrative body under a morphed-in hero (title,
@@ -87,17 +87,17 @@ and a plain crossfade (no continuity, weaker "story" feel).
 
 - **Palette**: strict black & white, matching the existing
   `logo-black.svg` / `logo-white.svg` / favicon. Emphasis comes from
-  stroke weight, motion, and doodle marks — not color.
+  stroke weight, motion, and doodle marks - not color.
 - **Typography**: a handwritten Google Font (Caveat or Kalam) for
   headings/accents; existing clean sans (or Geist) retained for body
   copy, for readability.
 - **Doodle primitives**: a small reusable component set backed by
   `roughjs`, rendering hand-drawn SVG shapes that re-randomize their
   wobble slightly per mount:
-  - `<SketchBox>` — hand-drawn bordered container (used for cards).
-  - `<SketchUnderline>` — animated underline accent.
-  - `<SketchArrow>` — pointer/callout arrow.
-  - `<SketchCircle>` — circles a highlighted word/element.
+  - `<SketchBox>` - hand-drawn bordered container (used for cards).
+  - `<SketchUnderline>` - animated underline accent.
+  - `<SketchArrow>` - pointer/callout arrow.
+  - `<SketchCircle>` - circles a highlighted word/element.
 - **Scroll reveals**: sections/cards fade or slide in via Framer
   Motion's `whileInView`; sketchy borders "draw themselves" in via
   stroke-dashoffset animation as they enter.
@@ -107,7 +107,7 @@ and a plain crossfade (no continuity, weaker "story" feel).
 ## Testing / validation plan
 
 - Visual check in a real browser at each major milestone (home page
-  layout, case-study morph transition, timeline, about section) —
+  layout, case-study morph transition, timeline, about section) -
   screenshot via headless Chrome or manual dev-server check, per this
   project's established workflow.
 - Confirm the morph transition behaves correctly forward (card → page)
@@ -116,7 +116,7 @@ and a plain crossfade (no continuity, weaker "story" feel).
   and multiple MDX files present (open-ended content requirement).
 - `pnpm build` must succeed with no type errors before any commit.
 - Basic responsiveness check (mobile width) for hero, card grid, and
-  timeline — not a full breakpoint audit, but nothing should visibly
+  timeline - not a full breakpoint audit, but nothing should visibly
   break.
 
 ## Open items deferred to implementation planning

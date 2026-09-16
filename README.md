@@ -26,10 +26,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Available Scripts
 
-- `pnpm dev` — start the development server
-- `pnpm build` — build for production
-- `pnpm start` — start the production server
-- `pnpm lint` — run ESLint
+- `pnpm dev` - start the development server
+- `pnpm build` - build for production
+- `pnpm start` - start the production server
+- `pnpm lint` - run ESLint
 
 ## License
 

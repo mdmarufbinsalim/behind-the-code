@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import { motion, type Variants } from "framer-motion";
 import { SKETCH_STROKE } from "./stroke";
 
 type Point = [number, number];
 
-// A loose, hand-drawn scribble rectangle around the bounds — three overlapping
+// A loose, hand-drawn scribble rectangle around the bounds - three overlapping
 // passes with different jitter, like someone roughing in an outline before
 // the "real" drawing (the actual image) settles into place underneath.
 function scribbleRect(w: number, h: number, seed: number): string {
@@ -50,11 +50,10 @@ export function SketchReveal({
   once?: boolean;
   className?: string;
 }) {
-  const [paths, setPaths] = useState<string[]>([]);
-
-  useEffect(() => {
-    setPaths([1, 2, 3].map((seed) => scribbleRect(width, height, seed)));
-  }, [width, height]);
+  const paths = useMemo(
+    () => [1, 2, 3].map((seed) => scribbleRect(width, height, seed)),
+    [width, height],
+  );
 
   const imageDelay = delay + STROKE_STAGGER * 2 + STROKE_DURATION * 0.55;
 

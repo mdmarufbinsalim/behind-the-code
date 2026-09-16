@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { SKETCH_STROKE } from "@/components/sketch/stroke";
 import { SketchBox } from "@/components/sketch/SketchBox";
 
-/** Hand-drawn close mark — two strokes that don't quite meet, like the rest of the site's pen. */
+/** Hand-drawn close mark - two strokes that don't quite meet, like the rest of the site's pen. */
 function SketchX() {
   return (
     <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true" className="overflow-visible">
@@ -47,7 +47,7 @@ export function Lightbox({
     }
     document.addEventListener("keydown", onKey);
 
-    // Lenis drives the window scroll itself, so hiding overflow isn't enough —
+    // Lenis drives the window scroll itself, so hiding overflow isn't enough -
     // SmoothScroll listens for these and parks the scroller while we're open.
     window.dispatchEvent(new Event("lightbox:open"));
     const previousOverflow = document.body.style.overflow;

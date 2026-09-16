@@ -1,5 +1,5 @@
-// One pen for every hand-drawn mark on the site — underlines, boxes, circles,
-// the hero connector, the timeline wave — so nothing reads as a different
+// One pen for every hand-drawn mark on the site - underlines, boxes, circles,
+// the hero connector, the timeline wave - so nothing reads as a different
 // weight of line. The timeline dots' border matches it in CSS (border-[2.5px]).
 export const SKETCH_STROKE = 2.5;
 

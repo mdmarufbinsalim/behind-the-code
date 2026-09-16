@@ -9,7 +9,7 @@ export function SmoothScroll() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // The browser's own scroll restoration fights Lenis on refresh — it
+    // The browser's own scroll restoration fights Lenis on refresh - it
     // restores the native scrollY before Lenis has mounted, then Lenis
     // constructs from that already-scrolled position instead of the top.
     // Manual restoration plus the explicit reset below keeps refresh (and
@@ -81,7 +81,7 @@ export function SmoothScroll() {
     // phase to catch it from every <details> on the page. Expandable now
     // animates its height rather than snapping it (see globals.css), so the
     // scroll height at the instant `toggle` fires is still the pre-animation
-    // one — resize again once that transition actually finishes.
+    // one - resize again once that transition actually finishes.
     const onToggle = () => lenis.resize();
     document.addEventListener("toggle", onToggle, true);
 
@@ -113,7 +113,7 @@ export function SmoothScroll() {
   //
   // Next's router doesn't reset native scroll on a client-side navigation
   // the way a full load does, and Lenis tracks its own animated position on
-  // top of that — so a route change also needs an explicit, immediate jump
+  // top of that - so a route change also needs an explicit, immediate jump
   // to the top rather than relying on either of them to do it alone.
   useEffect(() => {
     lenisRef.current?.resize();

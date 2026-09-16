@@ -20,7 +20,7 @@ export async function generateMetadata({
   const caseStudy = getCaseStudy(slug);
   if (!caseStudy) return {};
   return {
-    title: `${caseStudy.frontmatter.title} — Behind the Code`,
+    title: `${caseStudy.frontmatter.title} - Behind the Code`,
     description: caseStudy.frontmatter.summary,
   };
 }

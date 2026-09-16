@@ -9,7 +9,7 @@ import { GHOST_DASH, GHOST_OPACITY, GHOST_STROKE } from "@/components/sketch/str
  * A hand-drawn illustration in the same pen as the hero.
  *
  * With a `src` it renders the drawing: black line art on transparency, so it
- * gets inverted rather than dimmed in dark mode — the strokes go white and the
+ * gets inverted rather than dimmed in dark mode - the strokes go white and the
  * paper stays the page.
  *
  * Without one it reserves the slot, drawn in the same faint dotted stroke the
@@ -32,7 +32,7 @@ export function Illustration({
   label?: string;
   note?: string;
   ratio?: string;
-  /** Strings, because MDX only passes plain attributes through — see Facts. */
+  /** Strings, because MDX only passes plain attributes through - see Facts. */
   width?: number | string;
   height?: number | string;
 }) {

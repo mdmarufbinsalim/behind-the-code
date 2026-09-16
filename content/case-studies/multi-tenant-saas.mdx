@@ -4,7 +4,7 @@ slug: multi-tenant-saas
 role: "Software Engineer"
 stack: ["NestJS", "PostgreSQL", "TypeScript"]
 year: "2025"
-summary: "Architecting the multi-tenant backbone for an enterprise SaaS product — where the hardest bugs are the ones that leak one customer's data into another's screen."
+summary: "Architecting the multi-tenant backbone for an enterprise SaaS product - where the hardest bugs are the ones that leak one customer's data into another's screen."
 ---
 
 ## The problem
@@ -13,7 +13,7 @@ The product was moving from single-customer deployments to a real
 multi-tenant SaaS model. That sounds like an infrastructure decision, but
 it's really an architecture decision that touches almost every layer:
 every query, every background job, every cache key now has to answer one
-question first — *whose data is this?*
+question first - *whose data is this?*
 
 Get it right and tenants never notice the platform is shared. Get it
 wrong and you get the worst kind of bug: one that doesn't crash, doesn't
@@ -26,12 +26,12 @@ tenant isolation as a cross-cutting concern enforced at the framework
 level rather than something each feature had to remember to do
 correctly.
 
-- **Tenant context as a request-scoped provider** — resolved once per
+- **Tenant context as a request-scoped provider** - resolved once per
   request from the authenticated session, then injected everywhere data
   access happens, so there's exactly one place tenant scoping can go
   wrong instead of every query site.
 - **Row-level scoping enforced at the repository layer** in PostgreSQL,
-  not left to individual service methods to remember — a missing
+  not left to individual service methods to remember - a missing
   `WHERE tenant_id = ?` should be structurally hard to write, not just
   discouraged in code review.
 - **Modular feature boundaries** so tenant-specific configuration and

@@ -4,7 +4,7 @@ import { useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import type { ExperienceEntry } from "@content/experience";
 import { TimelineWave } from "@/components/sketch/TimelineWave";
-// Shapes temporarily disabled — see ScrollShapes.tsx (kept for later).
+// Shapes temporarily disabled - see ScrollShapes.tsx (kept for later).
 // import { ScrollShapes } from "@/components/sketch/ScrollShapes";
 
 const listVariants = {
@@ -71,7 +71,7 @@ export function ExperienceSection({ experience }: { experience: ExperienceEntry[
                 />
 
                 <p className="mb-1 text-sm text-neutral-500 dark:text-neutral-400">
-                  {entry.start} — {entry.end}
+                  {entry.start} - {entry.end}
                 </p>
                 <h4 className="text-2xl font-medium">
                   {entry.role}{" "}

@@ -4,12 +4,12 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Behind the Code — Md. Maruf Bin Salim",
+  title: "Behind the Code - Md. Maruf Bin Salim",
   description:
     "A look behind the code: systems I've built, problems I've solved, things I've broken, and lessons learned along the way.",
 };
 
-// Light mode is the default regardless of OS preference — dark mode is
+// Light mode is the default regardless of OS preference - dark mode is
 // opt-in only, via the toggle, remembered in localStorage.
 const themeInitScript = `(function(){try{if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');}catch(e){}})();`;
 

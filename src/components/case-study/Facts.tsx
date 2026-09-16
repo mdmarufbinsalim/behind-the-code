@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
  * came out of it. Two columns on anything wider than a phone.
  *
  * Composed from <Fact> children rather than an array prop, because
- * next-mdx-remote strips JSX expression attributes — only plain string
+ * next-mdx-remote strips JSX expression attributes - only plain string
  * attributes and children survive the trip through MDX.
  */
 export function Facts({ children }: { children: ReactNode }) {
