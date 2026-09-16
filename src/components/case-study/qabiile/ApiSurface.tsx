@@ -15,7 +15,7 @@ const STATS = [
 ];
 
 export function ApiSurface({
-  caption = "Phase 1, as the API sees it.",
+  caption = "One slice of it: Phase 1, as the API sees it.",
 }: {
   caption?: string;
 }) {

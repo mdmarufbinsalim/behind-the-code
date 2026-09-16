@@ -112,6 +112,40 @@ What I ruled out, and why:
 
 <Expandable title="What I built" label="the parts worth explaining">
 
+Four things carry the weight of this build: a way in that only an admin can
+open, an identity check that had to be built rather than bought, a ledger that
+every single feature writes to, and a queue layer that keeps the slow work out
+of the request path. Plus the web client on top of all of it.
+
+<PhoneRow caption="Three of the surfaces this backend exists for.">
+  <Phone
+    index="0"
+    src="/qabiile/mobile-invite.jpg"
+    width="720"
+    height="1600"
+    label="The invite gate - no invite, no account"
+    alt="The Qabiile mobile invite screen, asking for an email address to get an invitation code"
+  />
+  <Phone
+    index="1"
+    src="/qabiile/mobile-feed.jpg"
+    width="720"
+    height="1600"
+    label="Agora - the feed, with reactions and reposts"
+    alt="The Qabiile mobile feed with posts, care and love reactions, comment and repost actions"
+  />
+  <Phone
+    index="2"
+    src="/qabiile/mobile-clans.jpg"
+    width="720"
+    height="1600"
+    label="Qabiles - clans, ranking and reputation"
+    alt="The Qabiile mobile clans tab showing a clan with members, ranking and reputation, and a list of joined clans"
+  />
+</PhoneRow>
+
+<ExpandableDetail>
+
 ### Getting in: invite-only, as a backend flow
 
 Nobody signs up for Qabiile. An admin sends an invite, the code arrives by
@@ -141,8 +175,6 @@ against an upscaled image before giving up.
 The interesting part is the seam between the two runtimes.
 
 <OcrPipeline />
-
-<ExpandableDetail>
 
 **Why not BullMQ, when the API already runs BullMQ for everything else.**
 BullMQ's job format is MessagePack and Lua-script driven, and it is not
@@ -174,8 +206,6 @@ sex as `E/K` (Erkek/Kadın) on the visual side and `M/F` in the MRZ, so the
 comparison normalises both alphabets before it decides anything. Anything
 that doesn't match cleanly goes to a human in the admin queue.
 
-</ExpandableDetail>
-
 ### Money: a wallet that never gets edited
 
 Every wallet balance in Qabiile is a cache. The truth is an append-only
@@ -189,8 +219,6 @@ A bid is the one place where that ledger has to hold something back rather
 than pay it out.
 
 <EscrowLifecycle />
-
-<ExpandableDetail>
 
 A bid is the hard case, because it is a hold rather than a payment. Placing
 one runs in a transaction that takes a `pessimistic_write` lock on the hunt
@@ -209,8 +237,6 @@ hunt past its window, and captures the winning bid. It is deliberately
 self-healing: it looks for expired hunts rather than trusting a timer it set
 earlier, so a restart in the middle of the night doesn't leave a hunt open
 forever.
-
-</ExpandableDetail>
 
 <Figure
   src="/qabiile/feed.jpg"
@@ -270,8 +296,6 @@ generated contracts package the mobile app does, through `openapi-fetch`, so
 a response shape that changes in the API fails the web build rather than
 failing a user.
 
-<ExpandableDetail>
-
 The frontend problems worth naming:
 
 - **The balance is in the header, on every page.** Finishing a mission in one
@@ -291,8 +315,6 @@ The frontend problems worth naming:
   inputs that handle paste, an emoji picker and attachments in chat, a
   masonry grid for media, a lightbox for post images. None of it is hard.
   All of it is the difference between a demo and something people use.
-
-</ExpandableDetail>
 
 <Figure
   src="/qabiile/clans.jpg"
@@ -314,33 +336,6 @@ The frontend problems worth naming:
 - **Account deletion and retention** exist as first-class flows - a deletion
   request, a grace period, and a scheduler that actually removes the data.
 
-<PhoneRow caption="Three of the surfaces this backend exists for.">
-  <Phone
-    index="0"
-    src="/qabiile/mobile-invite.jpg"
-    width="720"
-    height="1600"
-    label="The invite gate - no invite, no account"
-    alt="The Qabiile mobile invite screen, asking for an email address to get an invitation code"
-  />
-  <Phone
-    index="1"
-    src="/qabiile/mobile-feed.jpg"
-    width="720"
-    height="1600"
-    label="Agora - the feed, with reactions and reposts"
-    alt="The Qabiile mobile feed with posts, care and love reactions, comment and repost actions"
-  />
-  <Phone
-    index="2"
-    src="/qabiile/mobile-clans.jpg"
-    width="720"
-    height="1600"
-    label="Qabiles - clans, ranking and reputation"
-    alt="The Qabiile mobile clans tab showing a clan with members, ranking and reputation, and a list of joined clans"
-  />
-</PhoneRow>
-
 ### Shipping it on one box
 
 Production and staging run on the same EC2 instance as two Compose projects
@@ -355,50 +350,71 @@ secret can't overwrite the production checkout; and the deploy prunes build
 cache older than 72 hours rather than all of it, because wiping the cache on
 every deploy turns a two-minute deploy into a full reinstall and recompile.
 
+</ExpandableDetail>
+
 </Expandable>
 
 <Expandable title="The outcome" label="what I'd do differently">
 
-Phase 1 is in active build, with production and staging both live. What
-exists today, on the backend alone:
+Phase 1 is in active build, with production and staging both live. What exists
+today is a working invite-only platform: an admin can invite someone, that
+person joins, builds a profile, picks a clan, posts, watches reels, messages,
+earns and spends currency, and gets verified as a real person - on web and on
+mobile, in English or Turkish, against one API that all three clients agree
+about.
 
 <ApiSurface />
 
 <ExpandableDetail>
 
-### What I actually did here
+### What leading it actually meant
 
-Leading this meant owning the decisions that are expensive to reverse - the
-module boundaries, the ledger being append-only, the contract being generated
-rather than written, the OCR service being a separate runtime - and then
-writing the parts where being wrong costs the most: the wallet and bidding
-code, the verification pipeline end to end, the web client's session and
-wallet plumbing, and the deployment. The rest of the team built against those
-seams, which is the point of drawing them carefully.
+The technical decisions that were expensive to reverse were mine to make: the
+module boundaries, the append-only ledger, a generated contract instead of
+hand-written clients, and a separate runtime for the one job that wasn't
+JavaScript. But most of the work of leading wasn't architecture - it was
+making the same decisions legible to five other people so they could build
+against them without asking me first.
+
+That is why this repo has a long knowledge base rather than a thin README, why
+the deploy notes explain why the build cache is preserved rather than just
+telling you not to wipe it, and why the seams between modules are where the
+comments are. A team of six moving fast is worth much more than any individual
+decision I made about a queue.
+
+I also wrote the parts where being wrong costs the most - the wallet and
+bidding code, the verification pipeline, the web client's session and wallet
+plumbing, the deployment - and reviewed the rest.
 
 ### What I'd do differently
 
-I'd have written the reliable-queue helper once. The API consumes its results
-list with a hand-rolled `BRPOPLPUSH` loop, a dedicated connection and a
-shutdown flag, and the Go side has its own equivalent; that is the same
-pattern implemented twice in two languages from the same paragraph of
-reasoning. A tiny shared spec document - or a generated one - would have made
-the second implementation a transcription rather than a translation.
+**Phase the product harder.** Feed, reels, clans, messaging, an auction house
+and a currency all reached Phase 1 together. Every one of them is defensible
+on its own, and the sum of them is why some things are shallower than I would
+like. I would fight for a narrower Phase 1 next time, and I would lose that
+fight more slowly.
 
-I'd also have put the reward configuration in the database from the start
-rather than arriving there. It lives in a `reward_settings` table now, which
-means the business can change what an activity is worth without a deploy, and
-every week it spent as a constant in the codebase was a week of deploys that
-should have been an edit.
+**Write the shared decisions down first, not after.** The best documentation
+in this project was written when something had already gone wrong twice. The
+knowledge base should have started on day one, alongside the first module.
+
+**Stop implementing the same idea twice in two languages.** The reliable-queue
+loop exists in Node and in Go, written from the same paragraph of reasoning on
+two different days. A one-page spec would have made the second one a
+transcription rather than a translation.
 
 ### What I took from it
 
-Two things. First, that the interesting problems in a social product turn out
-to be the boring ones from banking: what is the source of truth for a
-balance, what happens when two writes arrive together, what do you do when a
-job dies halfway. Second, that a queue between two languages is a protocol,
-and protocols want to be written down - the comment above those four key names
-is doing more work than most of the code underneath it.
+That the hard parts of a social product are rarely the social parts. They are
+the ones any bank would recognise: what is the source of truth for a balance,
+what happens when two writes land together, what do you do when a job dies
+halfway through.
+
+And that leading a team is mostly about reducing the number of things everyone
+else has to hold in their head. The contract is generated so nobody has to
+remember a response shape. The ledger is append-only so nobody has to reason
+about who last edited a balance. Every one of those choices costs something up
+front and pays back every week afterwards, in questions that never get asked.
 
 </ExpandableDetail>
 

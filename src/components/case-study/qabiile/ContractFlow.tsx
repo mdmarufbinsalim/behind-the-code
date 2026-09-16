@@ -40,7 +40,7 @@ export function ContractFlow({
   );
 
   const step = (label: string, cx: number) => (
-    <text x={cx} y={96} textAnchor="middle" fontSize={14} fill="var(--ink)" opacity={0.7}>
+    <text x={cx} y={38} textAnchor="middle" fontSize={14} fill="var(--ink)" opacity={0.7}>
       {label}
     </text>
   );
