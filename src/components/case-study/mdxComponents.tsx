@@ -10,7 +10,7 @@ import { NinetyTenSplit } from "./clerkal/NinetyTenSplit";
 import { OcrPipeline } from "./qabiile/OcrPipeline";
 import { EscrowLifecycle } from "./qabiile/EscrowLifecycle";
 import { ContractFlow } from "./qabiile/ContractFlow";
-import { ApiSurface } from "./qabiile/ApiSurface";
+import { StackMatrix } from "./qabiile/StackMatrix";
 import { PlatformSurface } from "./qabiile/PlatformSurface";
 import { InviteFunnel } from "./qabiile/InviteFunnel";
 import { EarningLoop } from "./qabiile/EarningLoop";
@@ -36,7 +36,7 @@ export const mdxComponents = {
   InviteFunnel,
   EarningLoop,
   ReelPipeline,
-  ApiSurface,
+  StackMatrix,
   PlatformSurface,
   PhoneRow,
   Phone,
