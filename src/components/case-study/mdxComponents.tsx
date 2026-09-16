@@ -11,6 +11,7 @@ import { OcrPipeline } from "./qabiile/OcrPipeline";
 import { EscrowLifecycle } from "./qabiile/EscrowLifecycle";
 import { ContractFlow } from "./qabiile/ContractFlow";
 import { ApiSurface } from "./qabiile/ApiSurface";
+import { PlatformSurface } from "./qabiile/PlatformSurface";
 import { InviteFunnel } from "./qabiile/InviteFunnel";
 import { EarningLoop } from "./qabiile/EarningLoop";
 import { ReelPipeline } from "./qabiile/ReelPipeline";
@@ -36,6 +37,7 @@ export const mdxComponents = {
   EarningLoop,
   ReelPipeline,
   ApiSurface,
+  PlatformSurface,
   PhoneRow,
   Phone,
 };
