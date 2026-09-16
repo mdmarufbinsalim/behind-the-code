@@ -17,7 +17,7 @@ export function CaseStudiesSection({
   headingRef?: RefObject<HTMLHeadingElement | null>;
 }) {
   return (
-    <section id="work" className="site-px py-16">
+    <section id="work" className="site-px pt-4 pb-16 lg:py-16">
       <motion.h2
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
