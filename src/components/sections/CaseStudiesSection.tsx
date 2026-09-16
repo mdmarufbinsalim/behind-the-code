@@ -1,9 +1,9 @@
 "use client";
 
 import type { RefObject } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { CaseStudyCard } from "@/components/case-study/CaseStudyCard";
-import { OvalLink } from "@/components/sketch/OvalLink";
 import type { CaseStudy } from "@/lib/case-studies";
 
 export function CaseStudiesSection({
@@ -33,30 +33,34 @@ export function CaseStudiesSection({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: false, margin: "-100px" }}
         transition={{ duration: 0.7, delay: 0.07 }}
-        className="mb-12 max-w-2xl text-3xl font-medium sm:text-4xl lg:ml-auto lg:text-right"
+        className="mb-3 max-w-2xl text-3xl font-medium sm:text-4xl lg:ml-auto lg:text-right"
       >
         A few systems worth telling the story of
       </motion.h3>
+
+      {total > caseStudies.length && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: false, margin: "-100px" }}
+          transition={{ duration: 0.7, delay: 0.14 }}
+          className="mb-12 text-sm tracking-wide lg:text-right"
+        >
+          <Link
+            href="/case-studies"
+            aria-label={`View all ${total} projects`}
+            className="cursor-pointer text-neutral-500 underline decoration-1 underline-offset-4 hover:opacity-60 dark:text-neutral-400"
+          >
+            View all
+          </Link>
+        </motion.p>
+      )}
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {caseStudies.map((cs, i) => (
           <CaseStudyCard key={cs.frontmatter.slug} frontmatter={cs.frontmatter} index={i} />
         ))}
       </div>
-
-      {total > caseStudies.length && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: false, margin: "-80px" }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="mt-14 flex justify-center"
-        >
-          <OvalLink href="/case-studies" label={`View all ${total} projects`}>
-            View all
-          </OvalLink>
-        </motion.div>
-      )}
     </section>
   );
 }
