@@ -19,10 +19,10 @@ summary: "A multi-tenant financial SaaS platform where every query has to answer
   caption="Finzeka - business intelligence over finance, inventory, cost and operations data, one tenant subdomain at a time."
 />
 
-<Illustration
-  label="Video: the Finzeka product walkthrough"
-  note="Screen recording to come - tenant sign-up, the platform admin console, impersonation, and a document upload landing in the parser pipeline."
-  ratio="16 / 9"
+<Video
+  src="/finzeka/finzeka-demo.mp4"
+  poster="/finzeka/finzeka-demo-poster.jpg"
+  caption="Logged into finzeka.com as the platform, and into acme.finzeka.com as a tenant - two different subdomains, two different schemas, in the same walkthrough."
 />
 
 <Facts>
@@ -175,10 +175,12 @@ impersonation context through to the audit trail, so "who actually did
 this" is always answerable, including when the answer is "a staff member,
 acting as this user, because of this reason."
 
-<Illustration
-  label="Screenshot: starting an impersonation session"
-  note="The platform admin console - picking a tenant user, entering a reason, and the banner that stays visible for the rest of the session."
-  ratio="16 / 9"
+<Figure
+  src="/finzeka/tenant-management.png"
+  alt="Finzeka's platform admin console: Tenant Management, listing tenants with their subdomain, creation date, plan and status - loadtest, company, OXTeknoloji, Mediusware2, test-org"
+  width="1920"
+  height="1080"
+  caption="The platform side: every tenant on the platform, its own subdomain, its own plan."
 />
 
 ### Kafka: the boundary for everything that shouldn't block a request
@@ -218,10 +220,12 @@ version of the same problem the backend solves with schema switching -
 correctly identifying *where* a request is coming from before deciding
 what it's allowed to do.
 
-<Illustration
-  label="Screenshot: the tenant sign-up and subdomain provisioning flow"
-  note="Creating a tenant, choosing a subdomain, and landing signed in on that tenant's own origin."
-  ratio="16 / 9"
+<Figure
+  src="/finzeka/tenant-dashboard.png"
+  alt="Acme's own Finzeka dashboard on acme.finzeka.com: finance alerts flagging an unusual tax pattern and invoices sold below minimum margin, plus a revenue vs expenses chart - entirely separate data from the platform console"
+  width="1920"
+  height="1080"
+  caption="acme.finzeka.com: a different origin, a different schema, a tenant admin who has never seen the platform console."
 />
 
 </ExpandableDetail>
@@ -235,10 +239,12 @@ app, and two Kafka consumers for audit logs and document parsing - with
 the tenancy, adapter, RBAC and impersonation layers all in production use
 today.
 
-<Illustration
-  label="Screenshot: the platform admin dashboard"
-  note="Tenants, usage, and the audit log viewer - a read against the events the Kafka consumer already persisted."
-  ratio="16 / 9"
+<Figure
+  src="/finzeka/platform-dashboard.png"
+  alt="Finzeka's platform dashboard: total tenants, trial tenants, active tenants and monthly recurring revenue, a tenant-onboarding chart, most popular plans, and a platform alerts panel reading all systems healthy"
+  width="1920"
+  height="1080"
+  caption="The view from the platform: every tenant, one number each, read across every schema at once."
 />
 
 <ExpandableDetail>
