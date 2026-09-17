@@ -19,6 +19,8 @@ import { PhoneRow, Phone } from "./qabiile/PhoneRow";
 import { TenancyDiagram } from "./finzeka/TenancyDiagram";
 import { AdapterFacadeDiagram } from "./finzeka/AdapterFacadeDiagram";
 import { RbacDiagram } from "./finzeka/RbacDiagram";
+import { IsolationDiagram } from "./finzeka/IsolationDiagram";
+import { KafkaConsumersDiagram } from "./finzeka/KafkaConsumersDiagram";
 
 /** Components case-study MDX bodies can reach for. */
 export const mdxComponents = {
@@ -47,4 +49,6 @@ export const mdxComponents = {
   TenancyDiagram,
   AdapterFacadeDiagram,
   RbacDiagram,
+  IsolationDiagram,
+  KafkaConsumersDiagram,
 };

@@ -11,13 +11,6 @@ coverAlt: "Finzeka's landing page: See What's Happening. Understand What's Chang
 summary: "A multi-tenant financial SaaS platform where every query has to answer one question first - whose data is this? - built on schema-per-tenant Postgres, adapters behind a facade for mail and storage, permission-as-data RBAC, and a Kafka backbone for everything that shouldn't block a request."
 ---
 
-<Figure
-  src="/finzeka/landing.png"
-  alt="Finzeka's landing page: See What's Happening. Understand What's Changing. Know What Needs Attention. - dashboard cards for revenue targets, sales by area, cash flow overview and product margin distribution"
-  width="1888"
-  height="939"
-  caption="Finzeka - business intelligence over finance, inventory, cost and operations data, one tenant subdomain at a time."
-/>
 
 <Video
   src="/finzeka/finzeka-demo.mp4"
@@ -47,10 +40,14 @@ remembers to add - fails exactly when it matters: under a deadline, in a
 new endpoint, in the query someone forgot. For a financial product that
 isn't a bug, it's a compliance incident.
 
-<Illustration
-  label="Illustration: one shared table vs. one shared database"
-  note="Left: a single tenants table with a forgotten WHERE clause leaking a row. Right: separate schemas, structurally unreachable from each other."
-  ratio="16 / 7"
+<IsolationDiagram />
+
+<Figure
+  src="/finzeka/subscriptions.png"
+  alt="Finzeka's Subscriptions screen: a table of tenants - loadtest, company, OXTeknoloji, Mediusware2, test-org, Mediusware, icardi, Sidul ORG, Baker and Reese Inc, test_demo_x - each with its own plan, billing cycle and status"
+  width="1920"
+  height="1080"
+  caption="Ten-plus tenants, each on its own plan and billing cycle - the number this whole build had to make boring."
 />
 
 <ExpandableDetail>
@@ -163,6 +160,14 @@ against a permission change - and every guard's actual question is one
 call: can this ability do this action on this subject. Adding a new
 permission is adding a row, not shipping a code change.
 
+<Figure
+  src="/finzeka/roles-permissions.png"
+  alt="Finzeka's Roles and Permissions screen: platform roles Accountant, External Operator and Support Engineer, each listing its granted permissions as chips - Multi Tenant Access, User Preference Management, Tenant Management, Audit Management, and more"
+  width="1920"
+  height="1080"
+  caption='Every one of those chips is an action:subject string on a role row - not a code path.'
+/>
+
 ### Impersonation, on the record
 
 Support and platform staff sometimes need to see inside a tenant's
@@ -201,11 +206,7 @@ job to Kafka, and a dedicated parser service consumes it, extracts what
 it needs, and reports back - so a large or slow document doesn't hold a
 request open.
 
-<Illustration
-  label="Diagram: audit logging and document parsing as Kafka consumers"
-  note="finzeka-core producing onto two topics; finzeka-auditlogs and finzeka-documentparser consuming independently, each with its own scaling and its own failure domain."
-  ratio="16 / 7"
-/>
+<KafkaConsumersDiagram />
 
 ### The frontend, and the seam a subdomain-per-tenant architecture creates
 
