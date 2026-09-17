@@ -16,6 +16,9 @@ import { InviteFunnel } from "./qabiile/InviteFunnel";
 import { EarningLoop } from "./qabiile/EarningLoop";
 import { ReelPipeline } from "./qabiile/ReelPipeline";
 import { PhoneRow, Phone } from "./qabiile/PhoneRow";
+import { TenancyDiagram } from "./finzeka/TenancyDiagram";
+import { AdapterFacadeDiagram } from "./finzeka/AdapterFacadeDiagram";
+import { RbacDiagram } from "./finzeka/RbacDiagram";
 
 /** Components case-study MDX bodies can reach for. */
 export const mdxComponents = {
@@ -40,4 +43,8 @@ export const mdxComponents = {
   PlatformSurface,
   PhoneRow,
   Phone,
+  // Finzeka: schema-per-tenant, adapters behind a facade, permission-as-data RBAC.
+  TenancyDiagram,
+  AdapterFacadeDiagram,
+  RbacDiagram,
 };

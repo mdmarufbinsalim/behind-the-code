@@ -1,0 +1,273 @@
+---
+title: "Finzeka - one platform, walled tenants, zero crossed wires"
+slug: finzeka
+role: "Software Engineer"
+stack: ["NestJS", "PostgreSQL", "TypeORM", "Kafka", "Redis / BullMQ", "Next.js", "AWS S3"]
+organization: "Mediusware Ltd"
+year: "2026"
+order: 3
+summary: "A multi-tenant financial SaaS platform where every query has to answer one question first - whose data is this? - built on schema-per-tenant Postgres, adapters behind a facade for mail and storage, permission-as-data RBAC, and a Kafka backbone for everything that shouldn't block a request."
+---
+
+<Illustration
+  label="Video: the Finzeka product walkthrough"
+  note="Screen recording to come - tenant sign-up, the platform admin console, impersonation, and a document upload landing in the parser pipeline."
+  ratio="16 / 9"
+/>
+
+<Facts>
+  <Fact label="Problem">One codebase serving many financial-services tenants on their own subdomains, where a single missed scope check leaks one company's records into another's screen - and every integration (mail, storage, document parsing) has to be swappable without touching the code that calls it.</Fact>
+  <Fact label="What I built">The tenancy backbone - schema-per-tenant Postgres chosen by subdomain before a query runs - plus the adapter/facade layer for mail and file storage, permission-as-data RBAC shared between platform staff and tenant users, staff impersonation with an audit trail, and the Kafka boundary that keeps audit logging and document parsing off the request path.</Fact>
+  <Fact label="Where it is" value="In active build across four services - the API, the web app, an audit-log consumer and a document-parsing consumer." />
+  <Fact label="My role" value="Backend architecture: multi-tenancy, the adapter/facade layer, RBAC, impersonation, and the Kafka event boundary." />
+  <Fact label="Timeline" value="Since December 2025, ongoing." />
+</Facts>
+
+<Expandable title="The problem" label="the constraints">
+
+Finzeka is a multi-tenant SaaS platform for financial-services companies -
+each one gets its own subdomain, its own users, its own data, on shared
+infrastructure. That's an easy sentence to write and a hard one to build
+correctly, because it turns "which tenant is this?" into a question every
+single query, upload, email and background job has to answer - and get
+right every time, not most of the time.
+
+The obvious approach - a `tenant_id` column and a `WHERE` clause everyone
+remembers to add - fails exactly when it matters: under a deadline, in a
+new endpoint, in the query someone forgot. For a financial product that
+isn't a bug, it's a compliance incident.
+
+<Illustration
+  label="Illustration: one shared table vs. one shared database"
+  note="Left: a single tenants table with a forgotten WHERE clause leaking a row. Right: separate schemas, structurally unreachable from each other."
+  ratio="16 / 7"
+/>
+
+<ExpandableDetail>
+
+The constraints that shaped everything after this:
+
+- **Isolation has to be structural, not remembered.** A missing scope
+  check should be impossible to write, not just discouraged in review.
+- **Platform staff still need a way in.** Support and admin work requires
+  seeing inside a tenant's account - safely, and on the record.
+- **Every external integration is provider-agnostic on paper.** Mail
+  today is SMTP; storage today is S3; either could change, and the
+  business logic calling them shouldn't notice.
+- **Not everything can happen inline.** Audit logging and document
+  parsing are both slow enough, and unimportant enough to the caller's
+  response, that they can't sit in the request path.
+- **One permission model, two populations.** Platform staff and tenant
+  users need the same access-control mechanism, evaluated against
+  different role tables.
+
+</ExpandableDetail>
+
+</Expandable>
+
+<Expandable title="The approach" label="the alternatives I ruled out">
+
+Tenant isolation lives at the database layer, not the query layer: each
+tenant gets its own Postgres **schema** inside one shared database, and
+the schema is chosen once per request, before any repository touches the
+database.
+
+<TenancyDiagram />
+
+<ExpandableDetail>
+
+What I ruled out, and why:
+
+- **A shared table with `tenant_id` everywhere.** Cheapest to build,
+  cheapest to get wrong - isolation depends on every developer adding
+  the right `WHERE` clause forever, on every query, in every future
+  endpoint. One miss is a data breach in a financial product.
+- **A database per tenant.** Real isolation, but it turns onboarding a
+  new tenant, running a migration, or scaling connections into an
+  operational problem that grows linearly with customers. Schema-per-tenant
+  keeps one connection pool and one migration run while still making
+  cross-tenant access a structural impossibility - a query against the
+  wrong schema doesn't leak data, it just fails.
+- **Row-level security policies.** Postgres RLS can enforce this too, but
+  it pushes the tenant-scoping logic into policy definitions that live
+  outside the application's own request lifecycle, which made the failure
+  mode harder to reason about than "which schema is this connection
+  pointed at right now."
+
+The mechanics: middleware reads the subdomain off the request host and
+tags it platform- or tenant-scoped. A query runner then connects and runs
+`SET search_path TO "<tenant-schema>"` before anything else executes, and
+every repository for the rest of that request reuses the same connection
+- there's exactly one place tenant scoping can go wrong instead of every
+query site, and it's released when the request finishes.
+
+</ExpandableDetail>
+
+</Expandable>
+
+<Expandable title="What I built" label="the parts worth explaining">
+
+Four things carry the weight of this build: the tenancy layer above, an
+adapter/facade pattern that keeps mail and file storage swappable,
+permission-as-data RBAC shared by platform staff and tenant users, and a
+Kafka backbone for everything too slow or too unimportant to sit in a
+request.
+
+<ExpandableDetail>
+
+### Adapters behind a facade, not an if-statement on an env var
+
+Mail and file storage are unrelated features that share the same shape of
+problem: the business logic that sends an email or stores a file
+shouldn't know or care which provider is actually doing it.
+
+<AdapterFacadeDiagram />
+
+Both follow the same pattern. A narrow interface - `send(options)` for
+mail, `uploadSingle(file, options)` for files - is the only thing a
+caller ever sees, reached through a facade (`MailerManager`, the upload
+facade) rather than the provider directly. Which implementation answers
+the call is decided once, at module wiring time, from config - SMTP today
+for mail, S3 in production and local disk in development for files - and
+adding a second provider (SendGrid, say) means writing one new class
+against the existing interface, not touching a single call site.
+
+The template side of mail follows the same instinct: there are two
+rendering engines - MJML for the responsive layout shell, Handlebars for
+the copy inside it - and a `MailTemplateRenderer` that tries each in turn
+rather than the calling code needing to know which templates use which
+engine.
+
+### RBAC that's data, not a wall of if-checks
+
+Platform staff and tenant users are two different populations reading two
+different role tables, but they go through exactly one mechanism: a
+permission is a string - `"update:File"`, `"read:User"` - and a role is
+just a list of them.
+
+<RbacDiagram />
+
+At request time, `CaslAbilityFactory` reads the current user's role
+permissions and builds an ability object fresh - not cached, never stale
+against a permission change - and every guard's actual question is one
+call: can this ability do this action on this subject. Adding a new
+permission is adding a row, not shipping a code change.
+
+### Impersonation, on the record
+
+Support and platform staff sometimes need to see inside a tenant's
+account to help - so impersonation is a first-class, audited feature
+rather than a shared password or a database backdoor. Starting one opens
+an `impersonation_sessions` row tying a specific platform user to a
+specific tenant user, with a start time, a reason, and - when it ends -
+an end time. Every action taken during that session carries the
+impersonation context through to the audit trail, so "who actually did
+this" is always answerable, including when the answer is "a staff member,
+acting as this user, because of this reason."
+
+<Illustration
+  label="Screenshot: starting an impersonation session"
+  note="The platform admin console - picking a tenant user, entering a reason, and the banner that stays visible for the rest of the session."
+  ratio="16 / 9"
+/>
+
+### Kafka: the boundary for everything that shouldn't block a request
+
+Two things happen on every meaningfully-sized request that the caller
+shouldn't have to wait for: writing the audit event, and - where a
+document was involved - parsing it. Both cross a Kafka topic into their
+own service instead of running inline.
+
+Audit logging publishes a structured event (actor, action, result,
+context, what changed) onto Kafka from `AuditService` and returns
+immediately; a separate consumer service picks it up, persists it, and
+serves the query and export endpoints against that store - so a slow
+audit write never becomes a slow API response, and a bug in audit
+reporting can't take core requests down with it. Document parsing works
+the same way in the other direction: the API uploads the file, hands a
+job to Kafka, and a dedicated parser service consumes it, extracts what
+it needs, and reports back - so a large or slow document doesn't hold a
+request open.
+
+<Illustration
+  label="Diagram: audit logging and document parsing as Kafka consumers"
+  note="finzeka-core producing onto two topics; finzeka-auditlogs and finzeka-documentparser consuming independently, each with its own scaling and its own failure domain."
+  ratio="16 / 7"
+/>
+
+### The frontend, and the seam a subdomain-per-tenant architecture creates
+
+The web app is Next.js, and schema-per-tenant on the backend means the
+frontend inherits a real problem: a session that's valid on
+`app.finzeka.com` (the platform) isn't automatically valid on
+`acme.finzeka.com` (a tenant) - they're different origins as far as the
+browser is concerned, even though the backend is one API. Getting a
+platform login to hand off cleanly into a tenant's own subdomain, and a
+tenant user's session to stay put on theirs, is the frontend-shaped
+version of the same problem the backend solves with schema switching -
+correctly identifying *where* a request is coming from before deciding
+what it's allowed to do.
+
+<Illustration
+  label="Screenshot: the tenant sign-up and subdomain provisioning flow"
+  note="Creating a tenant, choosing a subdomain, and landing signed in on that tenant's own origin."
+  ratio="16 / 9"
+/>
+
+</ExpandableDetail>
+
+</Expandable>
+
+<Expandable title="The outcome" label="what I'd do differently">
+
+Finzeka is in active build across four services - the core API, the web
+app, and two Kafka consumers for audit logs and document parsing - with
+the tenancy, adapter, RBAC and impersonation layers all in production use
+today.
+
+<Illustration
+  label="Screenshot: the platform admin dashboard"
+  note="Tenants, usage, and the audit log viewer - a read against the events the Kafka consumer already persisted."
+  ratio="16 / 9"
+/>
+
+<ExpandableDetail>
+
+### What I actually did here
+
+The decisions that were expensive to reverse were mine: schema-per-tenant
+over row-level scoping, the adapter/facade shape for every external
+integration rather than importing a provider SDK directly into business
+logic, permission-as-data RBAC shared across two user populations, and
+routing audit logging and document parsing through Kafka instead of
+inline. Getting those right early meant the features built afterward -
+impersonation, new document types, a second mail provider if one's ever
+needed - slot into an existing seam instead of requiring a redesign.
+
+### What I'd do differently
+
+I'd formalise the Kafka event schemas from the first topic rather than
+letting each producer and consumer agree on a shape informally - a
+schema registry or even just a shared types package would have caught a
+couple of early mismatches between what `finzeka-core` published and
+what the consumers expected sooner than they were actually caught.
+
+I'd also push the subdomain-to-session handoff into a documented,
+tested contract earlier. It's the kind of seam that works fine until a
+new frontend flow touches it sideways, and it deserved the same
+up-front rigor as the backend's schema switching from day one instead of
+catching up to it.
+
+### What I took from it
+
+That the expensive bugs in a multi-tenant system are never the ones that
+crash - they're the ones that succeed quietly against the wrong data. Once
+isolation is structural (a schema you're either connected to or not,
+never one you queried carelessly) entire categories of that bug stop
+being possible to write, which is a better guarantee than any amount of
+code review. And that "swap the provider later" is only true if the
+interface was narrow from the first implementation, not the second.
+
+</ExpandableDetail>
+
+</Expandable>
