@@ -376,12 +376,23 @@ body {
 }
 
 .resume ul {
-  margin: 4px 0 0 16px;
-  list-style: disc;
+  margin: 4px 0 0 0;
 }
 
 .resume li {
   margin-bottom: 3px;
+}
+
+/* Achievement bullets: a literal "\u2022 " character in the markup rather than
+   a CSS list-style marker (see page.tsx) - hung indent so a wrapped second
+   line still lines up under the first word instead of under the bullet. */
+.resume-bullets {
+  list-style: none;
+}
+
+.resume-bullets li {
+  padding-left: 14px;
+  text-indent: -14px;
 }
 
 .resume-skills {

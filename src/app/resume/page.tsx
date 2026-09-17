@@ -131,9 +131,18 @@ export default function ResumePage() {
                     </span>
                   </div>
                   <p className="resume-meta">{job.location}</p>
-                  <ul>
+                  <ul className="resume-bullets">
                     {job.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
+                      <li key={bullet}>
+                        {/* A literal character rather than list-style: disc - a CSS
+                            marker doesn't reliably survive into a PDF's text layer,
+                            so some extractors read a bulleted list as an unmarked
+                            paragraph. This one always comes through, and it's left
+                            in the accessibility tree rather than aria-hidden so a
+                            tag-tree-based extractor sees it too. */}
+                        {"\u2022 "}
+                        {bullet}
+                      </li>
                     ))}
                   </ul>
                 </div>
