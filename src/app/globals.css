@@ -319,6 +319,15 @@ body {
   margin-top: 2px;
 }
 
+/* Each link is its own row: icon and label centred on one line, rather than
+   trusting inline flow (Tailwind's preflight makes svg display:block, which
+   would otherwise drop the icon onto a line of its own). */
+.resume-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
 .resume section {
   margin-top: 22px;
 }

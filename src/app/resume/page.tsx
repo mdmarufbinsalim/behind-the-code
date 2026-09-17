@@ -23,7 +23,10 @@ function LinkMark({ kind }: { kind: "site" | "linkedin" | "github" }) {
     viewBox: "0 0 16 16",
     fill: "currentColor",
     "aria-hidden": true as const,
-    style: { verticalAlign: "-1px", marginRight: "3px" },
+    // Tailwind's preflight sets svg { display: block }, which would push the
+    // icon onto its own line inside the (inline) <a> - force it back inline
+    // rather than relying on the browser default.
+    style: { display: "inline-block", flexShrink: 0 },
   };
 
   if (kind === "linkedin") {
@@ -91,7 +94,7 @@ export default function ResumePage() {
               </p>
               <p className="resume-contact resume-links">
                 {resume.links.map((link) => (
-                  <a key={link.href} href={link.href}>
+                  <a key={link.href} href={link.href} className="resume-link">
                     <LinkMark kind={link.kind} />
                     {link.label}
                   </a>
