@@ -306,6 +306,17 @@ body {
 .resume-contact {
   font-size: 9.5pt;
   color: #222;
+  margin-bottom: 1px;
+}
+
+/* Marks plus labels, spaced rather than separated by punctuation - the links
+   are the one place a row of items reads better than a stack. */
+.resume-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 16px;
+  margin-top: 2px;
 }
 
 .resume section {
@@ -379,6 +390,11 @@ body {
   row-gap: 3px;
 }
 
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
 @media print {
   html,
   body {
@@ -409,7 +425,17 @@ body {
   }
 
   .resume-head {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
+  }
+
+  .resume-contact {
+    margin-bottom: 0;
+    line-height: 1.28;
+  }
+
+  .resume-links {
+    margin-top: 3px;
+    gap: 2px 14px;
   }
 
   .resume li {

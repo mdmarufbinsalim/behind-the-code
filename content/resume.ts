@@ -14,6 +14,13 @@ export type ResumeSchool = {
   date: string;
 };
 
+export type ResumeLink = {
+  /** Which mark sits in front of the label. */
+  kind: "site" | "linkedin" | "github";
+  label: string;
+  href: string;
+};
+
 export type ResumeReference = {
   name: string;
   title: string;
@@ -28,13 +35,14 @@ export const resume = {
   phone: "+880 1726 442155",
   email: "mdmarufbinsalim@gmail.com",
   links: [
-    { label: "marufspace.vercel.app", href: "https://marufspace.vercel.app/" },
+    { kind: "site", label: "Portfolio", href: "https://marufspace.vercel.app/" },
     {
-      label: "linkedin.com/in/md-maruf-bin-salim-bhuiyan",
+      kind: "linkedin",
+      label: "Md Maruf Bin Salim",
       href: "https://www.linkedin.com/in/md-maruf-bin-salim-bhuiyan/",
     },
-    { label: "github.com/mdmarufbinsalim", href: "https://github.com/mdmarufbinsalim" },
-  ],
+    { kind: "github", label: "mdmarufbinsalim", href: "https://github.com/mdmarufbinsalim" },
+  ] satisfies ResumeLink[],
   summary:
     "Software engineer who designs and ships systems where correctness matters - multi-tenant SaaS backends, domain-specific editors and the APIs behind them - owning delivery from architecture decisions through production rollout.",
   skills: [
